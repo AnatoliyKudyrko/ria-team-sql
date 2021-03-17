@@ -1,15 +1,15 @@
-import TableData from "./tableData/tableData";
+import TableView from "./tableView/tableView";
 import Header from "./header/header";
-import ControlData from "./controlData/controlData";
+import ControlTabs from "./controlTabs/controlTabs";
+
+
 
 function App() {
   return (
     <div className="App">
-      <header>
               <Header />
-              <ControlData />
-              <TableData />
-      </header>
+              <ControlTabs />
+              <TableView />
     </div>
   );
 }

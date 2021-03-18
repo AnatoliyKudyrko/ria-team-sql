@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Header() {
+const Header = () =>{
     const classes = useStyles();
     return (
         <AppBar position="static">
@@ -70,3 +70,5 @@ export default function Header() {
         </AppBar>
     );
 }
+
+export default Header;

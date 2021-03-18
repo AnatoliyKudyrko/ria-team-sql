@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import {
- Checkbox
-} from "@material-ui/core";
 
-function TabPanel(props) {
+import {SelectContainer} from "../selectContainer/selectContainer";
+import {SelectViewContainer} from "../SelectViewContainer/SelectViewContainer";
+import {PageSelect} from "../pageSelect/pageSelect";
+
+const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -29,14 +30,14 @@ function TabPanel(props) {
     );
 }
 
-function a11yProps(index) {
+const a11yProps = (index) => {
     return {
         id: `nav-tab-${index}`,
         'aria-controls': `nav-tabpanel-${index}`,
     };
 }
 
-function LinkTab(props) {
+const LinkTab = (props) => {
     return (
         <Tab
             component="a"
@@ -52,13 +53,13 @@ const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
     },
-    colum: {
+    flex: {
         display: 'flex',
         flexDirection:'row'
     },
 }));
 
-export default function ControlTabs() {
+ const ControlTabs = ()=> {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -79,9 +80,8 @@ export default function ControlTabs() {
                     <LinkTab label="Аналітика" href="/analytics" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0} className={{width: '100%'}}>
-                            <Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}  size="small" />
-                            <span>mviews.calltracking</span>
+            <TabPanel value={value} index={0} >
+                   <SelectContainer />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Page Two
@@ -92,3 +92,4 @@ export default function ControlTabs() {
         </div>
     );
 }
+export default ControlTabs;

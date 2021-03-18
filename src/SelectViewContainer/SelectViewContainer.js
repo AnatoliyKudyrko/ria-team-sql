@@ -26,6 +26,7 @@ export const SelectViewContainer = () => {
     const data = useSelector(state => state.selectData.data);
     const select = useSelector(state=>state.select);
     const active = select.filter(i=>i.status === true).map(item=>item.name).toString();
+
     useEffect(() => {
         const socket = io(SERVER);
         dispatch(FetchDataThunk(socket,active))

@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import {SelectContainer} from "../selectContainer/selectContainer";
 import {SelectViewContainer} from "../SelectViewContainer/SelectViewContainer";
 import {PageSelect} from "../pageSelect/pageSelect";
+import {Container, Paper} from "@material-ui/core";
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -52,6 +53,7 @@ const LinkTab = (props) => {
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.paper,
+
     },
     flex: {
         display: 'flex',
@@ -59,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
- const ControlTabs = ()=> {
+ const ControlTabs = (props)=> {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     };
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} >
             <AppBar position="static">
                 <Tabs
                     variant="fullWidth"
@@ -80,15 +82,17 @@ const useStyles = makeStyles((theme) => ({
                     <LinkTab label="Аналітика" href="/analytics" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
+           <Paper>
             <TabPanel value={value} index={0} >
-                   <SelectContainer />
+                    <SelectContainer />
             </TabPanel>
-            <TabPanel value={value} index={1}>
-                Page Two
-            </TabPanel>
+               <TabPanel value={value} index={1}>
+
+               </TabPanel>
             <TabPanel value={value} index={2}>
                 Page Three
             </TabPanel>
+           </Paper>
         </div>
     );
 }

@@ -35,7 +35,7 @@ export const SelectViewContainer = () => {
 
     return (
         <>
-            <TableView testData={[]} data={data.map(item=> {return {field:item.name,width:130}})} />
+            <TableView testData={[]} data={data.map(item=> item)} />
         </>
 
     );

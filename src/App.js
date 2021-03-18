@@ -10,6 +10,7 @@ import {SelectViewContainer} from "./SelectViewContainer/SelectViewContainer";
            <Header />
            <ControlTabs />
            <SelectViewContainer />
+
         </div>
   );
 }

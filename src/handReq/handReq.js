@@ -31,23 +31,15 @@ const HandReq = () => {
     const handleChange = (event) =>{
         setValue(event.target.value);
     }
-    const handleSubmit = (event)=> {
-        console.log(value);
-        console.log(typeof value)
+    const handleSubmit = ()=> {
         alert(value);
         const socket = io(SERVER);
-        new Promise((resolve, reject) => {
-            socket.emit("req", value, (err, res) => {
-                console.log(res)
-                dispatch(FetchDataSelect(res.meta))
-                if (err) {
-                    return reject(err);
-                }
-                return resolve(res);
-            });
-            event.preventDefault();
-        })
+        socket.emit("req", value, (err, res) => {
+            console.log(res)
+            dispatch(FetchDataSelect(res))
+        });
     }
+
     return (
         <div className={classes.centerV}>
             <TextareaAutosize
@@ -59,6 +51,7 @@ const HandReq = () => {
             <Button variant="contained" color="primary" className={classes.btn} onClick={handleSubmit}>
                 ОК
             </Button>
+           
         </div>
     );
 };

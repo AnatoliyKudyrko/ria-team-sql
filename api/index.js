@@ -1,7 +1,7 @@
 const app = require('express')();
 const http = require('http').createServer(app);
 const ClickHouse = require('@apla/clickhouse');
-const ch = new ClickHouse({ host: 'localhost', port: 8123 })
+const ch = new ClickHouse({ host: 'localhost', port: 8123,format:'JSONCompact' })
 
 
 const PORT = 4000;
@@ -31,7 +31,7 @@ ch.query("SELECT * FROM slon.r_tags_v2", (err, data) => {
 
 io.on('connection',  (socket) => {
     socket.on('req', function( param, callbackFn){
-        ch.query(param, (err, data) => {
+        ch.query(`${param} FORMAT JSONEachRow`, (err, data) => {
                 callbackFn(null , data);
         })
     });

@@ -1,15 +1,23 @@
 
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
+export const LOAD_DATA_REQ = 'LOAD_DATA_REQ';
 
-
-function FetchDataSelect(data){
+export function FetchDataSelect(data){
     return {
         type:LOAD_DATA_SELECT,
         data
     }
 
 }
+function FetchDataReq(data){
+    return {
+        type:LOAD_DATA_REQ ,
+        data
+    }
+
+}
+
 
 export function UpdateDataSelect(id){
     return {
@@ -26,6 +34,9 @@ export function FetchDataThunk (socket,action){
     })
 }
 }
+
+
+
 /*
 export function FetchDataMviewsThunk (socket){
     return function (dispatch){

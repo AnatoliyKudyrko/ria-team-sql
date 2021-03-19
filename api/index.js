@@ -29,6 +29,15 @@ ch.query("SELECT * FROM slon.r_tags_v2", (err, data) => {
 })
 
 
+io.on('connection',  (socket) => {
+    socket.on('req', function( param, callbackFn){
+        ch.query(param, (err, data) => {
+                callbackFn(null , data);
+        })
+    });
+
+});
+
 
 
 http.listen(PORT, () => {

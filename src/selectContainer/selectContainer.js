@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox} from "@material-ui/core";
+import {Checkbox} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {UpdateDataSelect} from "../redux/action/action";
@@ -24,9 +24,10 @@ const useStyles = makeStyles((theme) => ({
 export const SelectContainer = () => {
     const data = useSelector(state => state.select);
     return (
-        <>
+            <fieldset>
+                <legend>Таблиці</legend>
                 {data.map(item=><SelectItem key={item.count} item={item}  />)}
-        </>
+            </fieldset>
     );
 };
 
@@ -35,8 +36,9 @@ const SelectItem = ({item}) =>{
     const dispatch = useDispatch();
     return (
      <>
-         <Checkbox checked={status} onClick={()=>dispatch(UpdateDataSelect(count))} size="small" />
-         <span>{name}</span>
+             <Checkbox checked={status} onClick={()=>dispatch(UpdateDataSelect(count))} size="small" />
+             <span>{name}</span>
+
      </>
     )
 }

@@ -2,14 +2,9 @@ import * as React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {
-    FetchDataFactsThunk,
-    FetchDataMviewsThunk,
-    FetchDataSelectThunk,
-    FetchDataTagsThunk, FetchDataThunk
-} from "../redux/action/action";
+import {FetchDataThunk} from "../redux/action/action";
 import TableView from "../tableView/tableView";
-import {SelectContainer} from "../selectContainer/selectContainer";
+
 
 
 const SERVER = "http://127.0.0.1:4000";
@@ -35,7 +30,7 @@ export const SelectViewContainer = () => {
 
     return (
         <>
-            <TableView testData={[]} data={data.map(item=> item)} />
+            <TableView testData={[]} data={data} name={active}/>
         </>
 
     );

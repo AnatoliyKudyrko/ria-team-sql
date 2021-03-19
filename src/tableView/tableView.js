@@ -6,16 +6,16 @@ import {useEffect} from "react";
 const options = {
     onRowsDelete:false
 };
- const TableView = ({testData,data}) => {
+ const TableView = ({testData,data,name}) => {
      useEffect(()=>{
 
      },[data])
 
     return (
-        <div style={{height: 400, width: '100%'}}>
+        <div style={{height: 400, width: '100%',marginTop:'20px'}}>
             {data  !== null ?
                 <MUIDataTable
-                    title={"Дані"}
+                    title={`Дані у ${name}`}
                     data={testData}
                     columns={data}
                     options={options}

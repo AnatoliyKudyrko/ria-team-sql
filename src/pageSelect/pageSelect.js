@@ -2,7 +2,8 @@
 import * as React from 'react';
 import {SelectContainer} from "../selectContainer/selectContainer";
 import {SelectViewContainer} from "../SelectViewContainer/SelectViewContainer";
-export const PageSelect = () => {
+
+ const PageSelect = () => {
     return (
         <>
             <SelectContainer />
@@ -10,3 +11,4 @@ export const PageSelect = () => {
         </>
     );
 };
+export default PageSelect;

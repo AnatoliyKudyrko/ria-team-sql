@@ -1,18 +1,18 @@
-import Header from "./header/header";
-import ControlTabs from "./controlTabs/controlTabs";
-import {SelectViewContainer} from "./SelectViewContainer/SelectViewContainer";
+import React from "react";
+import MainContainer from "./mainContainer/mainContainer";
+import {BrowserRouter} from "react-router-dom";
 
 
 
  const App= () => {
   return (
+      <BrowserRouter>
         <div className="App">
-           <Header />
-           <ControlTabs />
-           <SelectViewContainer />
-
+          <MainContainer />
         </div>
+      </BrowserRouter>
   );
 }
-
 export default App;
+
+

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, TextareaAutosize} from "@material-ui/core";
+import {Button, ButtonGroup, TextareaAutosize, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import io from "socket.io-client";
@@ -14,46 +14,53 @@ const useStyles = makeStyles((theme) => ({
     },
     centerV:{
         display:"flex",
+        flexDirection:'column',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        width:'100%'
     },
-    btn:{
-        marginLeft:'20px'
-    }
+    text:{
+        width:'50%',
+        marginTop:'10px',
+        padding:'15px',
+        height:'100%'
+    },
 
 }));
 const HandReq = () => {
     const classes = new useStyles();
     const [value,setValue] = useState('');
     const dispatch = useDispatch();
-    useEffect(()=>{
-    },[])
     const handleChange = (event) =>{
         setValue(event.target.value);
     }
+
     const handleSubmit = ()=> {
         alert(value);
         const socket = io(SERVER);
         socket.emit("req", value, (err, res) => {
-            console.log(res)
+            console.log(res);
             dispatch(FetchDataSelect(res))
         });
     }
-
     return (
         <div className={classes.centerV}>
-            <TextareaAutosize
-                rowsMax={100}
-                placeholder="введіть запит"
-                className={classes.textarea}
+            <TextField
+                id="filled-multiline-flexible"
+                multiline
+                value={value}
                 onChange={handleChange}
+                placeholder="Запит"
+                variant="outlined"
+                className={classes.text}
             />
-            <Button variant="contained" color="primary" className={classes.btn} onClick={handleSubmit}>
-                ОК
-            </Button>
-           
+            <ButtonGroup size="small" aria-label="small outlined button group" className={classes.btn} color="primary">
+                <Button onClick={handleSubmit}>виконати</Button>
+                <Button color="secondary" onClick={()=>setValue('')}>очистити</Button>
+            </ButtonGroup>
         </div>
-    );
+
+);
 };
 
 export default HandReq;

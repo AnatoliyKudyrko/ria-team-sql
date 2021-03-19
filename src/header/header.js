@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         borderRadius: 3,
         '&:active': {
-            background: '#0062cc'
+            background: '#ef6c00'
         },
         '&:focus': {
             boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-            background: '#0062cc'
+            background: '#ef6c00'
         },
     },
     title: {
@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
     },
     panel: {
         borderRadius: theme.shape.borderRadius,
-        background: 'rgba(0, 0, 0, 0.04)',
-        width: '100%',
+        background: '#ffa726',
+        width: '30%',
         textAlign:'center',
         marginLeft:'100px',
         display:'flex',
@@ -53,7 +53,7 @@ const Header = () =>{
     const classes = useStyles();
     const classNavLink = {
         textDecoration:'none',
-        background:'#757de8',
+        background:'#ef6c00',
         padding:'10px'
     }
     return (
@@ -63,7 +63,6 @@ const Header = () =>{
                     Конструктор
                 </Typography>
                 <Paper className={classes.panel}>
-                    <NavLink className={classes.linksActive}  to='/select'  activeStyle={classNavLink}>Вибірка</NavLink>
                     <NavLink className={classes.linksActive}  to='/req' activeStyle={classNavLink}>Запити</NavLink>
                     <NavLink className={classes.linksActive}  to='/analytic' activeStyle={classNavLink}>Аналітика</NavLink>
                 </Paper>

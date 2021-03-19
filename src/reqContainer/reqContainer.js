@@ -7,10 +7,11 @@ import TableView from "../tableView/tableView";
 import {useSelector} from "react-redux";
 
 
+
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: "30px",
+
     },
     textarea: {
         width:'70%'
@@ -29,13 +30,23 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+
+class GridToolbarExport extends React.Component {
+    render() {
+        return null;
+    }
+}
+
 const ReqContainer = () => {
     const classes = new useStyles();
     const [nameReq,setNameReq] = useState('checkedHand');
     const data = useSelector(state => state.selectData.data);
-    useEffect(()=>{
 
-    },[]);
+    const columns = [
+        { field: 'user_id', headerName: 'user_id', width: 130 }]
+
+
+
 
     const getControlReq = (name) =>{
         setNameReq(name);
@@ -50,7 +61,7 @@ const ReqContainer = () => {
                      nameReq === 'checkedHand' ? <HandReq /> : 'sasda'
                  }
              </Paper>
-            <TableView testData={[]} data={data} name={"запиту"}/>
+         <TableView column={columns} rows={data.map((item,i)=>{return {id:i,user_id:item.user_id}})} c/>
         </div>
     );
 };

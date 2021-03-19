@@ -1,25 +1,47 @@
 import * as React from 'react';
 import MUIDataTable from "mui-datatables";
 import {useEffect} from "react";
-
+import {
+    DataGrid, GridToolbar,
+    GridToolbarContainer,
+    GridToolbarExport,
+} from '@material-ui/data-grid';
+import {makeStyles} from "@material-ui/core/styles";
 
 const options = {
     onRowsDelete:false
 };
- const TableView = ({testData,data,name}) => {
-     useEffect(()=>{
-
-     },[data])
-
+const useStyles = makeStyles((theme) => ({
+        root: {
+            marginRight:'100px'
+        }}
+));
+function CustomToolbar() {
+ const classes = useStyles();
+    return (
+        <GridToolbarContainer >
+            <GridToolbarExport className={classes.root}/>
+        </GridToolbarContainer>
+    );
+}
+ const TableView = ({column,rows}) => {
     return (
         <div style={{height: 400, width: '100%',marginTop:'20px'}}>
-            {data  !== null ?
-                <MUIDataTable
-                    title={`Дані у ${name}`}
-                    data={testData}
-                    columns={data}
-                    options={options}
-                /> : <Loader />}
+            {rows  !== null ?
+                <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid rows={rows} columns={column}  localeText={{
+                        toolbarDensity: 'Size',
+                        toolbarDensityLabel: 'Size',
+                        toolbarDensityCompact: 'Small',
+                        toolbarDensityStandard: 'Medium',
+                        toolbarDensityComfortable: 'Large',
+                    }}
+                              components={{
+                                  Toolbar: GridToolbar,
+                              }}
+                    />
+                </div>
+                : <Loader />}
 
         </div>
     );

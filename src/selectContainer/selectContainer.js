@@ -17,17 +17,17 @@ const useStyles = makeStyles((theme) => ({
     },
     flex: {
         display: 'flex',
-        flexDirection:'row',
+        flexDirection:'column'
     },
 }));
 
 export const SelectContainer = () => {
+    const classes = useStyles();
     const data = useSelector(state => state.select);
     return (
-            <fieldset>
-                <legend>Таблиці</legend>
-                {data.map(item=><SelectItem key={item.count} item={item}  />)}
-            </fieldset>
+    <div className={classes.flex}>
+        {data.map(item=><SelectItem key={item.count} item={item}  />)}
+    </div>
     );
 };
 
@@ -35,10 +35,10 @@ const SelectItem = ({item}) =>{
     const {name,count,status} = item;
     const dispatch = useDispatch();
     return (
-     <>
+     <div>
              <Checkbox checked={status} onClick={()=>dispatch(UpdateDataSelect(count))} size="small" />
              <span>{name}</span>
 
-     </>
+     </div>
     )
 }

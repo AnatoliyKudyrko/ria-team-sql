@@ -98,7 +98,7 @@ io.on('connection',  (socket) => {
     socket.on('req', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
-            field: item, headerName:item, width: 150
+            name: item
         }})
             callbackFn(null , {columns,rows});
     });

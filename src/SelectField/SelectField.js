@@ -31,7 +31,6 @@ const SelectField = (props) => {
     const field = useSelector(state => state.select.dataField);
     const active = data.filter(i=>i.status === true).map(item=>item.name).toString();
 
-
     const getNameDB = (active) =>{
          let index = active.indexOf('.');
          let name = active.slice(0,index);

@@ -27,7 +27,12 @@ function CustomToolbar() {
  const TableView = ({column,rows}) => {
     return (
         <div style={{height: 400, width: '100%',marginTop:'10px'}}>
-            {rows  !== null ?
+            <MUIDataTable
+                data={rows}
+                columns={column}
+                options={options}
+            />
+{/*            {rows  !== null ?
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid rows={rows} columns={column}  localeText={{
                         toolbarDensity: 'Size',
@@ -41,7 +46,7 @@ function CustomToolbar() {
                               }}
                     />
                 </div>
-                : <Loader />}
+                : <Loader />}*/}
 
         </div>
     );

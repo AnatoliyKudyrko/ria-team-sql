@@ -53,7 +53,7 @@ const ReqContainer = () => {
                  }
              </Paper>
             <Paper>
-               <TableView column={data.columns} rows={data.rows.map((item,i)=>{return {id:i,...item}})} />
+               <TableView column={data.columns} rows={data.rows} />
 
             </Paper>
 

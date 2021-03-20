@@ -19,12 +19,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 const SelectField = () => {
     const classes = useStyles();
-    const slon = 'slon';
-    const table = 'slon.facts';
    useEffect(()=>{
        const socket = io(SERVER);
-       socket.emit("getFields", slon,table,( res) => {
-           console.log(res);
+       socket.emit("getFields", "slon","facts",(data) => {
+           console.log(data);
        })
    })
     return (

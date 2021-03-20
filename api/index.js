@@ -53,9 +53,8 @@ io.on('connection',  (socket) => {
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
-            console.log(db, table, callbackFn);
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                callbackFn(null, data.map(item => item.name));
+                callbackFn(data.map(item => item.name));
             })
         } else {
             const msg = 'database not found';

@@ -1,17 +1,15 @@
 const app = require('express')();
 const http = require('http').createServer(app);
 //const ClickHouse = require('@apla/clickhouse');
-//const ch = new ClickHouse({ host: 'localhost', port: 8123 })
 const { ClickHouse } = require('clickhouse');
+const config = require('./config'),
+      err = require('./helpers/error');
+const slonDb = new ClickHouse({...config.clickhouse, db: 'slon'});
+const mviewsDb = new ClickHouse({...config.clickhouse, db: 'mviews'});
+const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'system'}});
+const databases = ['slon', 'mviews'];
 
-const clickhouse = new ClickHouse({
-    url: 'http://localhost',
-    port: 8123,
-    debug: false,
-    basicAuth: null,
-    isUseGzip: false,
-    format: "json",
-});
+const clickhouse = new ClickHouse({...config.clickhouse});
 
 const PORT = 4000;
 const io = require('socket.io')(http,{
@@ -48,13 +46,32 @@ io.on('connection',  (socket) => {
 
 });
 */
+
+//приймає запит у вигляді сроки та віддає дані по цьому запиту
 io.on('connection',  (socket) => {
+    socket.on('getFields', (db, table, callbackFn) => {
+        if (databases.includes(db)) {
+            systemDb.query(`SELECT name FROM columns WHERE database = ${db} AND table = ${table} ORDER BY name`, (err, data) => {
+                callbackFn({
+                    data
+                });
+            })
+        } else {
+            const msg = 'database not found';
+            err(msg);
+            callbackFn({
+                error: msg
+            })
+        }
+    });
+
     socket.on('req', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
             callbackFn(null , rows);
     });
 
 });
+
 
 
 http.listen(PORT, () => {

@@ -4,8 +4,8 @@ const http = require('http').createServer(app);
 const { ClickHouse } = require('clickhouse');
 const config = require('./config'),
       err = require('./helpers/error');
-const slonDb = new ClickHouse({...config.clickhouse, db: 'slon'});
-const mviewsDb = new ClickHouse({...config.clickhouse, db: 'mviews'});
+const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
+const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
 const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'system'}});
 const databases = ['slon', 'mviews'];
 
@@ -17,7 +17,6 @@ const io = require('socket.io')(http,{
         origin: '*',
     }
 });
-
 
 /*ch.query("SELECT * FROM mviews.calltracking", (err, data) => {
     io.on('connection',  (socket) => {
@@ -46,20 +45,20 @@ io.on('connection',  (socket) => {
 
 });
 */
+//csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})
 
 //приймає запит у вигляді сроки та віддає дані по цьому запиту
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
-            systemDb.query(`SELECT name FROM columns WHERE database = ${db} AND table = ${table} ORDER BY name`, (err, data) => {
-                callbackFn({
-                    data
-                });
+            console.log(db, table, callbackFn);
+            systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
+                callbackFn(null, data.map(item => item.name));
             })
         } else {
             const msg = 'database not found';
             err(msg);
-            callbackFn({
+            callbackFn(null, {
                 error: msg
             })
         }

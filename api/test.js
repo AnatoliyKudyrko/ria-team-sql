@@ -5,9 +5,9 @@ const SERVER = "http://127.0.0.1:4000";
         const param = {
             fields: ['slon.facts.user_id']
         };
-    /*    socket.emit("getData", param,(err, res) => {
+       socket.emit("getData", param,(err, res) => {
             console.log(res);
-        });*/
+        });
         socket.emit("getTables", (err, res) => {
             console.log(res);
         });

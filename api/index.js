@@ -55,12 +55,13 @@ io.on('connection',  (socket) => {
         if (databases.includes(db)) {
             console.log(db, table, callbackFn);
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                callbackFn(null, data.map(item => item.name));
+                const res = data ? data.map(item => item.name) : null;
+                callbackFn(res);
             })
         } else {
             const msg = 'database not found';
             err(msg);
-            callbackFn(null, {
+            callbackFn({
                 error: msg
             })
         }
@@ -78,7 +79,7 @@ io.on('connection',  (socket) => {
             })
         });
         Promise.all([prom1, prom2]).then(values => {
-            callbackFn(null, {
+            callbackFn({
                 mviews: values[0],
                 slon: values[1]
             });
@@ -87,10 +88,13 @@ io.on('connection',  (socket) => {
 
     socket.on('getData', (params, callbackFn) => {
         const fields = params.fields.join(',');
+        const pageSize = params.page || 30;
+        const shift = params.page ? (params.page - 1) * pageSize : 0;
         const tables = Array.from(new Set(params.fields.map(field => field.replace(/\.[^\.]*$/, '')))).join(',');
-        console.log(`SELECT ${fields} FROM ${tables}`);
-            fullDbs.query(`SELECT ${fields} FROM ${tables}`, (err, data) => {
-                callbackFn(null, data);
+        console.log(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize}`);
+            fullDbs.query(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize}`, (err, data) => {
+                const res = data || null;
+                callbackFn( res);
             });
     });
 
@@ -100,7 +104,7 @@ io.on('connection',  (socket) => {
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
             field: item, headerName:item, width: 150
         }})
-            callbackFn(null , {columns,rows});
+            callbackFn({columns,rows});
     });
 
 });

@@ -17,7 +17,6 @@ const io = require('socket.io')(http,{
         origin: '*',
     }
 });
-console.log(slonDb);
 
 /*ch.query("SELECT * FROM mviews.calltracking", (err, data) => {
     io.on('connection',  (socket) => {
@@ -46,20 +45,20 @@ io.on('connection',  (socket) => {
 
 });
 */
+//csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})
 
 //приймає запит у вигляді сроки та віддає дані по цьому запиту
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
-            systemDb.query(`SELECT name FROM columns WHERE database = ${db} AND table = ${table} ORDER BY name`, (err, data) => {
-                callbackFn({
-                    data
-                });
+            console.log(db, table, callbackFn);
+            systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
+                callbackFn(null, data.map(item => item.name));
             })
         } else {
             const msg = 'database not found';
             err(msg);
-            callbackFn({
+            callbackFn(null, {
                 error: msg
             })
         }

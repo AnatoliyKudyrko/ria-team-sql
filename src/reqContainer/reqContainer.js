@@ -5,10 +5,12 @@ import HandReq from "../handReq/handReq";
 import io from "socket.io-client";
 import TableView from "../tableView/tableView";
 import {useSelector} from "react-redux";
+import AutoReq from "../autoReq/autoReq";
 
 
 
 const SERVER = "http://127.0.0.1:4000";
+
 const useStyles = makeStyles((theme) => ({
     root: {
 
@@ -31,23 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-class GridToolbarExport extends React.Component {
-    render() {
-        return null;
-    }
-}
+
 
 const ReqContainer = () => {
     const classes = new useStyles();
     const [nameReq,setNameReq] = useState('checkedHand');
     const data = useSelector(state => state.selectData.data);
-
-    const columns = [
-        { field: 'user_id', headerName: 'user_id', width: 130 }]
-
-
-
-
+    console.log(data)
     const getControlReq = (name) =>{
         setNameReq(name);
     }
@@ -58,10 +50,14 @@ const ReqContainer = () => {
             </div>
              <Paper className={classes.root}>
                  {
-                     nameReq === 'checkedHand' ? <HandReq /> : 'sasda'
+                     nameReq === 'checkedHand' ? <HandReq /> : <AutoReq />
                  }
              </Paper>
-         <TableView column={columns} rows={data.map((item,i)=>{return {id:i,user_id:item.user_id}})} c/>
+            <Paper>
+               <TableView column={data.columns} rows={data.rows.map((item,i)=>{return {id:i,...item}})} />
+
+            </Paper>
+
         </div>
     );
 };

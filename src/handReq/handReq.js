@@ -39,8 +39,11 @@ const HandReq = () => {
         alert(value);
         const socket = io(SERVER);
         socket.emit("req", value, (err, res) => {
-            console.log(res);
-            dispatch(FetchDataSelect(res))
+            dispatch(FetchDataSelect({
+                columns:res.columns,
+                rows:res.rows
+        }
+            ))
         });
     }
     return (

@@ -53,7 +53,6 @@ io.on('connection',  (socket) => {
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
-            console.log(db, table, callbackFn);
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
                 const res = data ? data.map(item => item.name) : null;
                 callbackFn(res);
@@ -67,7 +66,8 @@ io.on('connection',  (socket) => {
         }
     });
 
-    socket.on('getTables', (callbackFn) => {
+
+   socket.on('getTables', (callbackFn) => {
         const prom1 = new Promise((res, rej) => {
             systemDb.query(`SELECT name FROM tables WHERE database = 'mviews'`, (err, data) => {
                 res( data.map(item => item.name));
@@ -91,10 +91,9 @@ io.on('connection',  (socket) => {
         const pageSize = params.page || 30;
         const shift = params.page ? (params.page - 1) * pageSize : 0;
         const tables = Array.from(new Set(params.fields.map(field => field.replace(/\.[^\.]*$/, '')))).join(',');
-        console.log(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize}`);
             fullDbs.query(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize}`, (err, data) => {
                 const res = data || null;
-                callbackFn( res);
+                callbackFn(res);
             });
     });
 
@@ -106,7 +105,6 @@ io.on('connection',  (socket) => {
         }})
             callbackFn({columns,rows});
     });
-
 });
 
 

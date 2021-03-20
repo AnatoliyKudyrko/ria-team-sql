@@ -64,6 +64,26 @@ io.on('connection',  (socket) => {
         }
     });
 
+    socket.on('getTables', (callbackFn) => {
+        const prom1 = new Promise((res, rej) => {
+            systemDb.query(`SELECT name FROM tables WHERE database = 'mviews'`, (err, data) => {
+                res( data.map(item => item.name));
+            })
+        });
+        const prom2 = new Promise((res, rej) => {
+            systemDb.query(`SELECT name FROM tables WHERE database = 'slon'`, (err, data) => {
+                res( data.map(item => item.name));
+            })
+        });
+        Promise.all([prom1, prom2]).then(values => {
+            callbackFn(null, {
+                mviews: values[0],
+                slon: values[1]
+            });
+        })
+    });
+
+
     socket.on('req', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{

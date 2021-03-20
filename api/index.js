@@ -106,6 +106,7 @@ io.on('connection',  (socket) => {
                 console.log(res);
                 callbackFn(res);
             });
+            
     });
 
 
@@ -117,6 +118,7 @@ io.on('connection',  (socket) => {
             callbackFn({columns,rows});
     });
 });
+
 
 
 

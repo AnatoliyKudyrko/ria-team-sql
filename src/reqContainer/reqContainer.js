@@ -37,9 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ReqContainer = () => {
     const classes = new useStyles();
-    const [nameReq,setNameReq] = useState('checkedHand');
+    const [nameReq,setNameReq] = useState('checkedAuto');
     const data = useSelector(state => state.selectData.data);
-    console.log(data)
     const getControlReq = (name) =>{
         setNameReq(name);
     }
@@ -50,11 +49,11 @@ const ReqContainer = () => {
             </div>
              <Paper className={classes.root}>
                  {
-                     nameReq === 'checkedHand' ? <HandReq /> : <AutoReq />
+                     nameReq === 'checkedAuto' ?  <AutoReq /> : <HandReq />
                  }
              </Paper>
             <Paper>
-               <TableView column={data.columns} rows={data.rows.map((item,i)=>{return {id:i,...item}})} />
+               <TableView column={data.columns} rows={data.rows} />
 
             </Paper>
 
@@ -64,10 +63,10 @@ const ReqContainer = () => {
 
 const ControlReq = (props)=>{
     const [state, setState] = useState({
-        checkedHand: true,
-        checkedAuto: false
+        checkedAuto: true,
+        checkedHand: false
 
-    });
+    })
 
     const handleChange = (event) => {
         if(  [event.target.name].toString() === 'checkedHand' && event.target.checked === true ){
@@ -85,19 +84,6 @@ const ControlReq = (props)=>{
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={state.checkedHand}
-                            onChange={handleChange}
-                            name="checkedHand"
-                            color="primary"
-                        />
-                    }
-                    label="руч."
-                />
-            </Box>
-            <Box component="span" m={1}>
-                <FormControlLabel
-                    control={
-                        <Checkbox
                             checked={state.checkedAuto}
                             onChange={handleChange}
                             name="checkedAuto"
@@ -107,6 +93,20 @@ const ControlReq = (props)=>{
                     label="авто"
                 />
             </Box>
+            <Box component="span" m={1}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={state.checkedHand}
+                            onChange={handleChange}
+                            name="checkedHand"
+                            color="primary"
+                        />
+                    }
+                    label="руч."
+                />
+            </Box>
+
         </div>
     )
 }

@@ -21,22 +21,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const SelectContainer = () => {
+export const SelectContainer = (props) => {
     const classes = useStyles();
     const data = useSelector(state => state.select);
     return (
     <div className={classes.flex}>
-        {data.map(item=><SelectItem key={item.count} item={item}  />)}
+        {data.checkedData.map(item=><SelectItem key={item.count} item={item} getTableName={props.getTableName} />)}
     </div>
     );
 };
 
-const SelectItem = ({item}) =>{
+const SelectItem = ({item,getTableName}) =>{
     const {name,count,status} = item;
     const dispatch = useDispatch();
+    const handleClick = ()=>{
+        dispatch(UpdateDataSelect(count));
+        getTableName(name);
+    }
     return (
      <div>
-             <Checkbox checked={status} onClick={()=>dispatch(UpdateDataSelect(count))} size="small" />
+             <Checkbox checked={status} onClick={()=>handleClick()} size="small" />
              <span>{name}</span>
 
      </div>

@@ -9,7 +9,7 @@ import Header from "../header/header";
 
 const MainContainer = () => {
     return (
-        <div>
+        <div className={{marginBottom:'30px'}}>
             <Header />
             <Switch>
                 <Route  path='/select' component={PageSelect}/>

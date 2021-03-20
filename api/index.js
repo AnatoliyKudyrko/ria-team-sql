@@ -6,6 +6,8 @@ const config = require('./config'),
       err = require('./helpers/error');
 const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
 const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
+
+const fullDbs = new ClickHouse({...config.clickhouse});
 const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'system'}});
 const databases = ['slon', 'mviews'];
 
@@ -81,6 +83,15 @@ io.on('connection',  (socket) => {
                 slon: values[1]
             });
         })
+    });
+
+    socket.on('getData', (params, callbackFn) => {
+        const fields = params.fields.join(',');
+        const tables = Array.from(new Set(params.fields.map(field => field.replace(/\.[^\.]*$/, '')))).join(',');
+        console.log(`SELECT ${fields} FROM ${tables}`);
+            fullDbs.query(`SELECT ${fields} FROM ${tables}`, (err, data) => {
+                callbackFn(null, data);
+            });
     });
 
 

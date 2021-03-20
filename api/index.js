@@ -4,8 +4,8 @@ const http = require('http').createServer(app);
 const { ClickHouse } = require('clickhouse');
 const config = require('./config'),
       err = require('./helpers/error');
-const slonDb = new ClickHouse({...config.clickhouse, db: 'slon'});
-const mviewsDb = new ClickHouse({...config.clickhouse, db: 'mviews'});
+const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
+const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
 const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'system'}});
 const databases = ['slon', 'mviews'];
 
@@ -17,7 +17,7 @@ const io = require('socket.io')(http,{
         origin: '*',
     }
 });
-
+console.log(slonDb);
 
 /*ch.query("SELECT * FROM mviews.calltracking", (err, data) => {
     io.on('connection',  (socket) => {

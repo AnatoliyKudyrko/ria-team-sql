@@ -13,14 +13,6 @@ export function FetchDataSelect(data){
     }
 
 }
-function FetchDataReq(data){
-    return {
-        type:LOAD_DATA_REQ ,
-        data
-    }
-
-}
-
 
 export function UpdateDataSelect(id){
     return {

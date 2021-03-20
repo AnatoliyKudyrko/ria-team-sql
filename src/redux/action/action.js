@@ -1,7 +1,10 @@
-
+import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
 export const LOAD_DATA_REQ = 'LOAD_DATA_REQ';
+
+const SERVER = "http://127.0.0.1:4000";
+const socket = io(SERVER);
 
 export function FetchDataSelect(data){
     return {
@@ -29,11 +32,22 @@ export function UpdateDataSelect(id){
 
 export function FetchDataThunk (socket,action){
     return function (dispatch){
-        socket.on(action,(data)=>{
-           dispatch(FetchDataSelect(data.meta))
+        socket.on(action,  (data)=>{
+           dispatch(FetchDataSelect( data.rows))
     })
 }
 }
+export  const FetchDataThunkReq =(action,value)=>{
+    return (dispatch)=>{
+        socket.emit(action, value, (err, res) => {
+            console.log(res.columns)
+            dispatch(FetchDataSelect(res.rows))
+        });
+    }
+}
+
+
+
 
 
 

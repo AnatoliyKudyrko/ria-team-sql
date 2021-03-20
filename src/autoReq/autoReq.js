@@ -11,12 +11,18 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent:'space-around',
-        background:'#bbb',
+        background:'rgba(0, 0, 0, 0.04)',
         '& > *': {
             margin: theme.spacing(1),
             width: theme.spacing(30),
         },
     },
+    block:{
+        background:'#e57373',
+        textAlign:'center',
+        fontSize:'18px',
+        color:'#fff'
+    }
 
 }));
 const AutoReq = () => {
@@ -26,18 +32,22 @@ const AutoReq = () => {
     return (
         <div>
             <div className={classes.root}>
-                <Paper>
-                    <span>tab</span>
-                    <hr/>
+                <Paper >
+                     <div className={classes.block}>
+                        <span> Таблиці</span>
+                     </div>
                     <SelectContainer />
                 </Paper>
                 <Paper>
-                    <span>Filed</span>
-                    <hr/>
+                    <div className={classes.block}>
+                        <span> Поля</span>
+                    </div>
                     <SelectField />
                 </Paper>
                 <Paper >
-                    sadas
+                    <div className={classes.block}>
+                        <span> Групування</span>
+                    </div>
                 </Paper>
             </div>
         </div>

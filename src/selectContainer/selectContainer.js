@@ -24,9 +24,10 @@ const useStyles = makeStyles((theme) => ({
 export const SelectContainer = () => {
     const classes = useStyles();
     const data = useSelector(state => state.select);
+    console.log(data.checkedData)
     return (
     <div className={classes.flex}>
-        {data.map(item=><SelectItem key={item.count} item={item}  />)}
+        {data.checkedData.map(item=><SelectItem key={item.count} item={item}  />)}
     </div>
     );
 };

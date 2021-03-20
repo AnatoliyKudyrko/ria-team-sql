@@ -39,7 +39,6 @@ const ReqContainer = () => {
     const classes = new useStyles();
     const [nameReq,setNameReq] = useState('checkedAuto');
     const data = useSelector(state => state.selectData.data);
-    console.log(data)
     const getControlReq = (name) =>{
         setNameReq(name);
     }

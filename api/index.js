@@ -50,11 +50,15 @@ io.on('connection',  (socket) => {
 //csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})
 
 //приймає запит у вигляді сроки та віддає дані по цьому запиту
+function namer(item, index) { 
+    return item.name;
+}
+
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                const res = data ? data.map(item => item.name) : null;
+                const res = data ? data.map(namer) : null;
                 callbackFn(res);
             })
         } else {
@@ -70,12 +74,12 @@ io.on('connection',  (socket) => {
    socket.on('getTables', (callbackFn) => {
         const prom1 = new Promise((res, rej) => {
             systemDb.query(`SELECT name FROM tables WHERE database = 'mviews'`, (err, data) => {
-                res( data.map(item => item.name));
+                res( data.map(namer));
             })
         });
         const prom2 = new Promise((res, rej) => {
             systemDb.query(`SELECT name FROM tables WHERE database = 'slon'`, (err, data) => {
-                res( data.map(item => item.name));
+                res( data.map(namer));
             })
         });
         Promise.all([prom1, prom2]).then(values => {
@@ -90,9 +94,11 @@ io.on('connection',  (socket) => {
         const fields = params.fields.join(',');
         const pageSize = params.page || 30;
         const shift = params.page ? (params.page - 1) * pageSize : 0;
+        const grouper = params.group || '';
         const tables = Array.from(new Set(params.fields.map(field => field.replace(/\.[^\.]*$/, '')))).join(',');
-            fullDbs.query(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize}`, (err, data) => {
+            fullDbs.query(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize} GROUP BY ${grouper}`, (err, data) => {
                 const res = data || null;
+                console.log(res);
                 callbackFn(res);
             });
     });

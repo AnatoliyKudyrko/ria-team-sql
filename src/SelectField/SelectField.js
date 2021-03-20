@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import io from "socket.io-client";
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const SelectField = () => {
+const SelectField = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const data = useSelector(state => state.select.checkedData);
@@ -44,18 +44,7 @@ const SelectField = () => {
            dispatch(FetchDataField(data))
        })
    },[data])
-    const listItems = field.map((item,i) =>
-            <FormControlLabel key={i}
-                control={
-                    <Checkbox
-                        name={item.name}
-                        color="primary"
-                        size='small'
-                    />
-                }
-                label={item.name}
-            />
-    )
+    const listItems = field.map((item,i) => <SelectFieldItem item={item} i={i} key={i} getFieldName={props.getFieldName}/>);
     return (
         <div className={classes.root}>
             <div className={classes.flex}>
@@ -67,7 +56,31 @@ const SelectField = () => {
         </div>
     );
 };
+const SelectFieldItem = (props) => {
+    const [checked, setChecked] = useState(false);
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
+    useEffect(()=>{
+        if(checked === true){
+            props.getFieldName(props.item.name);
+        }
+    },[checked])
+    return (
+    <FormControlLabel  control={
+        <Checkbox
+        name={props.item.name}
+        color="primary"
+        size='small'
+        checked={checked}
+        onChange={handleChange}
+    />
+    } label={props.item.name}
 
+
+    />
+    )
+}
 
 
 

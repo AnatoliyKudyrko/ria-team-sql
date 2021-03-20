@@ -36,7 +36,6 @@ const HandReq = () => {
     }
 
     const handleSubmit = ()=> {
-        alert(value);
         const socket = io(SERVER);
         socket.emit("req", value, (err, res) => {
             dispatch(FetchDataSelect({

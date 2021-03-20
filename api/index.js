@@ -54,11 +54,16 @@ function namer(item, index) {
     return item.name;
 }
 
+function dateFilter(item) {
+    return !(['EventDate','HourDate', 'MinuteDate', 'SecondDate', 'date_time'].includes(item))  
+}
+
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                const res = data ? data.map(namer) : null;
+                const res = data ? data.map(namer).filter(dateFilter) : null;
+                console.log(res);
                 callbackFn(res);
             })
         } else {

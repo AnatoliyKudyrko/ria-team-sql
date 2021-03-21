@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Paper} from "@material-ui/core";
+import {Checkbox, FormControlLabel, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {SelectTable} from "../selectTable/selectTable";
 import SelectField from "../SelectField/SelectField";
@@ -10,8 +10,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent:'space-around',
-        background:'rgba(0, 0, 0, 0.04)',
+        justifyContent:'flex-start',
+        margin:'20px',
+        background:'rgba(0, 0, 0, 0.02)',
         '& > *': {
             margin: theme.spacing(1),
             width: theme.spacing(30),
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
         textAlign:'center',
         fontSize:'18px',
         color:'#fff'
+    },
+    flex:{
+        display:'flex',
+        width:'50%'
     }
 
 }));
@@ -53,16 +58,11 @@ const AutoReqMain = () => {
                     </div>
                     <SelectField getFieldName={getFieldName} delFieldName={delFieldName} />
                 </Paper>
-                <Paper >
-                    <div className={classes.block}>
-                        <span> Групування</span>
-                    </div>
-                </Paper>
             </div>
             <AutoViewReq table = {tableName} field={fieldArray} />
-            <Filter />
+            <Filter table = {tableName} field={fieldArray}  />
         </div>
     );
-};
+}
 
 export default AutoReqMain;

@@ -18,7 +18,7 @@ export function Select (state=initialState,action){
                 let obj = {};
                 if (item.count === action.id) {
                     obj=  {...item, status: item.status = true}
-                };
+                }
                 return {...item,...obj}
             });
             return {...state,checkedData:[...objActive]}

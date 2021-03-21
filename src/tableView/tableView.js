@@ -25,6 +25,7 @@ const options = {
                     columns={column}
                     options={options}
                 />
+                loading={true}
 */}
             <DataGrid rows={rows} columns={column}  localeText={{
                 toolbarDensity: 'Size',

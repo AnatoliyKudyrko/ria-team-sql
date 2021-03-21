@@ -1,13 +1,22 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {Checkbox, FormControlLabel, InputLabel, ListSubheader, Radio, TextField} from "@material-ui/core";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {
+    AccordionSummary,
+    Button,
+    InputLabel,
+    TextField
+} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-
+import io from "socket.io-client";
+import {FetchDataSelect} from "../../redux/action/action";
+import {SERVER} from "../../dal/connectService";
+import {useDispatch} from "react-redux";
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -17,51 +26,126 @@ const useStyles = makeStyles((theme) => ({
         display:'flex',
         justifyContent:'space-between',
         alignItems:'center'
+    },
+        container: {
+            display: 'flex',
+            flexWrap: 'wrap',
+        },
+        textField: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+            width: 200,
+        },
+    btn:{
+        height:theme.spacing(3)
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+        color:'#e57373'
+    },
+    detalies:{
+        display:"flex",
+        flexDirection:"column"
+    },
+    bodyDiv:{
+        display:"flex",
+        alignItems:'flex-end'
     }
 }));
-const Filter = () => {
+const Filter = ({table,field}) => {
     const classes = useStyles();
-    const [selectedValue, setSelectedValue] = React.useState('a');
+    const dispatch = useDispatch();
+    const [dataFrom, setDataFrom] = React.useState('2021-03-01');
+    const [dataTo, setDataTo] = React.useState('021-03-20');
+    const [day, setDay] = React.useState(0);
+    const [reqDate,setReqDate] = useState('');
 
-    const handleChange = (event) => {
-        setSelectedValue(event.target.value);
+    const handleDay= (event) => {
+        setDay(event.target.value);
+        console.log(day);
     };
+    const handleChangeFrom = (event) => {
+        setDataFrom(event.target.value);
+        console.log(dataFrom)
+    };
+    const handleChangeTo = (event) => {
+        setDataTo(event.target.value);
+        console.log(dataTo)
+    };
+    const filterDate = ()=>{
+        setReqDate(`Select ${field} from ${table} where EventDate BETWEEN ${dataFrom} and ${dataTo}`);
+        console.log(reqDate);
+        const socket = io(SERVER);
+        socket.emit("req", `${reqDate} LIMIT 1000`, (err, res) => {
+            dispatch(FetchDataSelect({
+                    columns:res.columns,
+                    rows:res.rows
+                }
+            ))
+        });
+    }
+    const filterDay = ()=>{
+        console.log(day)
+    }
+
     return (
          <div>
-             <Typography variant="h6" component="h2">
-                 Полярні запити
-             </Typography>
-        <div>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="grouped-select">Фільтрація по даті</InputLabel>
-                <Select defaultValue="" id="grouped-select">
-                    <ListSubheader>Запити</ListSubheader>
-                    <MenuItem value={'Кількість автомобілів'}>Кількість автомобілів</MenuItem>
-                    <MenuItem value={'Кількість юзерів'}>Кількість юзерів</MenuItem>
-                    <MenuItem value={'Кількість юзерів за парметром'}>
-                        Кількість юзерів за парметром
-                    </MenuItem>
-                    <ListSubheader>Дата</ListSubheader>
-                </Select>
-                <div>
-                    <Radio
-                        checked={selectedValue === 'a'}
-                        onChange={handleChange}
-                        value="a"
-                        name="radio-button-demo"
-                        inputProps={{ 'aria-label': 'A' }}
-                    />
-                    <Radio
-                        checked={selectedValue === 'd'}
-                        onChange={handleChange}
-                        value="d"
-                        color="default"
-                        name="radio-button-demo"
-                        inputProps={{ 'aria-label': 'D' }}
-                    />
-                </div>
-            </FormControl>
-        </div>
+             <Accordion >
+                 <AccordionSummary
+                     expandIcon={<ExpandMoreIcon />}
+                     aria-controls="panel1a-content"
+                     id="panel1a-header"
+                 >
+                     <Typography className={classes.heading}>Популярні фільтри</Typography>
+                 </AccordionSummary>
+                 <AccordionDetails className={classes.detalies}>
+                     <div className={classes.bodyDiv} >
+                             <form className={classes.container} noValidate>
+                                 <TextField
+                                     id="date"
+                                     label="З"
+                                     type="date"
+                                     onChange={handleChangeFrom}
+                                     className={classes.textField}
+                                     InputLabelProps={{
+                                         shrink: true,
+                                     }}
+                                 />
+                                 <TextField
+                                     id="date1"
+                                     label="До"
+                                     type="date"
+                                     onChange={handleChangeTo}
+                                     className={classes.textField}
+                                     InputLabelProps={{
+                                         shrink: true,
+                                     }}
+                                 />
+                             </form>
+                             <Button  className={classes.btn} variant="contained" color="primary" onClick={()=>filterDate()} >
+                                 Знайти
+                             </Button>
+                     </div>
+                     <div className={classes.bodyDiv}>
+                     <FormControl className={classes.formControl}>
+                             <InputLabel>За останні дні</InputLabel>
+                             <Select
+                                 value={day}
+                                 onChange={handleDay}
+                             >
+                                 <MenuItem value={7}>7</MenuItem>
+                                 <MenuItem value={30}>30</MenuItem>
+                                 <MenuItem value={90}>90</MenuItem>
+                             </Select>
+                         </FormControl>
+                                 <Button  className={classes.btn} variant="contained" color="primary" onClick={filterDay} >
+                                     Знайти
+                                 </Button>
+
+                     </div>
+                 </AccordionDetails>
+             </Accordion>
          </div>
     );
 };

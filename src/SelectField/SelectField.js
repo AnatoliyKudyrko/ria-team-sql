@@ -30,7 +30,6 @@ const SelectField = (props) => {
     const data = useSelector(state => state.select.checkedData);
     const field = useSelector(state => state.select.dataField);
     const active = data.filter(i=>i.status === true).map(item=>item.name).toString();
-
     const getNameDB = (active) =>{
          let index = active.indexOf('.');
          let name = active.slice(0,index);
@@ -43,6 +42,7 @@ const SelectField = (props) => {
            dispatch(FetchDataField(data))
        })
    },[data])
+    console.log(field)
     const listItems = field.map((item,i) => <SelectFieldItem item={item} i={i} key={i} getFieldName={props.getFieldName}/>);
     return (
         <div className={classes.root}>
@@ -60,6 +60,7 @@ const SelectFieldItem = (props) => {
     const handleChange = (event) => {
         setChecked(event.target.checked);
     };
+    console.log(props.item.name)
     useEffect(()=>{
         if(checked === true){
             props.getFieldName(props.item.name);

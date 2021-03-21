@@ -12,7 +12,7 @@ const MainContainer = () => {
         <div className={{marginBottom:'30px'}}>
             <Header />
             <Switch>
-                <Route  path='/select' component={PageSelect}/>
+                <Route exact path='/select' component={PageSelect}/>
                 <Route path='/req' component={ReqContainer}/>
             </Switch>
         </div>

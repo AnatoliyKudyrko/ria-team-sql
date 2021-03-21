@@ -50,20 +50,19 @@ io.on('connection',  (socket) => {
 //csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})
 
 //приймає запит у вигляді сроки та віддає дані по цьому запиту
-function namer(item, index) { 
+function namer(item, index) {
     return item.name;
 }
 
 function dateFilter(item) {
-    return !(['EventDate','HourDate', 'MinuteDate', 'SecondDate', 'date_time'].includes(item))  
+    return !(['EventDate','HourDate', 'MinuteDate', 'SecondDate', 'date_time'].includes(item))
 }
 
 io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                const res = data ? data.map(namer).filter(dateFilter) : null;
-                console.log(res);
+                const res = data ? data.map(namer).filter(dateFilter).map(item=>{return {name:item}}) : null;
                 callbackFn(res);
             })
         } else {
@@ -103,7 +102,6 @@ io.on('connection',  (socket) => {
         const tables = Array.from(new Set(params.fields.map(field => field.replace(/\.[^\.]*$/, '')))).join(',');
             fullDbs.query(`SELECT ${fields} FROM ${tables} LIMIT ${shift}, ${pageSize} GROUP BY ${grouper}`, (err, data) => {
                 const res = data || null;
-                console.log(res);
                 callbackFn(res);
             });
             
@@ -113,7 +111,7 @@ io.on('connection',  (socket) => {
     socket.on('req', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
-            field: item, headerName:item, width: 150
+            name:item
         }})
             callbackFn({columns,rows});
     });

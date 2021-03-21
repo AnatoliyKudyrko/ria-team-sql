@@ -5,7 +5,6 @@ import HandReq from "../handRegContainer/handReq/handReq";
 import TableView from "../tableView/tableView";
 import {useSelector} from "react-redux";
 import AutoReqMain from "../autoReqContainer/autoReqMain/autoReqMain";
-import Filter from "../autoReqContainer/filter/filter";
 
 
 

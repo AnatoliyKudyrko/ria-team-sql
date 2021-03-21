@@ -34,7 +34,7 @@ const AutoViewReq = ({table,field}) => {
 
     const handleSubmit =()=>{
         const socket = io(SERVER);
-        socket.emit("req", `${req} LIMIT 1000`, (err, res) => {
+        socket.emit("reqData", `${req} LIMIT 1000`, (err, res) => {
             dispatch(FetchDataSelect({
                     columns:res.columns,
                     rows:res.rows

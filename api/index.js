@@ -110,13 +110,32 @@ io.on('connection',  (socket) => {
     });
 
 
-    socket.on('req', async function( param, callbackFn){
+    socket.on('reqData', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
             field: item, headerName:item, width: 150
         }})
         callbackFn(null,{columns,rows});
     });
+
+    socket.on('reqDate', async function({field,table,dataFrom,dataTo}, callbackFn){
+        const rows = await clickhouse.query(`Select ${field} from ${table} where toYYYYMMDD(EventDate) BETWEEN ${Number(dataFrom.replace(/-/g, ''))} and ${Number(dataTo.replace(/-/g, ''))} limit 1000`).toPromise();
+        const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
+            field: item, headerName:item, width: 150
+        }})
+        callbackFn(null,{columns,rows});
+    });
+
+    socket.on('reqDays', async function({field,table,day}, callbackFn){
+            const rows = await clickhouse.query(`select ${field} from ${table} where EventDate > today()-${day} limit 1000`).toPromise();
+            const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
+                field: item, headerName:item, width: 150
+            }})
+            callbackFn(null,{columns,rows});
+    });
+
+
+
 });
 
 

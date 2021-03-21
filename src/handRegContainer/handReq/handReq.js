@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Button, ButtonGroup, TextareaAutosize, TextField} from "@material-ui/core";
+import {Button, ButtonGroup, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import io from "socket.io-client";
 import {FetchDataSelect} from "../../redux/action/action";
 import {SERVER} from "../../dal/connectService";
@@ -37,7 +37,7 @@ const HandReq = () => {
 
     const handleSubmit = ()=> {
         const socket = io(SERVER);
-        socket.emit("req", value, (err, res) => {
+        socket.emit("reqData", value, (err, res) => {
             dispatch(FetchDataSelect({
                 columns:res.columns,
                 rows:res.rows

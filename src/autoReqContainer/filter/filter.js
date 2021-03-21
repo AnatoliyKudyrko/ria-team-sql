@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,6 +17,7 @@ import io from "socket.io-client";
 import {FetchDataSelect} from "../../redux/action/action";
 import {SERVER} from "../../dal/connectService";
 import {useDispatch} from "react-redux";
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -56,10 +57,9 @@ const useStyles = makeStyles((theme) => ({
 const Filter = ({table,field}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [dataFrom, setDataFrom] = React.useState('2021-03-01');
-    const [dataTo, setDataTo] = React.useState('021-03-20');
+    const [dataFrom, setDataFrom] = React.useState('2021-01-02');
+    const [dataTo, setDataTo] = React.useState('2021-03-19');
     const [day, setDay] = React.useState(0);
-    const [reqDate,setReqDate] = useState('');
 
     const handleDay= (event) => {
         setDay(event.target.value);
@@ -74,19 +74,27 @@ const Filter = ({table,field}) => {
         console.log(dataTo)
     };
     const filterDate = ()=>{
-        setReqDate(`Select ${field} from ${table} where EventDate BETWEEN ${dataFrom} and ${dataTo}`);
-        console.log(reqDate);
-        const socket = io(SERVER);
-        socket.emit("req", `${reqDate} LIMIT 1000`, (err, res) => {
-            dispatch(FetchDataSelect({
-                    columns:res.columns,
-                    rows:res.rows
-                }
-            ))
-        });
+            const socket = io(SERVER);
+            socket.emit("reqDate", {field,table,dataFrom,dataTo}, (err, res) => {
+                dispatch(FetchDataSelect({
+                        columns:res.columns,
+                        rows:res.rows
+                    }
+                ))
+            });
     }
+
     const filterDay = ()=>{
-        console.log(day)
+        if(day !== 0){
+            const socket = io(SERVER);
+            socket.emit("reqDays", {field,table,day}, (err, res) => {
+                dispatch(FetchDataSelect({
+                        columns:res.columns,
+                        rows:res.rows
+                    }
+                ))
+            });
+        }
     }
 
     return (
@@ -107,6 +115,7 @@ const Filter = ({table,field}) => {
                                      label="З"
                                      type="date"
                                      onChange={handleChangeFrom}
+                                     value={dataFrom}
                                      className={classes.textField}
                                      InputLabelProps={{
                                          shrink: true,
@@ -116,6 +125,7 @@ const Filter = ({table,field}) => {
                                      id="date1"
                                      label="До"
                                      type="date"
+                                     value={dataTo}
                                      onChange={handleChangeTo}
                                      className={classes.textField}
                                      InputLabelProps={{

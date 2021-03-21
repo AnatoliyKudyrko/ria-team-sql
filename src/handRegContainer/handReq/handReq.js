@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, ButtonGroup, TextareaAutosize, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import io from "socket.io-client";
-import {FetchDataSelect} from "../redux/action/action";
-import {SERVER} from "../dal/connectService";
+import {FetchDataSelect} from "../../redux/action/action";
+import {SERVER} from "../../dal/connectService";
 
 
 

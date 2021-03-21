@@ -62,7 +62,8 @@ io.on('connection',  (socket) => {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
-                const res = data ? data.map(namer).filter(dateFilter).map(item=>{return {name:item}}) : null;
+               // const res = data ? data.map(namer).filter(dateFilter).map(item=>{return {name:item}}) : null;
+                const res = data ? data.map(namer).map(item=>{return {name:item}}) : null;
                 callbackFn(res);
             })
         } else {
@@ -75,7 +76,7 @@ io.on('connection',  (socket) => {
     });
 
 
-/*
+
    socket.on('getTables', (callbackFn) => {
         const prom1 = new Promise((res, rej) => {
             systemDb.query(`SELECT name FROM tables WHERE database = 'mviews'`, (err, data) => {
@@ -107,13 +108,12 @@ io.on('connection',  (socket) => {
             });
             
     });
-*/
 
 
     socket.on('req', async function( param, callbackFn){
         const rows = await clickhouse.query(param).toPromise();
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
-            name:item
+            field: item, headerName:item, width: 150
         }})
         callbackFn(null,{columns,rows});
     });

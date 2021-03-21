@@ -1,4 +1,4 @@
-import {LOAD_DATA_FIELDS, LOAD_DATA_SELECT, UPDATE_DATA_SELECT} from "../action/action";
+import {LOAD_DATA_FIELDS, UPDATE_DATA_SELECT} from "../action/action";
 
 const initialState = {
     checkedData: [
@@ -24,7 +24,6 @@ export function Select (state=initialState,action){
             return {...state,checkedData:[...objActive]}
 
         case LOAD_DATA_FIELDS:
-            console.log(state.dataField)
             return {
                 ...state,
                 dataField:[...action.data]

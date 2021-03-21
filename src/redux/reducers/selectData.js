@@ -1,6 +1,7 @@
 import {LOAD_DATA_SELECT} from "../action/action";
 
 const initialState = {
+    loading: false,
     data: {
         columns:[],
         rows:[]

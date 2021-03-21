@@ -1,8 +1,8 @@
 import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
-export const LOAD_DATA_REQ = 'LOAD_DATA_REQ';
 export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
+
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
 
@@ -18,7 +18,6 @@ export function FetchDataField(data){
         type:LOAD_DATA_FIELDS,
         data
     }
-
 }
 export function UpdateDataSelect(id){
     return {

@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Box, Checkbox, FormControlLabel, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import HandReq from "../handReq/handReq";
-import io from "socket.io-client";
+import HandReq from "../handRegContainer/handReq/handReq";
 import TableView from "../tableView/tableView";
 import {useSelector} from "react-redux";
-import AutoReq from "../autoReq/autoReq";
+import AutoReqMain from "../autoReqContainer/autoReqMain/autoReqMain";
+import Filter from "../autoReqContainer/filter/filter";
 
 
 
-const SERVER = "http://127.0.0.1:4000";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,10 +34,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const ReqContainer = () => {
+const ReqContainerMain = () => {
     const classes = new useStyles();
     const [nameReq,setNameReq] = useState('checkedAuto');
     const data = useSelector(state => state.selectData.data);
+
     const getControlReq = (name) =>{
         setNameReq(name);
     }
@@ -49,12 +49,11 @@ const ReqContainer = () => {
             </div>
              <Paper className={classes.root}>
                  {
-                     nameReq === 'checkedAuto' ?  <AutoReq /> : <HandReq />
+                     nameReq === 'checkedAuto' ?  <AutoReqMain /> : <HandReq />
                  }
              </Paper>
             <Paper>
-               <TableView column={data.columns} rows={data.rows} />
-
+               <TableView column={data.columns} rows={data.rows.map((item,i)=>{return{id:i,...item}})} />
             </Paper>
 
         </div>
@@ -111,4 +110,4 @@ const ControlReq = (props)=>{
     )
 }
 
-export default ReqContainer;
+export default ReqContainerMain;

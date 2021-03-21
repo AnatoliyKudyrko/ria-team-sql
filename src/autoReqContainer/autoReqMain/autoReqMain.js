@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {Box, Divider, FormControl, InputLabel, Paper} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {SelectContainer} from "../selectContainer/selectContainer";
-import {useSelector} from "react-redux";
+import {SelectTable} from "../selectTable/selectTable";
 import SelectField from "../SelectField/SelectField";
-import {Select} from "../redux/reducers/select";
 import AutoViewReq from "../autoViewReq/autoViewReq";
+import Filter from "../filter/filter";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,9 +25,8 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
-const AutoReq = () => {
+const AutoReqMain = () => {
     const classes = useStyles();
-    const data = useSelector(state => state.select);
     const [tableName,setTableName] = useState('slon.facts');
     const [fieldArray,setFieldArray] = useState([]);
     const getTableName = (name)=>{
@@ -47,7 +45,7 @@ const AutoReq = () => {
                      <div className={classes.block}>
                         <span> Таблиці</span>
                      </div>
-                    <SelectContainer getTableName={getTableName}/>
+                    <SelectTable getTableName={getTableName}/>
                 </Paper>
                 <Paper>
                     <div className={classes.block}>
@@ -62,8 +60,9 @@ const AutoReq = () => {
                 </Paper>
             </div>
             <AutoViewReq table = {tableName} field={fieldArray} />
+            <Filter />
         </div>
     );
 };
 
-export default AutoReq;
+export default AutoReqMain;

@@ -24,7 +24,7 @@ const WelcomeBanner = ()=>{
             <Container fixed>
                 <Typography component="div" className={classes.root}>
                     <span>Вас вітає конструктор запитів БД ClickHouse</span>
-                   <NavLink to='/select'>Розпочати роботу</NavLink>
+                   <NavLink to='/req'>Розпочати роботу</NavLink>
                 </Typography>
             </Container>
 

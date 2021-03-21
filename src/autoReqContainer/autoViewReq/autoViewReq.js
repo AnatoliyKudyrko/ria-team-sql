@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ButtonGroup, Paper} from "@material-ui/core";
+import {Button, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {FetchDataSelect} from "../redux/action/action";
+import {FetchDataSelect} from "../../redux/action/action";
 import io from "socket.io-client";
 import {useDispatch} from "react-redux";
 
@@ -34,18 +34,19 @@ const AutoViewReq = ({table,field}) => {
 
     const handleSubmit =()=>{
         const socket = io(SERVER);
-        socket.emit("req", req, (err, res) => {
+        socket.emit("req", `${req} LIMIT 1000`, (err, res) => {
             dispatch(FetchDataSelect({
                     columns:res.columns,
                     rows:res.rows
                 }
             ))
         });
+
     }
     return (
         <div className={classes.btn}>
             <Paper className={classes.root}>
-                <p className={classes.reqTitle}>{req}</p>
+                <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
             </Paper>
             {
                 field.length !== 0 ? <Button onClick={handleSubmit} color="primary" >виконати</Button> : null

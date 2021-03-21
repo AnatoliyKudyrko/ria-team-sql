@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel} from "@material-ui/core";
+import {Checkbox,FormControlLabel} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import io from "socket.io-client";
-import {FetchDataField, FetchDataSelect} from "../redux/action/action";
+import {FetchDataField} from "../../redux/action/action";
 import {useDispatch, useSelector} from "react-redux";
-import {SERVER} from "../dal/connectService";
+import {SERVER} from "../../dal/connectService";
 
 
 const useStyles = makeStyles((theme) => ({

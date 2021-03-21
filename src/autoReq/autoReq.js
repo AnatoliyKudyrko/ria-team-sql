@@ -37,6 +37,9 @@ const AutoReq = () => {
     const getFieldName = (name)=>{
         setFieldArray(item => [...item, name])
     }
+    const delFieldName = (name)=>{
+        setFieldArray(item=>[...item.filter(item => item !== name)])
+    }
     return (
         <div>
             <div className={classes.root}>
@@ -50,7 +53,7 @@ const AutoReq = () => {
                     <div className={classes.block}>
                         <span> Поля</span>
                     </div>
-                    <SelectField getFieldName={getFieldName}/>
+                    <SelectField getFieldName={getFieldName} delFieldName={delFieldName} />
                 </Paper>
                 <Paper >
                     <div className={classes.block}>

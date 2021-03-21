@@ -75,6 +75,7 @@ io.on('connection',  (socket) => {
     });
 
 
+/*
    socket.on('getTables', (callbackFn) => {
         const prom1 = new Promise((res, rej) => {
             systemDb.query(`SELECT name FROM tables WHERE database = 'mviews'`, (err, data) => {
@@ -106,6 +107,7 @@ io.on('connection',  (socket) => {
             });
             
     });
+*/
 
 
     socket.on('req', async function( param, callbackFn){
@@ -113,7 +115,7 @@ io.on('connection',  (socket) => {
         const columns = Object.getOwnPropertyNames(rows[0]).map(item=>{return{
             name:item
         }})
-            callbackFn({columns,rows});
+        callbackFn(null,{columns,rows});
     });
 });
 

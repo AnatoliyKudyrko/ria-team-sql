@@ -4,8 +4,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import io from "socket.io-client";
 import {FetchDataSelect} from "../redux/action/action";
+import {SERVER} from "../dal/connectService";
 
-const SERVER = "http://127.0.0.1:4000";
 
 
 const useStyles = makeStyles((theme) => ({

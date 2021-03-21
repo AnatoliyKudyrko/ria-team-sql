@@ -4,10 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import io from "socket.io-client";
 import {FetchDataField, FetchDataSelect} from "../redux/action/action";
 import {useDispatch, useSelector} from "react-redux";
-import logger from "redux-thunk";
-
-
-const SERVER = "http://127.0.0.1:4000";
+import {SERVER} from "../dal/connectService";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,20 +27,25 @@ const SelectField = (props) => {
     const data = useSelector(state => state.select.checkedData);
     const field = useSelector(state => state.select.dataField);
     const active = data.filter(i=>i.status === true).map(item=>item.name).toString();
+
     const getNameDB = (active) =>{
          let index = active.indexOf('.');
          let name = active.slice(0,index);
          let table = active.slice(index+1,active.length);
          return {name,table};
      }
+
     useEffect(()=>{
        const socket = io(SERVER);
        socket.emit("getFields", getNameDB(active).name, getNameDB(active).table,(data) => {
            dispatch(FetchDataField(data))
        })
    },[data])
-    console.log(field)
-    const listItems = field.map((item,i) => <SelectFieldItem item={item} i={i} key={i} getFieldName={props.getFieldName}/>);
+
+    const listItems = field.map((item,i) =>
+        <SelectFieldItem item={item} i={i} key={i}
+                         getFieldName={props.getFieldName}
+                         delFieldName={props.delFieldName} />);
     return (
         <div className={classes.root}>
             <div className={classes.flex}>
@@ -55,15 +57,18 @@ const SelectField = (props) => {
         </div>
     );
 };
+
 const SelectFieldItem = (props) => {
     const [checked, setChecked] = useState(false);
     const handleChange = (event) => {
         setChecked(event.target.checked);
     };
-    console.log(props.item.name)
     useEffect(()=>{
         if(checked === true){
             props.getFieldName(props.item.name);
+        }
+        if(checked === false){
+            props.delFieldName(props.item.name);
         }
     },[checked])
     return (

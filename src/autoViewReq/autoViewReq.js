@@ -27,6 +27,7 @@ const AutoViewReq = ({table,field}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [req, setReq] = useState('');
+
     useEffect(()=>{
         setReq(`Select ${field} from ${table}`)
     },[table,field])
@@ -46,7 +47,10 @@ const AutoViewReq = ({table,field}) => {
             <Paper className={classes.root}>
                 <p className={classes.reqTitle}>{req}</p>
             </Paper>
-            <Button onClick={handleSubmit} color="primary" >виконати</Button>
+            {
+                field.length !== 0 ? <Button onClick={handleSubmit} color="primary" >виконати</Button> : null
+            }
+
         </div>
     );
 };

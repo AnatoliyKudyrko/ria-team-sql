@@ -56,10 +56,15 @@ const HandReq = () => {
                 variant="outlined"
                 className={classes.text}
             />
-            <ButtonGroup size="small" aria-label="small outlined button group" className={classes.btn} color="primary">
-                <Button onClick={handleSubmit}>виконати</Button>
-                <Button color="secondary" onClick={()=>setValue('')}>очистити</Button>
-            </ButtonGroup>
+            {
+                value !== "" ?
+                <ButtonGroup size="small" aria-label="small outlined button group" className={classes.btn} color="primary">
+                    <Button onClick={handleSubmit}>виконати</Button>
+                    <Button color="secondary" onClick={()=>setValue('')}>очистити</Button>
+                </ButtonGroup>
+                    :null
+            }
+
         </div>
 
 );

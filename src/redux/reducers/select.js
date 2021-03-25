@@ -1,4 +1,4 @@
-import {LOAD_DATA_FIELDS, UPDATE_DATA_SELECT} from "../action/action";
+import {LOAD_DATA_ACTIVE_FIELD, LOAD_DATA_FIELDS, UPDATE_DATA_SELECT} from "../action/action";
 
 const initialState = {
     checkedData: [
@@ -6,7 +6,8 @@ const initialState = {
         {count: 2, name: 'slon.r_tags_v2', status: false},
         {count: 3, name: 'mviews.calltracking', status: false},
     ],
-    dataField:[]
+    dataField:[],
+    dataActiveField:[]
 }
 export function Select (state=initialState,action){
     switch (action.type){
@@ -27,6 +28,11 @@ export function Select (state=initialState,action){
             return {
                 ...state,
                 dataField:[...action.data]
+            }
+        case LOAD_DATA_ACTIVE_FIELD:
+            return {
+                ...state,
+                dataActiveField:[...action.data]
             }
         default: return state
     }

@@ -49,7 +49,7 @@ const AutoViewReq = ({table,field}) => {
                 <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
             </Paper>
             {
-                field.length !== 0 ? <Button variant="contained" onClick={handleSubmit} color="primary" >виконати</Button> : null
+                field.length !== 0 ? <Button variant="contained" onClick={handleSubmit} color="primary" >Виконати</Button> : null
             }
 
         </div>

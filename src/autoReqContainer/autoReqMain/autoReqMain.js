@@ -1,25 +1,22 @@
-import React, {useState} from 'react';
-import {Paper} from "@material-ui/core";
+import React, {useEffect, useState} from 'react';
+import {Button, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {SelectTable} from "../selectTable/selectTable";
 import SelectField from "../SelectField/SelectField";
 import AutoViewReq from "../autoViewReq/autoViewReq";
 import Filter from "../filter/filter";
+import Grid from "@material-ui/core/Grid";
+import {useDispatch, useSelector} from "react-redux";
+import {FetchDataActiveField} from "../../redux/action/action";
+import GroupReq from "../groupReq/groupReq";
+import OrderReq from "../OrderReq/OrderReq";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent:'flex-start',
-        margin:'20px',
-        background:'rgba(0, 0, 0, 0.02)',
-        '& > *': {
-            margin: theme.spacing(1),
-            width: theme.spacing(30),
-        },
+        flexGrow: 1,
+        marginTop:'10px'
     },
     block:{
-        background:'#e57373',
         textAlign:'center',
         fontSize:'18px',
         color:'#fff'
@@ -27,13 +24,31 @@ const useStyles = makeStyles((theme) => ({
     flex:{
         display:'flex',
         width:'50%'
-    }
-
+    },
+    blockTwo:{
+        background:'#e57373',
+        textAlign:'center',
+        fontSize:'18px',
+        color:'#fff',
+        width:'300px'
+    },
 }));
+
 const AutoReqMain = () => {
     const classes = useStyles();
     const [tableName,setTableName] = useState('slon.facts');
     const [fieldArray,setFieldArray] = useState([]);
+    const [checkedTable,setCheckedTable] = useState('');
+    const dataActiveField = useSelector(state=>state.select.dataActiveField);
+
+
+    const dispatch = useDispatch();
+
+
+    useEffect(()=>{
+        dispatch(FetchDataActiveField(fieldArray))
+    },[fieldArray])
+
     const getTableName = (name)=>{
         setTableName(name);
     }
@@ -43,26 +58,57 @@ const AutoReqMain = () => {
     const delFieldName = (name)=>{
         setFieldArray(item=>[...item.filter(item => item !== name)])
     }
+
+    const JoinTable = ()=>{
+        let req = `Select ${[...fieldArray]} from ${tableName}`;
+
+    }
     return (
         <div>
+            {
+                dataActiveField.length !== 0 ?
+                <Button color='primary' size='small' onClick={()=>JoinTable()}>Об'єднати з </Button> : null
+            }
             <div className={classes.root}>
-                <Paper >
-                     <div className={classes.block}>
+                <Grid container spacing={3}>
+                    <Grid item xs={2}>
+                     <Paper>
                         <span> Таблиці</span>
-                     </div>
-                    <SelectTable getTableName={getTableName}/>
-                </Paper>
-                <Paper>
-                    <div className={classes.block}>
+                    <SelectTable getTableName={getTableName} />
+                     </Paper>
+                    </Grid>
+                    <Grid item xs={2}>
+                     <Paper>
                         <span> Поля</span>
-                    </div>
                     <SelectField getFieldName={getFieldName} delFieldName={delFieldName} />
-                </Paper>
+                     </Paper>
+                    </Grid>
+                    {
+                        dataActiveField.length !== 0 ? <MoreParam dataActiveField={dataActiveField} /> : null
+                    }
+                </Grid>
             </div>
             <AutoViewReq table = {tableName} field={fieldArray} />
             <Filter table = {tableName} field={fieldArray}  />
         </div>
     );
+}
+
+const MoreParam =({dataActiveField})=>{
+    return (
+        <>
+        <Grid item xs={6}>
+            <Paper>
+                <GroupReq dataActiveField={dataActiveField} />
+            </Paper>
+        </Grid>
+    <Grid item xs={2}>
+        <Paper>
+            <OrderReq dataActiveField={dataActiveField} />
+        </Paper>
+    </Grid>
+        </>
+    )
 }
 
 export default AutoReqMain;

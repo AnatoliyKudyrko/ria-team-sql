@@ -2,7 +2,7 @@ import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
 export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
-
+export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
 
@@ -16,6 +16,12 @@ export function FetchDataSelect(data){
 export function FetchDataField(data){
     return {
         type:LOAD_DATA_FIELDS,
+        data
+    }
+}
+export function FetchDataActiveField(data){
+    return {
+        type:LOAD_DATA_ACTIVE_FIELD,
         data
     }
 }

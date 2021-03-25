@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const SelectTable = (props) => {
+export const SelectTable = ({getTableName}) => {
     const classes = useStyles();
-    const data = useSelector(state => state.select);
+    const dataCheckedTable = useSelector(state => state.select.checkedData);
     return (
     <div className={classes.flex}>
-        {data.checkedData.map(item=><SelectItem key={item.count} item={item} getTableName={props.getTableName} />)}
+        {dataCheckedTable.map(item=><SelectItem key={item.count} item={item} getTableName={getTableName} />)}
     </div>
     );
 };
@@ -35,14 +35,15 @@ const SelectItem = ({item,getTableName}) =>{
     const {name,count,status} = item;
     const dispatch = useDispatch();
     const handleClick = ()=>{
+        console.log(count);
+        console.log(status)
         dispatch(UpdateDataSelect(count));
         getTableName(name);
     }
     return (
      <div>
-             <Checkbox checked={status} onClick={()=>handleClick()} size="small" />
+             <Checkbox checked={status} onClick={handleClick} size="small" />
              <span>{name}</span>
-
      </div>
     )
 }

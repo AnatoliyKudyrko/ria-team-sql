@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
-        color:'#e57373'
+        color:'#115293'
     },
     detalies:{
         display:"flex",
@@ -105,7 +105,7 @@ const Filter = ({table,field}) => {
                      aria-controls="panel1a-content"
                      id="panel1a-header"
                  >
-                     <Typography className={classes.heading}>Популярні фільтри</Typography>
+                     <Typography className={classes.heading}>Фільтри</Typography>
                  </AccordionSummary>
                  <AccordionDetails className={classes.detalies}>
                      <div className={classes.bodyDiv} >
@@ -133,9 +133,9 @@ const Filter = ({table,field}) => {
                                      }}
                                  />
                              </form>
-                             <Button  className={classes.btn} variant="contained" color="primary" onClick={()=>filterDate()} >
-                                 Знайти
-                             </Button>
+                             {/*<Button  className={classes.btn} variant="contained" color="primary" onClick={()=>filterDate()} >*/}
+                             {/*    Знайти*/}
+                             {/*</Button>*/}
                      </div>
                      <div className={classes.bodyDiv}>
                      <FormControl className={classes.formControl}>
@@ -149,9 +149,9 @@ const Filter = ({table,field}) => {
                                  <MenuItem value={90}>90</MenuItem>
                              </Select>
                          </FormControl>
-                                 <Button  className={classes.btn} variant="contained" color="primary" onClick={filterDay} >
-                                     Знайти
-                                 </Button>
+                                 {/*<Button  className={classes.btn} variant="contained" color="primary" onClick={filterDay} >*/}
+                                 {/*    Знайти*/}
+                                 {/*</Button>*/}
 
                      </div>
                  </AccordionDetails>

@@ -41,20 +41,32 @@ const GroupReq = ({dataActiveField}) => {
 const GroupReqItem = ({name})=>{
     const classes = useStyles();
     const [fun, setFun] = useState('');
+    const [equals, setEquals] = useState('');
+    const [less, setLess] = useState('');
+    const [larger, setLarger] = useState('');
+    const [not, setNot] = useState('');
+    const [req,setReq] = useState('');
+
     const handleChange = (event) => {
         setFun(event.target.value);
     }
     useEffect(()=>{
-        console.log(fun)
-    })
+        console.log(fun,name,equals)
+    },[fun,equals,less,larger,not])
+
+    const handleChangeEquals = (event) => {setEquals(event.target.value)};
+    const handleChangeLess = (event) => {setLess(event.target.value)};
+    const handleChangeLarger= (event) => {setLarger(event.target.value)};
+    const handleChangeNot = (event) => {setNot(event.target.value)};
+
     return (
         <ListItem>
             <ListItemText primary={name}  />
             <div>
-                <TextField size='small' label="=" color="secondary" style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small' label="<" color="secondary" style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small' label=">" color="secondary" style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small' label="<>" color="secondary" style={{width: "70px",marginRight:'10px'}} />
+                <TextField size='small' onChange={handleChangeEquals} label="=" color="secondary" value={equals} style={{width: "70px",marginRight:'10px'}} />
+                <TextField size='small'  onChange={handleChangeLess} label="<" color="secondary" value={less} style={{width: "70px",marginRight:'10px'}} />
+                <TextField size='small'  onChange={handleChangeLarger} label=">" color="secondary" value={larger} style={{width: "70px",marginRight:'10px'}} />
+                <TextField size='small'  onChange={handleChangeNot} label="<>" color="secondary" value={not} style={{width: "70px",marginRight:'10px'}} />
             </div>
             <div>
                 <FormControl className={classes.formControl}>

@@ -38,12 +38,13 @@ const AutoReqMain = () => {
     const classes = useStyles();
     const [tableName,setTableName] = useState('slon.facts');
     const [fieldArray,setFieldArray] = useState([]);
-    const [checkedTable,setCheckedTable] = useState('');
+    const [checkedTable,setCheckedTable] = useState(false);
     const dataActiveField = useSelector(state=>state.select.dataActiveField);
-
-
     const dispatch = useDispatch();
 
+    useEffect(()=>{
+        fieldArray.length !== 0 ? setCheckedTable(true): setCheckedTable(false)
+    },[fieldArray])
 
     useEffect(()=>{
         dispatch(FetchDataActiveField(fieldArray))
@@ -58,23 +59,15 @@ const AutoReqMain = () => {
     const delFieldName = (name)=>{
         setFieldArray(item=>[...item.filter(item => item !== name)])
     }
-
-    const JoinTable = ()=>{
-        let req = `Select ${[...fieldArray]} from ${tableName}`;
-
-    }
     return (
         <div>
-            {
-                dataActiveField.length !== 0 ?
-                <Button color='primary' size='small' onClick={()=>JoinTable()}>Об'єднати з </Button> : null
-            }
+            <Filter table = {tableName} field={fieldArray}  />
             <div className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={2}>
                      <Paper>
                         <span> Таблиці</span>
-                    <SelectTable getTableName={getTableName} />
+                    <SelectTable getTableName={getTableName} checkedTable={checkedTable} />
                      </Paper>
                     </Grid>
                     <Grid item xs={2}>
@@ -89,7 +82,7 @@ const AutoReqMain = () => {
                 </Grid>
             </div>
             <AutoViewReq table = {tableName} field={fieldArray} />
-            <Filter table = {tableName} field={fieldArray}  />
+
         </div>
     );
 }

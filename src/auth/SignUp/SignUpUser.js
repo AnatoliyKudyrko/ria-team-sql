@@ -39,7 +39,7 @@ function SignUpUser() {
     const classes = useStyles();
     const handleClick = ()=>{
         const socket = io(SERVER);
-        socket.emit('checkUser',{login:'test',password:'sadas',first_name:'toli',last_name:'sasaas'})
+        socket.emit('checkUser',{login:'dddd',password:'sadassadsadsadsa',first_name:'toli',last_name:'sasaas'})
     }
     return (
         <Container component="main" maxWidth="xs">

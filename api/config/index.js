@@ -26,8 +26,16 @@ module.exports = {
     mysql: {
         host: 'localhost',
         port: '3306',
-        user: 'admin',
+        user: 'root',
         database: 'delta',
-        password: ''
+        password: '1234'
+      },
+    nodemailer: {
+      service: 'gmail',
+      host: 'smtp.gmail.com',
+      auth: {
+        user: 'aleksandr.dubovskiy@gmail.com',
+        pass: 'sanja1Det123' // naturally, replace both with your real credentials or an application-specific password
       }
+    }
 };

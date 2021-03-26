@@ -1,5 +1,5 @@
-const {createUser, updateUser, deleteUser, checkUser, forgotUser} = require ('../controllers/indexUsers');
-
+const {createUser, updateUser, deleteUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
+const err = require('./helpers/error');
 module.exports = function (socket) {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
@@ -81,4 +81,5 @@ module.exports = function (socket) {
     socket.on('deleteUser', deleteUser);
     socket.on('checkUser', checkUser);
     socket.on('forgotUser', forgotUser);
+    socket.on('remindUser', remindUser);
 }

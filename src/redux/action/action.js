@@ -3,6 +3,9 @@ export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
 export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
 export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
+export const FILTER_DATA_SELECT = 'FILTER_DATA_SELECT';
+export const LOAD_ACTIVE_NAME_TABLE = 'LOAD_ACTIVE_NAME_TABLE';
+
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
 
@@ -30,9 +33,19 @@ export function UpdateDataSelect(id){
         type:UPDATE_DATA_SELECT,
         id
     }
-
 }
-
+export function FilterDataSelect(data){
+    return {
+        type:FILTER_DATA_SELECT,
+        data
+    }
+}
+export function LoadActiveTableName(data){
+    return {
+        type:LOAD_ACTIVE_NAME_TABLE ,
+        data
+    }
+}
 export function FetchDataThunk (socket,action){
     return function (dispatch){
         socket.on(action,  (data)=>{

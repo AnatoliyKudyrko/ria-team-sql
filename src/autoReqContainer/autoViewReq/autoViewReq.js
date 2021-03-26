@@ -11,7 +11,8 @@ const useStyles = makeStyles((theme) => ({
          display:'flex',
          justifyContent:'center',
          alignContent:'center',
-        textAlign:'center'
+        textAlign:'center',
+        marginTop:'40px'
 
     },
     reqTitle:{
@@ -27,7 +28,6 @@ const AutoViewReq = ({table,field}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [req, setReq] = useState('');
-
     useEffect(()=>{
         setReq(`Select ${field} from ${table}`)
     },[table,field])

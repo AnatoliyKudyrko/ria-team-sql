@@ -1,4 +1,8 @@
-import {LOAD_DATA_ACTIVE_FIELD, LOAD_DATA_FIELDS, UPDATE_DATA_SELECT} from "../action/action";
+import {
+    FILTER_DATA_SELECT, LOAD_ACTIVE_NAME_TABLE,
+    LOAD_DATA_ACTIVE_FIELD,
+    LOAD_DATA_FIELDS, UPDATE_DATA_SELECT
+} from "../action/action";
 
 const initialState = {
     checkedData: [
@@ -7,7 +11,8 @@ const initialState = {
         {count: 3, name: 'mviews.calltracking', status: false},
     ],
     dataField:[],
-    dataActiveField:[]
+    dataActiveField:[],
+    activeNameTable:[{name:'slon.facts'}]
 }
 export function Select (state=initialState,action){
     switch (action.type){
@@ -33,6 +38,18 @@ export function Select (state=initialState,action){
             return {
                 ...state,
                 dataActiveField:[...action.data]
+            }
+        case FILTER_DATA_SELECT:
+            console.log(action.data.toString())
+            return {
+                ...state,
+                checkedData: [...state.checkedData.filter(item=>item.name !== action.data[0])]
+            }
+        case LOAD_ACTIVE_NAME_TABLE:
+            console.log(action.data)
+            return {
+                ...state,
+                activeNameTable: [action.data]
             }
         default: return state
     }

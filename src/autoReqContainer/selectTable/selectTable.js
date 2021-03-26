@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {Checkbox} from "@material-ui/core";
+import {Button, Checkbox} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {UpdateDataSelect} from "../../redux/action/action";
+import {FilterDataSelect, LoadActiveTableName, UpdateDataSelect} from "../../redux/action/action";
+import {useEffect, useState} from "react";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,12 +22,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const SelectTable = ({getTableName}) => {
+export const SelectTable = ({getTableName,checkedTable}) => {
     const classes = useStyles();
+
     const dataCheckedTable = useSelector(state => state.select.checkedData);
+    const name = useSelector(state => state.select.activeNameTable);
+    const dispatch = useDispatch();
+
+
+
+
+    const handleClickFilter =()=>{
+        dispatch(FilterDataSelect('slon.facts'));
+        console.log(dataCheckedTable)
+    }
     return (
     <div className={classes.flex}>
-        {dataCheckedTable.map(item=><SelectItem key={item.count} item={item} getTableName={getTableName} />)}
+        {dataCheckedTable
+            .map(item=><SelectItem key={item.count} item={item} getTableName={getTableName} />)
+        }
+        {checkedTable ? <Button color='primary' size='small' onClick={()=>handleClickFilter()}>Об'єднати </Button> : null}
     </div>
     );
 };
@@ -35,15 +50,15 @@ const SelectItem = ({item,getTableName}) =>{
     const {name,count,status} = item;
     const dispatch = useDispatch();
     const handleClick = ()=>{
-        console.log(count);
-        console.log(status)
         dispatch(UpdateDataSelect(count));
         getTableName(name);
+        dispatch(LoadActiveTableName({name:name}))
     }
     return (
      <div>
-             <Checkbox checked={status} onClick={handleClick} size="small" />
+             <Checkbox checked={status} onClick={handleClick} size="small" color='primary'/>
              <span>{name}</span>
+
      </div>
     )
 }

@@ -16,6 +16,7 @@
     "clickhouse": "^2.2.1",
     "express": "^4.17.1",
     "mui-datatables": "^3.7.6",
+    "mysql2": "^2.2.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-loader-spinner": "^4.0.0",

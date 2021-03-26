@@ -22,5 +22,12 @@ module.exports = {
             output_format_json_quote_64bit_integers : 0,
             enable_http_compression                 : 0,
         },
-    }
+    },
+    mysql: {
+        host: 'localhost',
+        port: '3306',
+        user: 'admin',
+        database: 'delta',
+        password: ''
+      }
 };

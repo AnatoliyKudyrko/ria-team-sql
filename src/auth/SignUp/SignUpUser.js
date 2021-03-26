@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import io from "socket.io-client";
 
-
-
+const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
 
 function SignUpUser() {
     const classes = useStyles();
+    const handleClick = ()=>{
+        const socket = io(SERVER);
+        socket.emit('checkUser',{login:'test',password:'sadas',first_name:'toli',last_name:'sasaas'})
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -106,11 +110,11 @@ function SignUpUser() {
                         </Grid>
                     </Grid>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleClick}
                     >
                         Зареєструватися
                     </Button>

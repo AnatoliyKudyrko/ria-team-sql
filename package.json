@@ -17,6 +17,8 @@
     "express": "^4.17.1",
     "mui-datatables": "^3.7.6",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.5.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-loader-spinner": "^4.0.0",

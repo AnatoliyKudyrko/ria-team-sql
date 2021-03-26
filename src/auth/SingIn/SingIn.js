@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+const SignIn = ()=>{
     let history = useHistory();
     const classes = useStyles();
     const [loggedIn,setLoggedIn] = useState(false);
@@ -140,3 +140,4 @@ export default function SignIn() {
         </Container>
     );
 }
+export default SignIn;

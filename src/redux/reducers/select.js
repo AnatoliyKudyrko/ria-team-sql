@@ -52,10 +52,16 @@ export function Select (state=initialState,action){
                 dataActiveField:[...action.data]
             }
         case FILTER_DATA_SELECT:
-            console.log(action.data.toString())
+            console.log(action.data)
+            const index = state.checkedData.map(item => item.name).indexOf(action.data[0]);
+            console.log(index)
+            const stateTemp = [
+                ...state.checkedData.slice(0, index),
+                ...state.checkedData.slice(index + 1)
+            ];
             return {
                 ...state,
-                checkedData: [...state.checkedData.filter(item=>item.name !== action.data[0])]
+                checkedData: [...stateTemp]
             }
         case LOAD_ACTIVE_NAME_TABLE:
             console.log(action.data)

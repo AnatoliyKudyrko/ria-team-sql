@@ -29,10 +29,10 @@ const OrderReq = ({dataActiveField}) => {
     }
     useEffect(()=>{
         if(groupBy !== ''){
-            dispatch(LoadDataGroup(groupBy))
+            dispatch(LoadDataGroup(`GROUP BY ${groupBy}`))
         }
         if(orderBy !== ''){
-            dispatch(LoadDataOrder(orderBy))
+            dispatch(LoadDataOrder(`ORDER BY ${orderBy}`))
         }
 
     },[groupBy,orderBy])

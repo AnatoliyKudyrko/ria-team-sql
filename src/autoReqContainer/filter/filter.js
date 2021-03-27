@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import io from "socket.io-client";
-import {FetchDataSelect} from "../../redux/action/action";
+import {FetchDataSelect, LoadDataWhereField} from "../../redux/action/action";
 import {SERVER} from "../../dal/connectService";
 import {useDispatch} from "react-redux";
 
@@ -47,18 +47,18 @@ const useStyles = makeStyles((theme) => ({
     },
     detalies:{
         display:"flex",
-        flexDirection:"column"
+        flexDirection:"row",
+        alignItems:'center'
     },
     bodyDiv:{
         display:"flex",
-        alignItems:'flex-end'
     }
 }));
 const Filter = ({table,field}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [dataFrom, setDataFrom] = React.useState('2021-01-02');
-    const [dataTo, setDataTo] = React.useState('2021-03-19');
+    const [dataFrom, setDataFrom] = React.useState('');
+    const [dataTo, setDataTo] = React.useState('');
     const [day, setDay] = React.useState(0);
 
     const handleDay= (event) => {
@@ -73,29 +73,40 @@ const Filter = ({table,field}) => {
         setDataTo(event.target.value);
         console.log(dataTo)
     };
-    const filterDate = ()=>{
-            const socket = io(SERVER);
-            socket.emit("reqDate", {field,table,dataFrom,dataTo}, (err, res) => {
-                dispatch(FetchDataSelect({
-                        columns:res.columns,
-                        rows:res.rows
-                    }
-                ))
-            });
-    }
-
-    const filterDay = ()=>{
+    useEffect(()=>{
+      if(dataFrom !== '' && dataTo !== ''){
+          dispatch(LoadDataWhereField(`where toYYYYMMDD(EventDate) BETWEEN ${Number(dataFrom.replace(/-/g, ''))} and ${Number(dataTo.replace(/-/g, ''))}`))
+      }
+    },[dataTo,dataFrom])
+    useEffect(()=>{
         if(day !== 0){
-            const socket = io(SERVER);
-            socket.emit("reqDays", {field,table,day}, (err, res) => {
-                dispatch(FetchDataSelect({
-                        columns:res.columns,
-                        rows:res.rows
-                    }
-                ))
-            });
+            dispatch(LoadDataWhereField(`where EventDate > today()-${day}`))
         }
-    }
+    },[day])
+
+    // const filterDate = ()=>{
+    //         const socket = io(SERVER);
+    //         socket.emit("reqDate", {field,table,dataFrom,dataTo}, (err, res) => {
+    //             dispatch(FetchDataSelect({
+    //                     columns:res.columns,
+    //                     rows:res.rows
+    //                 }
+    //             ))
+    //         });
+    // }
+    //
+    // const filterDay = ()=>{
+    //     if(day !== 0){
+    //         const socket = io(SERVER);
+    //         socket.emit("reqDays", {field,table,day}, (err, res) => {
+    //             dispatch(FetchDataSelect({
+    //                     columns:res.columns,
+    //                     rows:res.rows
+    //                 }
+    //             ))
+    //         });
+    //     }
+    // }
 
     return (
          <div>
@@ -108,7 +119,7 @@ const Filter = ({table,field}) => {
                      <Typography className={classes.heading}>Фільтри</Typography>
                  </AccordionSummary>
                  <AccordionDetails className={classes.detalies}>
-                     <div className={classes.bodyDiv} >
+                     <div className={classes.bodyDiv} style={{marginRight:'50px'}}>
                              <form className={classes.container} noValidate>
                                  <TextField
                                      id="date"
@@ -137,7 +148,7 @@ const Filter = ({table,field}) => {
                              {/*    Знайти*/}
                              {/*</Button>*/}
                      </div>
-                     <div className={classes.bodyDiv}>
+                     <div className={classes.bodyDiv} >
                      <FormControl className={classes.formControl}>
                              <InputLabel>За останні дні</InputLabel>
                              <Select
@@ -145,8 +156,8 @@ const Filter = ({table,field}) => {
                                  onChange={handleDay}
                              >
                                  <MenuItem value={7}>7</MenuItem>
+                                 <MenuItem value={14}>14</MenuItem>
                                  <MenuItem value={30}>30</MenuItem>
-                                 <MenuItem value={90}>90</MenuItem>
                              </Select>
                          </FormControl>
                                  {/*<Button  className={classes.btn} variant="contained" color="primary" onClick={filterDay} >*/}

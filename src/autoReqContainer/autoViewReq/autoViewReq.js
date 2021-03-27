@@ -34,11 +34,8 @@ const AutoViewReq = ({table,field}) => {
     const group = useSelector(state=>state.select.group)
     const order = useSelector(state=>state.select.order)
     useEffect(()=>{
-        setReq(`Select ${[...funField]} from ${table} ${where}`)
-        console.log(req)
-        console.log(group)
-        console.log(order)
-    },[table,field,where,funField])
+        setReq(`Select ${field} ${[...funField]} from ${table} ${where} ${group} ${order}`)
+    },[table,field,where,funField,group,order])
 
     const handleSubmit =()=>{
         const socket = io(SERVER);
@@ -60,11 +57,31 @@ const AutoViewReq = ({table,field}) => {
                 <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
             </Paper>
             {
-                field.length !== 0 ? <Button variant="contained" onClick={handleSubmit} color="primary" >Виконати</Button> : null
+                field.length !== 0 ? <Btn handleSubmit={handleSubmit} handleSubmitHistory={handleSubmitHistory}/> : null
             }
-            <Button variant="contained" onClick={handleSubmitHistory} color="primary" >Зберегти</Button>
+
+
         </div>
     );
 };
+
+const Btn= ({handleSubmit,handleSubmitHistory})=>{
+    return(
+        <div style={{display:"flex",justifyContent:'space-around'}}>
+
+    <div>
+        <Button variant="contained" onClick={handleSubmitHistory} style={{backgroundColor: '#4caf50',color:'#fff'}}  >Зберегти</Button>
+    </div>
+            <div>
+                <Button variant="contained" onClick={handleSubmit} color="primary" >Виконати</Button>
+            </div>
+    <div>
+    <Button variant="contained"  color="secondary" >Очистити</Button>
+    </div>
+        </div>
+    )
+}
+
+
 
 export default AutoViewReq;

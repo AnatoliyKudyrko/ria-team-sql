@@ -81,7 +81,7 @@ const AutoReqMain = () => {
                     }
                 </Grid>
             </div>
-            <AutoViewReq table = {tableName} field={fieldArray} />
+            <AutoViewReq table = {tableName} field={dataActiveField} />
 
         </div>
     );

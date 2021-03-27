@@ -33,15 +33,16 @@ export const SelectTable = ({getTableName,checkedTable}) => {
 
 
     const handleClickFilter =()=>{
-        dispatch(FilterDataSelect('slon.facts'));
+        console.log(name);
+        dispatch(FilterDataSelect(name.map(item=>item.name)));
         console.log(dataCheckedTable)
     }
     return (
     <div className={classes.flex}>
         {dataCheckedTable
-            .map(item=><SelectItem key={item.count} item={item} getTableName={getTableName} />)
+            .map((item,i)=><SelectItem key={i} item={item} getTableName={getTableName} />)
         }
-        {checkedTable ? <Button color='primary' size='small' onClick={()=>handleClickFilter()}>Об'єднати </Button> : null}
+        {checkedTable ? <Button color='primary' size='small' onClick={handleClickFilter}>Об'єднати </Button> : null}
     </div>
     );
 };

@@ -68,8 +68,8 @@ const GroupReqItem = ({name,table})=>{
                 dispatch(LoadDataFunField(`${fun}(${name})`))
                 console.log(`${fun}(${name})`)
             }
-
         }
+
 
     },[fun,value,operator,name])
 

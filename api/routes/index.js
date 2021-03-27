@@ -1,4 +1,5 @@
 const {createUser, updateUser, deleteUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
+const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
 const err = require('../helpers/error');
 module.exports = function (socket) {
     socket.on('getFields', (db, table, callbackFn) => {
@@ -82,4 +83,9 @@ module.exports = function (socket) {
     socket.on('checkUser', checkUser);
     socket.on('forgotUser', forgotUser);
     socket.on('remindUser', remindUser);
+
+    socket.on('createQuery', createQuery);
+    socket.on('updateQuery', updateQuery);
+    socket.on('selectQueries', selectQueries);
+    
 }

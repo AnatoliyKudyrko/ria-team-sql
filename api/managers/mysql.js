@@ -22,11 +22,11 @@ async function createUser({ login, password, first_name, last_name }) {
         if (!success) {
             const [rows] = await connection.execute(`INSERT INTO users (login, password, first_name, last_name) VALUES ('${login}', '${password}', '${first_name}', '${last_name}')`);
             console.log(rows.insertId);
-                response = {
-                    success: true,
-                    data: { login, first_name, last_name, user_id: rows.insertId},
-                    msg: `${login} is created`
-                }
+            response = {
+                success: true,
+                data: { login, first_name, last_name, user_id: rows.insertId },
+                msg: `${login} is created`
+            }
         } else {
             response = {
                 success: false,
@@ -48,7 +48,7 @@ async function updateUser({ user_id, login, password, first_name, last_name }) {
         if (rows.changedRows) {
             response = {
                 success: true,
-                data: { login, first_name, last_name, user_id},
+                data: { login, first_name, last_name, user_id },
                 msg: `${login} is updated`
             }
         }
@@ -63,12 +63,12 @@ async function checkUser({ login, password }) {
     try {
         const connection = await db.connection();
         const [rows] = await connection.execute(`SELECT user_id, first_name, last_name FROM users WHERE login = '${login}' AND password = '${password}'`);
-        let response = {success: false};
+        let response = { success: false };
         if (rows.length) {
             response = {
-                data: {...rows[0], login},
+                data: { ...rows[0], login },
                 success: true
-            }            
+            }
         } else {
             const { user_id } = await checkLogin({ login });
             const msg = user_id ? 'Password is wrong' : 'Login isn\'t registered';
@@ -107,7 +107,7 @@ async function getUserData({ user_id }) {
         const [rows] = await connection.execute(`SELECT user_id, login, first_name, last_name FROM users WHERE user_id = '${user_id}'`);
         console.log(rows[0]);
         return rows.length ? {
-            data: {...rows[0]},
+            data: { ...rows[0] },
             success: true
         } : {
             success: false
@@ -120,7 +120,8 @@ async function getUserData({ user_id }) {
 async function deleteUser({ user_id }) {
     try {
         const connection = await db.connection();
-        await connection.execute(`DELETE user_id FROM users WHERE user_id = '${user_id}'`);
+        await connection.execute(`DELETE FROM users WHERE user_id = '${user_id}'`);
+        await connection.execute(`DELETE FROM requests WHERE user_id = '${user_id}'`);
         return { id };
     } catch (error) {
         console.error(error);
@@ -128,4 +129,54 @@ async function deleteUser({ user_id }) {
     };
 }
 
-module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData };
+async function createQuery({ user_id, request_date, request_query, request_query_name }) {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const [rows] = await connection.execute(`INSERT INTO requests (user_id, request_date, request_query, request_query_name) VALUES ('${user_id}', '${request_date}', '${request_query}', '${request_query_name}')`);
+        console.log(rows.insertId);
+        response = {
+            success: true,
+            data: { request_id: rows.insertId, user_id, request_query_name, request_query, request_date },
+            msg: `${request_query_name} is created`
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
+async function updateQuery({request_id, request_date, request_query, request_query_name }) {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const [rows] = await connection.execute(`UPDATE requests SET request_date = '${request_date}, request_query = '${request_query}', request_query_name = '${request_query_name}', request_date = '${request_date}' WHERE request_id = ${request_id}`);
+        response = {
+            success: true,
+            msg: `${request_query_name} is updated`
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
+async function selectQueries({ user_id, request_date, request_query, request_query_name }) {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const [rows] = await connection.execute(`SELECT request_date, request_query, request_query_name FROM requests WHERE request.user_id = '${user_id}' ORDER BY request_date`);
+        response = {
+            success: true,
+            data: rows,
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
+module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery };

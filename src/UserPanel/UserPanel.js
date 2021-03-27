@@ -12,6 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from "@material-ui/core/Button";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
 export default function UserPanel() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
+
+    const data = useSelector(state => state.Auth.data);
+
     const [values, setValues] = React.useState({
         amount: '',
         password: '',
@@ -60,7 +64,7 @@ export default function UserPanel() {
 
     return (
         <div className={classes.root}>
-            <h2>Профиль</h2>
+            <h2>Особистий кабінет</h2>
             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -68,10 +72,10 @@ export default function UserPanel() {
                     id="panel1bh-header"
                 >
                     <Typography className={classes.heading}>Імя</Typography>
-                    <Typography className={classes.secondaryHeading}>Толя</Typography>
+                    <Typography className={classes.secondaryHeading}>{data.map(item=>item.first_name)}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <TextField id="standard-basic" defaultValue="Hello World" />
+                    <TextField id="standard-basic" defaultValue= {data.map(item=>item.first_name)} />
                     <Button size="small" color="secondary">
                         Змінити
                     </Button>
@@ -85,11 +89,11 @@ export default function UserPanel() {
                 >
                     <Typography className={classes.heading}>Прізвище</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        Кудирко
+                        {data.map(item=>item.last_name)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
-                    <TextField id="standard-basic" defaultValue="Hello World" />
+                    <TextField id="standard-basic" defaultValue= {data.map(item=>item.last_name)} />
                     <Button size="small" color="secondary">
                         Змінити
                     </Button>
@@ -101,9 +105,9 @@ export default function UserPanel() {
                     aria-controls="panel3bh-content"
                     id="panel3bh-header"
                 >
-                    <Typography className={classes.heading}>Gmail</Typography>
+                    <Typography className={classes.heading}>Email</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        gigabate3@gmail.com
+                        {data.map(item=>item.login)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -111,7 +115,7 @@ export default function UserPanel() {
                         id="email"
                         name="email"
                         autoComplete="email"
-                        defaultValue =" gigabate3@gmail.com"
+                        defaultValue = {data.map(item=>item.login)}
                     />
                     <Button size="small" color="secondary">
                         Змінити

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,27 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
+import io from "socket.io-client";
+import {FetchDataSelect, FetchDataUser} from "../../redux/action/action";
+import {SERVER} from "../../dal/connectService";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import {useDispatch} from "react-redux";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+
+const validationSchema = yup.object({
+    email: yup
+        .string('Введіть свій email')
+        .email('Введіть валідний email')
+        .required('Email обовязковий'),
+    password: yup
+        .string('Введіть свій пароль')
+        .min(8, 'Пароль повинен містити не менше 8 символів')
+        .required('Пароль обовязковий'),
+});
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -33,19 +54,50 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
-    const classes = useStyles();
-    const [loggedIn,setLoggedIn] = useState(true);
+const SignIn = ()=>{
     let history = useHistory();
-    const handClick =()=>{
+    const dispatch = useDispatch();
+    const classes = useStyles();
+    const [loggedIn,setLoggedIn] = useState(false);
+    const [error,setError] = useState(false);
+    const CheckUser =(values)=>{
+        const socket = io(SERVER);
+
+        socket.emit("checkUser", {login:values.email,password:values.password}, (err, res) => {
+            if( res[0].length !== 0 ){
+                setLoggedIn(true);
+                dispatch(FetchDataUser(res[0][0]));
+                setError(false);
+
+            }
+            if( res[0].length === 0 ){
+                setLoggedIn(false);
+                setError(true);
+            }
+
+        });
+
+    }
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            CheckUser(values);
+        },
+    });
+
+    useEffect(()=>{
         if(loggedIn) {
             history.push("/dashboard");
         }
+    },[loggedIn])
 
-    }
+
     const ToSingUp =()=>{
         history.push("/singup");
-
     }
     return (
         <Container component="main" maxWidth="xs">
@@ -57,32 +109,39 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">
                     Вхід
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
                         fullWidth
-                        label="логін"
-                        autoFocus
+                        id="email"
+                        name="email"
+                        label="Email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
                     />
                     <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
                         fullWidth
-                        name="password"
-                        label="пароль"
-                        type="password"
                         id="password"
-                        autoComplete="current-password"
+                        name="password"
+                        label="Пароль"
+                        type="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
                     />
+                    {
+                        error ?  <Typography component="p" color='error' m={0.5}>
+                            Перевірте написання email або пароля
+                        </Typography> : null
+                    }
                     <Button
                         fullWidth
                         variant="contained"
                         color="info"
                         className={classes.submit}
-                        onClick={()=>handClick()}
+                        type="submit"
                     >
                         Увійти
                     </Button>
@@ -103,3 +162,4 @@ export default function SignIn() {
         </Container>
     );
 }
+export default SignIn;

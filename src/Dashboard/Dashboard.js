@@ -22,6 +22,7 @@ import {AccountCircle} from "@material-ui/icons";
 import UserPanel from "../UserPanel/UserPanel";
 import History from "../history/history";
 import HistoryIcon from '@material-ui/icons/History';
+import {useSelector} from "react-redux";
 
 
 const drawerWidth = 240;
@@ -119,6 +120,8 @@ const  Dashboard =(props) =>{
 
     let history = useHistory();
     let path = history.location.pathname;
+    const name = useSelector(state => state.Auth.data);
+    console.log(name)
     return (
         <div className={classes.root}>
             <CssBaseline/>
@@ -136,6 +139,7 @@ const  Dashboard =(props) =>{
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Конструктор Delta
                     </Typography>
+                    {name.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}
                     <IconButton color="inherit">
                         <DropDowns  icon={  <AccountCircle/>} content={'Account'}/>
                     </IconButton>

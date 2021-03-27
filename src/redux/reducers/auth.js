@@ -1,18 +1,17 @@
-import {LOAD_DATA_SELECT} from "../action/action";
+import {LOAD_DATA_USER} from "../action/action";
 
 const initialState = {
-    success: false,
-    data: {}
+    data: []
 }
 export function Auth (state=initialState,action){
     switch (action.type){
-        case LOAD_DATA_SELECT:
+        case LOAD_DATA_USER:
+            console.log(action.data)
             return {
                 ...state,
-                data:{
-                    columns:[...action.data.columns],
-                    rows:[...action.data.rows]
-                }
+                data:[
+                  action.data
+                ]
             }
         default:return state
     }

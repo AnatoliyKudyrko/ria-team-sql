@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {FetchDataSelect} from "../../redux/action/action";
+import {FetchDataSelect, LoadDataHistory} from "../../redux/action/action";
 import io from "socket.io-client";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const AutoViewReq = ({table,field}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const name = useSelector(state => state.Auth.data);
     const [req, setReq] = useState('');
     useEffect(()=>{
         setReq(`Select ${field} from ${table}`)
@@ -43,6 +44,9 @@ const AutoViewReq = ({table,field}) => {
         });
 
     }
+    const handleSubmitHistory = ()=>{
+      dispatch(LoadDataHistory({name:name.map(item=>item.first_name),reqData:req,date:new Date().toDateString()}))
+    }
     return (
         <div className={classes.btn}>
             <Paper className={classes.root}>
@@ -51,7 +55,7 @@ const AutoViewReq = ({table,field}) => {
             {
                 field.length !== 0 ? <Button variant="contained" onClick={handleSubmit} color="primary" >Виконати</Button> : null
             }
-
+            <Button variant="contained" onClick={handleSubmitHistory} color="primary" >Зберегти</Button>
         </div>
     );
 };

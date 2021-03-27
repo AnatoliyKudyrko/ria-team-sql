@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
+export const LOAD_DATA_USER = 'LOAD_DATA_USER';
+export const LOAD_DATA_HISTORY = 'LOAD_DATA_HISTORY';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
 export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
 export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
@@ -15,6 +17,19 @@ export function FetchDataSelect(data){
         data
     }
 }
+export function FetchDataUser(data){
+    return {
+        type:LOAD_DATA_USER,
+        data
+    }
+}
+export function LoadDataHistory(data){
+    return {
+        type: LOAD_DATA_HISTORY,
+        data
+    }
+}
+
 
 export function FetchDataField(data){
     return {

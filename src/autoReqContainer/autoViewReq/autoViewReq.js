@@ -29,9 +29,16 @@ const AutoViewReq = ({table,field}) => {
     const dispatch = useDispatch();
     const name = useSelector(state => state.Auth.data);
     const [req, setReq] = useState('');
+    const where = useSelector(state=>state.select.where)
+    const funField = useSelector(state=>state.select.fieldFun)
+    const group = useSelector(state=>state.select.group)
+    const order = useSelector(state=>state.select.order)
     useEffect(()=>{
-        setReq(`Select ${field} from ${table}`)
-    },[table,field])
+        setReq(`Select ${[...funField]} from ${table} ${where}`)
+        console.log(req)
+        console.log(group)
+        console.log(order)
+    },[table,field,where,funField])
 
     const handleSubmit =()=>{
         const socket = io(SERVER);

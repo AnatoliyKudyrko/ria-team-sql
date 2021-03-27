@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FormControl from "@material-ui/core/FormControl";
 import {InputLabel, MenuItem} from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import {makeStyles} from "@material-ui/core/styles";
+import {useDispatch, useSelector} from "react-redux";
+import {LoadDataGroup, LoadDataOrder} from "../../redux/action/action";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -18,12 +20,23 @@ const OrderReq = ({dataActiveField}) => {
     const classes = useStyles();
     const [groupBy, setGroupBy] = useState('');
     const [orderBy, setOrderBy] = useState('');
+    const dispatch = useDispatch();
     const handleChange = (event) => {
         setGroupBy(event.target.value);
     }
     const handleChangeOrder = (event) => {
         setOrderBy(event.target.value);
     }
+    useEffect(()=>{
+        if(groupBy !== ''){
+            dispatch(LoadDataGroup(groupBy))
+        }
+        if(orderBy !== ''){
+            dispatch(LoadDataOrder(orderBy))
+        }
+
+    },[groupBy,orderBy])
+
     return (
         <div>
             <FormControl className={classes.formControl}>
@@ -37,7 +50,7 @@ const OrderReq = ({dataActiveField}) => {
                     <MenuItem value="">
                         <em>Немає</em>
                     </MenuItem>
-                    {dataActiveField.map((item,i)=><MenuItem key={i} value={item}>{item}</MenuItem>)}
+                    {dataActiveField.map((item,i)=><MenuItem key={i} value={item} >{item}</MenuItem>)}
                 </Select>
             </FormControl>
             <FormControl className={classes.formControl}>

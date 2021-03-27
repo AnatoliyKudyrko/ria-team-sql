@@ -1,7 +1,14 @@
 import {
-    FILTER_DATA_SELECT, LOAD_ACTIVE_NAME_TABLE,
+    FILTER_DATA_SELECT,
+    LOAD_ACTIVE_NAME_TABLE,
     LOAD_DATA_ACTIVE_FIELD,
-    LOAD_DATA_FIELDS, UPDATE_DATA_SELECT
+    LOAD_DATA_FIELDS,
+    LOAD_DATA_FUN_FIELD,
+    LOAD_DATA_FUN_WHERE,
+    LOAD_DATA_GROUP,
+    LOAD_DATA_ORDER,
+    LoadDataFunField,
+    UPDATE_DATA_SELECT
 } from "../action/action";
 
 const initialState = {
@@ -12,7 +19,12 @@ const initialState = {
     ],
     dataField:[],
     dataActiveField:[],
-    activeNameTable:[{name:'slon.facts'}]
+    activeNameTable:[{name:'slon.facts'}],
+    fieldFun : [],
+    where:[],
+    group:[],
+    order:[],
+    limit:[]
 }
 export function Select (state=initialState,action){
     switch (action.type){
@@ -50,6 +62,27 @@ export function Select (state=initialState,action){
             return {
                 ...state,
                 activeNameTable: [action.data]
+            }
+        case LOAD_DATA_FUN_FIELD:
+            return {
+                ...state,
+                fieldFun:[...state.fieldFun, action.data]
+            }
+        case LOAD_DATA_FUN_WHERE:
+            return {
+                ...state,
+                    where:[action.data]
+            }
+
+        case LOAD_DATA_GROUP:
+            return {
+                ...state,
+                group:[action.data]
+            }
+        case LOAD_DATA_ORDER:
+            return {
+                ...state,
+                order:[action.data]
             }
         default: return state
     }

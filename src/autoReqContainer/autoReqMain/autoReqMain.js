@@ -77,7 +77,7 @@ const AutoReqMain = () => {
                      </Paper>
                     </Grid>
                     {
-                        dataActiveField.length !== 0 ? <MoreParam dataActiveField={dataActiveField} /> : null
+                        dataActiveField.length !== 0 ? <MoreParam dataActiveField={dataActiveField} table = {tableName} /> : null
                     }
                 </Grid>
             </div>
@@ -87,12 +87,12 @@ const AutoReqMain = () => {
     );
 }
 
-const MoreParam =({dataActiveField})=>{
+const MoreParam =({dataActiveField,table})=>{
     return (
         <>
         <Grid item xs={6}>
             <Paper>
-                <GroupReq dataActiveField={dataActiveField} />
+                <GroupReq dataActiveField={dataActiveField} table={table} />
             </Paper>
         </Grid>
     <Grid item xs={2}>

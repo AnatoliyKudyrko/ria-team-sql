@@ -1,7 +1,12 @@
 import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
+
 export const LOAD_DATA_USER = 'LOAD_DATA_USER';
 export const LOAD_DATA_HISTORY = 'LOAD_DATA_HISTORY';
+export const LOAD_DATA_FUN_FIELD = 'LOAD_DATA_FUN_FIELD';
+export const LOAD_DATA_GROUP = 'LOAD_DATA_GROUP';
+export const LOAD_DATA_ORDER = 'LOAD_DATA_ORDER';
+export const LOAD_DATA_FUN_WHERE = 'LOAD_DATA_FUN_WHERE';
 export const UPDATE_DATA_SELECT = 'UPDATE_DATA_SELECT';
 export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
 export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
@@ -23,14 +28,37 @@ export function FetchDataUser(data){
         data
     }
 }
+
 export function LoadDataHistory(data){
     return {
         type: LOAD_DATA_HISTORY,
         data
     }
 }
-
-
+export function LoadDataFunField(data){
+    return {
+        type: LOAD_DATA_FUN_FIELD,
+        data
+    }
+}
+export function LoadDataWhereField(data){
+    return {
+        type: LOAD_DATA_FUN_WHERE,
+        data
+    }
+}
+export function LoadDataGroup(data){
+    return {
+        type: LOAD_DATA_GROUP,
+        data
+    }
+}
+export function LoadDataOrder(data){
+    return {
+        type: LOAD_DATA_ORDER,
+        data
+    }
+}
 export function FetchDataField(data){
     return {
         type:LOAD_DATA_FIELDS,

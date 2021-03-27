@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { Autocomplete } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {Checkbox, FormHelperText, InputLabel, MenuItem} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
+import {LoadDataFunField, LoadDataWhereField} from "../../redux/action/action";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const GroupReq = ({dataActiveField}) => {
+const GroupReq = ({dataActiveField,table}) => {
     const [activeField, setActiveField] = useState([]);
     return (
         <div>
@@ -33,35 +34,66 @@ const GroupReq = ({dataActiveField}) => {
                     <TextField {...params} variant="outlined" placeholder="Виберіть поля" />
                 )}
             />
-            {activeField.length !== 0 ? activeField.map(item=><GroupReqItem name={item} /> ): null }
+            {activeField.length !== 0 ? activeField.map(item=><GroupReqItem name={item} key={item} table={table}/> ): null }
         </div>
     );
 };
 
-const GroupReqItem = ({name})=>{
+const GroupReqItem = ({name,table})=>{
     const classes = useStyles();
     const [fun, setFun] = useState('');
-    const [equals, setEquals] = useState('');
-    const [less, setLess] = useState('');
-    const [larger, setLarger] = useState('');
-    const [not, setNot] = useState('');
+    const [operator, setOperator] = useState('=');
+    const [value, setValue] = useState('');
+    const [type, setType] = useState(false);
     const [req,setReq] = useState('');
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
         setFun(event.target.value);
     }
+    const handleChangeOperator = (event) => {
+        setOperator(event.target.value);
+    }
     useEffect(()=>{
-        console.log(fun,name,equals)
-    },[fun,equals,less,larger,not])
+        name.indexOf('Date') === -1 ?  setType(false) : setType(true)
+    },[name])
 
-    const handleChangeEquals = (event) => {setEquals(event.target.value)};
-    const handleChangeLess = (event) => {setLess(event.target.value)};
-    const handleChangeLarger= (event) => {setLarger(event.target.value)};
-    const handleChangeNot = (event) => {setNot(event.target.value)};
+    useEffect(()=>{
+        if (fun !== ''){
+            if(fun === 'WHERE' && value !== ''){
+                dispatch(LoadDataWhereField(`${fun} ${name} ${operator} ${value}`))
+                console.log(fun,name,operator,value)
+            }
+            if(fun !== 'WHERE'){
+                dispatch(LoadDataFunField(`${fun}(${name})`))
+                console.log(`${fun}(${name})`)
+            }
+
+        }
+
+    },[fun,value,operator,name])
+
+    const handleChangeValue = (event) => {setValue(event.target.value)};
 
     return (
-        <ListItem>
+        <ListItem style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
             <ListItemText primary={name}  />
+            {
+                fun === 'WHERE' ?
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                        <FormControl className={classes.formControl}>
+                            <Select
+                                value={operator}
+                                onChange={handleChangeOperator}
+                            >
+                                <MenuItem value={'='}> {'='} </MenuItem>
+                                <MenuItem value={'<'}> {'<'} </MenuItem>
+                                <MenuItem value={'>'}> {'>'} </MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField  type={type ? 'date' : ''} onChange={handleChangeValue} color="secondary" value={value} style={{marginRight:'10px'}} />
+                    </div> : null
+            }
             <div>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="demo-simple-select-helper-label">Функції</InputLabel>
@@ -84,15 +116,6 @@ const GroupReqItem = ({name})=>{
                     </Select>
                 </FormControl>
             </div>
-            {
-                (fun === 'WHERE' && fun === '') ?
-                    <div>
-                        <TextField size='small' onChange={handleChangeEquals} label="=" color="secondary" value={equals} style={{width: "70px",marginRight:'10px'}} />
-                        <TextField size='small'  onChange={handleChangeLess} label="<" color="secondary" value={less} style={{width: "70px",marginRight:'10px'}} />
-                        <TextField size='small'  onChange={handleChangeLarger} label=">" color="secondary" value={larger} style={{width: "70px",marginRight:'10px'}} />
-                        <TextField size='small'  onChange={handleChangeNot} label="<>" color="secondary" value={not} style={{width: "70px",marginRight:'10px'}} />
-                    </div> : null
-            }
 
         </ListItem>
     )

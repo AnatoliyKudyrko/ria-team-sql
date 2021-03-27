@@ -79,8 +79,9 @@ const SignUpUser = () =>{
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values,actions) => {
             RegisterUser(values);
+            actions.resetForm();
         },
     });
 
@@ -94,90 +95,107 @@ const SignUpUser = () =>{
                 <Typography component="h1" variant="h5">
                     Реєстрація
                 </Typography>
-                <form className={classes.form} onSubmit={formik.handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email"
-                                name="email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                error={formik.touched.email && Boolean(formik.errors.email)}
-                                helperText={formik.touched.email && formik.errors.email}
-                            />
-                        </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="Імя"
-                                    autoFocus
-                                    value={formik.values.firstName}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                                    helperText={formik.touched.firstName && formik.errors.firstName}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Прізвище"
-                                    name="lastName"
-                                    autoComplete="lname"
-                                    value={formik.values.lastName}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                                    helperText={formik.touched.lastName && formik.errors.lastName}
-                                />
-                            </Grid>
+                {
+                    registerIn  ? <SuccessReqister /> :
+                        <form className={classes.form} onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email"
+                                        name="email"
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.email && Boolean(formik.errors.email)}
+                                        helperText={formik.touched.email && formik.errors.email}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="fname"
+                                        name="firstName"
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="firstName"
+                                        label="Імя"
+                                        autoFocus
+                                        value={formik.values.firstName}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                                        helperText={formik.touched.firstName && formik.errors.firstName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="lastName"
+                                        label="Прізвище"
+                                        name="lastName"
+                                        autoComplete="lname"
+                                        value={formik.values.lastName}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                                        helperText={formik.touched.lastName && formik.errors.lastName}
+                                    />
+                                </Grid>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        label="Пароль"
+                                        type="password"
+                                        id="password"
+                                        value={formik.values.password}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.password && Boolean(formik.errors.password)}
+                                        helperText={formik.touched.password && formik.errors.password}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
                                 fullWidth
-                                name="password"
-                                label="Пароль"
-                                type="password"
-                                id="password"
-                                value={formik.values.password}
-                                onChange={formik.handleChange}
-                                error={formik.touched.password && Boolean(formik.errors.password)}
-                                helperText={formik.touched.password && formik.errors.password}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        type="submit"
-                    >
-                        Зареєструватися
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link to='/'>
-                                Вже є аккаунт ? Увійдіть
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                type="submit"
+                            >
+                                Зареєструватися
+                            </Button>
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Link to='/'>
+                                        Вже є аккаунт ? Увійдіть
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </form>
+                }
+
             </div>
         </Container>
     );
 }
 
+const SuccessReqister = ()=>{
+    return (
+        <Box component="div" m={5} style={{textAlign:'center'}}>
+            <div  style={{fontSize:'18px', marginBottom:'20px'}}>
+                Дякуєм за регістрацію
+            </div>
+            <Link to='/'>
+                На сторінку входу
+            </Link>
+        </Box>
+        )
+
+}
 export default SignUpUser;

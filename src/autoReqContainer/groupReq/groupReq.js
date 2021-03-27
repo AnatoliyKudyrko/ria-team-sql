@@ -63,12 +63,6 @@ const GroupReqItem = ({name})=>{
         <ListItem>
             <ListItemText primary={name}  />
             <div>
-                <TextField size='small' onChange={handleChangeEquals} label="=" color="secondary" value={equals} style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small'  onChange={handleChangeLess} label="<" color="secondary" value={less} style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small'  onChange={handleChangeLarger} label=">" color="secondary" value={larger} style={{width: "70px",marginRight:'10px'}} />
-                <TextField size='small'  onChange={handleChangeNot} label="<>" color="secondary" value={not} style={{width: "70px",marginRight:'10px'}} />
-            </div>
-            <div>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="demo-simple-select-helper-label">Функції</InputLabel>
                     <Select
@@ -90,6 +84,16 @@ const GroupReqItem = ({name})=>{
                     </Select>
                 </FormControl>
             </div>
+            {
+                (fun === 'WHERE' && fun === '') ?
+                    <div>
+                        <TextField size='small' onChange={handleChangeEquals} label="=" color="secondary" value={equals} style={{width: "70px",marginRight:'10px'}} />
+                        <TextField size='small'  onChange={handleChangeLess} label="<" color="secondary" value={less} style={{width: "70px",marginRight:'10px'}} />
+                        <TextField size='small'  onChange={handleChangeLarger} label=">" color="secondary" value={larger} style={{width: "70px",marginRight:'10px'}} />
+                        <TextField size='small'  onChange={handleChangeNot} label="<>" color="secondary" value={not} style={{width: "70px",marginRight:'10px'}} />
+                    </div> : null
+            }
+
         </ListItem>
     )
 }

@@ -13,10 +13,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
 import io from "socket.io-client";
-import {FetchDataSelect} from "../../redux/action/action";
+import {FetchDataSelect, FetchDataUser} from "../../redux/action/action";
 import {SERVER} from "../../dal/connectService";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import {useDispatch} from "react-redux";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const validationSchema = yup.object({
     email: yup
@@ -51,13 +56,25 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = ()=>{
     let history = useHistory();
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [loggedIn,setLoggedIn] = useState(false);
-
+    const [error,setError] = useState(false);
     const CheckUser =(values)=>{
         const socket = io(SERVER);
+
         socket.emit("checkUser", {login:values.email,password:values.password}, (err, res) => {
-            res[0].length !== 0 ? setLoggedIn(true): setLoggedIn(false)
+            if( res[0].length !== 0 ){
+                setLoggedIn(true);
+                dispatch(FetchDataUser(res[0][0]));
+                setError(false);
+
+            }
+            if( res[0].length === 0 ){
+                setLoggedIn(false);
+                setError(true);
+            }
+
         });
 
     }
@@ -114,6 +131,11 @@ const SignIn = ()=>{
                         error={formik.touched.password && Boolean(formik.errors.password)}
                         helperText={formik.touched.password && formik.errors.password}
                     />
+                    {
+                        error ?  <Typography component="p" color='error' m={0.5}>
+                            Перевірте написання email або пароля
+                        </Typography> : null
+                    }
                     <Button
                         fullWidth
                         variant="contained"

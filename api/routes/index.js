@@ -1,5 +1,5 @@
 const {createUser, updateUser, deleteUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
-const err = require('./helpers/error');
+const err = require('../helpers/error');
 module.exports = function (socket) {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {

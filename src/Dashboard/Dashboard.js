@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MainContainer from "../mainContainer/mainContainer";
-import {ListItem, ListItemIcon, ListItemText, Paper} from "@material-ui/core";
+import {Badge, ListItem, ListItemIcon, ListItemText, Paper} from "@material-ui/core";
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import {Link, useHistory} from "react-router-dom";
@@ -23,7 +23,7 @@ import UserPanel from "../UserPanel/UserPanel";
 import History from "../history/history";
 import HistoryIcon from '@material-ui/icons/History';
 import {useSelector} from "react-redux";
-
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const drawerWidth = 240;
 
@@ -117,16 +117,17 @@ const  Dashboard =(props) =>{
         setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
     let history = useHistory();
     let path = history.location.pathname;
     const name = useSelector(state => state.Auth.data);
+    const countHistory = useSelector(state => state.history.count);
     console.log(name)
     return (
         <div className={classes.root}>
             <CssBaseline/>
             <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
+
                     <IconButton
                         edge="start"
                         color="inherit"
@@ -140,6 +141,11 @@ const  Dashboard =(props) =>{
                         Конструктор Delta
                     </Typography>
                     {name.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}
+                    <IconButton color="inherit">
+                        <Badge badgeContent={countHistory} color="secondary">
+                            <DropDowns  icon={<NotificationsIcon/>} content={'Notifications'} />
+                        </Badge>
+                    </IconButton>
                     <IconButton color="inherit">
                         <DropDowns  icon={  <AccountCircle/>} content={'Account'}/>
                     </IconButton>

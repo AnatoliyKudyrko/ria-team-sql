@@ -1,7 +1,10 @@
-import {LOAD_DATA_HISTORY} from "../action/action";
+import {LOAD_DATA_HISTORY, LOAD_DATA_HISTORY_EXECUTE, LOAD_DATA_HISTORY_ID} from "../action/action";
 
 const initialState = {
-    data: []
+    execute:false,
+    count:0,
+    data: [],
+    activeItems:0
 }
 export function HistoryReducer (state=initialState,action){
     switch (action.type){
@@ -9,6 +12,17 @@ export function HistoryReducer (state=initialState,action){
             return {
                 ...state,
                 data:[...state.data, action.data]
+            }
+        case LOAD_DATA_HISTORY_EXECUTE:
+            return {
+                ...state,
+                count:state.count+1,
+                execute: true
+            }
+        case LOAD_DATA_HISTORY_ID:
+            return {
+                ...state,
+                activeItems:action.id
             }
         default:return state
     }

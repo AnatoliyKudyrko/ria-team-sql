@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Checkbox, FormControlLabel, Paper} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import HandReq from "../handRegContainer/handReq/handReq";
@@ -36,7 +36,15 @@ const useStyles = makeStyles((theme) => ({
 const ReqContainerMain = () => {
     const classes = new useStyles();
     const [nameReq,setNameReq] = useState('checkedAuto');
+    const [viewTableStatus,setViewTableStatus] = useState(false);
     const data = useSelector(state => state.selectData.data);
+
+    const viewTable =(tableStatus)=> {
+        setViewTableStatus(tableStatus);
+    }
+
+    useEffect(()=>{
+    },[viewTableStatus])
 
     const getControlReq = (name) =>{
         setNameReq(name);
@@ -48,12 +56,16 @@ const ReqContainerMain = () => {
             </div>
              <Paper className={classes.root}>
                  {
-                     nameReq === 'checkedAuto' ?  <AutoReqMain /> : <HandReq />
+                     nameReq === 'checkedAuto' ?  <AutoReqMain viewTable={viewTable}/> : <HandReq viewTable={viewTable} />
                  }
              </Paper>
-            <Paper>
-               <TableView column={data.columns} rows={data.rows.map((item,i)=>{return{id:i,...item}})} />
-            </Paper>
+
+            {
+                viewTableStatus ?    <Paper>
+                    <TableView column={data.columns} rows={data.rows.map((item,i)=>{return{id:i,...item}})} />
+                </Paper> : null
+            }
+
 
         </div>
     );

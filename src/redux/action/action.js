@@ -3,6 +3,7 @@ export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
 
 export const LOAD_DATA_USER = 'LOAD_DATA_USER';
 export const LOAD_DATA_HISTORY = 'LOAD_DATA_HISTORY';
+export const LOAD_DATA_HISTORY_ID = 'LOAD_DATA_HISTORY_ID';
 export const LOAD_DATA_FUN_FIELD = 'LOAD_DATA_FUN_FIELD';
 export const LOAD_DATA_GROUP = 'LOAD_DATA_GROUP';
 export const LOAD_DATA_ORDER = 'LOAD_DATA_ORDER';
@@ -12,6 +13,7 @@ export const LOAD_DATA_FIELDS = 'LOAD_DATA_FIELDS';
 export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
 export const FILTER_DATA_SELECT = 'FILTER_DATA_SELECT';
 export const LOAD_ACTIVE_NAME_TABLE = 'LOAD_ACTIVE_NAME_TABLE';
+export const LOAD_DATA_HISTORY_EXECUTE = 'LOAD_DATA_HISTORY_EXECUTE';
 
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
@@ -35,6 +37,19 @@ export function LoadDataHistory(data){
         data
     }
 }
+
+export function HistoryExecute(){
+    return {
+        type: LOAD_DATA_HISTORY_EXECUTE
+    }
+}
+export function HistoryExecuteId(id){
+    return {
+        type: LOAD_DATA_HISTORY_ID,
+        id
+    }
+}
+
 export function LoadDataFunField(data){
     return {
         type: LOAD_DATA_FUN_FIELD,

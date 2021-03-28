@@ -8,8 +8,13 @@ import {Button, InputLabel, MenuItem} from "@material-ui/core";
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
-import {useSelector} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
+import NearMeIcon from '@material-ui/icons/NearMe';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CloseIcon from '@material-ui/icons/Close';
+import {HistoryExecute, HistoryExecuteId} from "../redux/action/action";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -27,6 +32,7 @@ function History() {
     const classes = useStyles();
     const [name, setName] = useState(10);
     const data = useSelector(state => state.history.data);
+    const dispatch = useDispatch();
     const handleChange = (event) => {
         setName(event.target.value);
     };
@@ -39,46 +45,75 @@ function History() {
             <ListItemText primary="Немає подій"  />
         </ListItem> )
 
-    const itemYes = (data.map((item=>{
+    const ButtonGroup = (i)=>{
+        const executeReqHistory = (item)=>{
+            console.log(data[item])
+            dispatch(HistoryExecute())
+            dispatch(HistoryExecuteId(item))
+        }
         return (
-            <div>
-                <ListItem key={item}>
-                    <ListItemText primary={item.name}  />
-                    <ListItemText primary={item.reqData} style={{textAlign:'left'}}/>
-                    <ListItemText primary={item.date} style={{textAlign:'center'}}/>
+            <div style={{display:'flex',justifyContent:'space-between'}}>
+                <Button color='primary' variant='contained' onClick={()=>executeReqHistory(i)} >Виконати</Button>
+                <NearMeIcon color='primary'/>
+                <CloseIcon />
+            </div>
+        )
+
+    }
+    const itemYes = (data.map((item,i)=>{
+        return (
+            <div key={i}>
+                <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
+                    <ListItemText primary={item.name}  style={{width:'20%'}}/>
+                    <ListItemText primary={item.nameReq} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.date} align='center' style={{width:'20%'}}/>
+                    <ListItemText align='right' style={{width:'20%'}}>
+                                      <ButtonGroup i={i} />
+                    </ListItemText>
                 </ListItem>
                 <Divider />
             </div>
         )
-    })))
+    }))
+
+
 
     return (
         <div>
             <List className={classes.root} >
+                <Box m={2} >
+                    <Typography variant="h5" component="h5" >
+                        Історія запитів
+                    </Typography>
+                </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'space-between'}}>
-                <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>
-                    <span style={{color:'#000'}}>Сортувати</span>
-                    <FormControl className={classes.formControl}>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={name}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={10}>Мої</MenuItem>
-                            <MenuItem value={20}>Всі</MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
+                   <Box m={2}>
+                       <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>
+                           <FormControl className={classes.formControl}>
+                               <Select
+                                   labelId="demo-simple-select-label"
+                                   id="demo-simple-select"
+                                   value={name}
+                                   onChange={handleChange}
+                               >
+                                   <MenuItem value={10}>Мої</MenuItem>
+                                   <MenuItem value={20}>Всі</MenuItem>
+                               </Select>
+                           </FormControl>
+                       </div>
+                   </Box>
+            <Box m={2}>
                 <div style={{textAlign:'right'}}>
                     <span style={{color:'#5e122d'}}>Очистити</span>
                     <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>
                 </div>
+            </Box>
                 </div>
                 <ListItem>
                     <ListItemText primary="Юзер"  />
-                    <ListItemText primary="Запит"  />
-                    <ListItemText primary="Час" style={{textAlign:'center'}}/>
+                    <ListItemText primary="Запит" align='center'  />
+                    <ListItemText primary="Час" align='center' />
+                    <ListItemText primary="Дії" align='center' />
                 </ListItem>
                 <Divider />
                 {

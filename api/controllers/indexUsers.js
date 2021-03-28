@@ -18,11 +18,11 @@ async function updateUser(data, cb) {
     if (data.password) {
         data.password = code(data.password);
     }
-    return cb(await myDb.updateUser({ ...data }));
+    return cb(null, await myDb.updateUser({ ...data }));
 }
 
 async function deleteUser(data, cb) {
-    return cb(await myDb.deleteUser({ ...data }));
+    return cb(null, await myDb.deleteUser({ ...data }));
 }
 
 async function checkUser(data, cb) {
@@ -60,7 +60,7 @@ async function forgotUser(data, cb) {
             }
         });
     } else {
-        cb({
+        cb(null, {
             success: false,
             msg: 'User isn\'t registered'
         })
@@ -71,12 +71,12 @@ async function remindUser({ code }, cb) {
     if (storedForgotCode.check(code)) {
         storedForgotCode.clear();
         const user_id = code.replace(/.*code_/, '');
-        cb({
+        cb(null, {
             success: true,
             data: await myDb.getUserData({ user_id })
         });
     } else {
-        cb({
+        cb(null, {
             msg: 'User Error',
             success: false
         })

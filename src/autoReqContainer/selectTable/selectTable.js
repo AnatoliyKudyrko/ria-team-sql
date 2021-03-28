@@ -81,10 +81,10 @@ const SelectItem = ({item,getTableName,data}) =>{
      <div >
              <Checkbox checked={status} onClick={handleClick} size="small" color='primary' disabled={dis}/>
              <span>{name}</span>
-         {
-             dataActiveField.length !== 0  ?  <Button color='primary' size='small' onClick={handleClickReq}>Зберегти підзапит </Button> : null
-         }
-         <hr/>
+         {/*{*/}
+         {/*    dataActiveField.length !== 0  ?  <Button color='primary' size='small' onClick={handleClickReq}>Зберегти підзапит </Button> : null*/}
+         {/*}*/}
+         {/*<hr/>*/}
      </div>
     )
 }

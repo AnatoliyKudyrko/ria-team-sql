@@ -10,7 +10,8 @@ function code(str) {
 }
 
 async function createUser(data, cb) {
-    return cb(await myDb.createUser({ ...data, password: code(data.password) }));
+    const result = await myDb.createUser({ ...data, password: code(data.password) });
+    return cb(result);
 }
 
 async function updateUser(data, cb) {

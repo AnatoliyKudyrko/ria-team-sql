@@ -28,7 +28,7 @@ module.exports = {
         port: '3306',
         user: 'root',
         database: 'delta',
-        password: 'root'
+        password: '1234'
       },
     nodemailer: {
       service: 'gmail',

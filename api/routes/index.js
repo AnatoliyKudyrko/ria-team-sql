@@ -1,6 +1,19 @@
 const {createUser, updateUser, deleteUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
 const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
 const err = require('../helpers/error');
+const { ClickHouse } = require('clickhouse');
+const config = require('./config'),
+    err = require('./helpers/error');
+const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
+const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
+
+const fullDbs = new ClickHouse({...config.clickhouse});
+const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'system'}});
+const databases = ['slon', 'mviews'];
+
+const clickhouse = new ClickHouse({...config.clickhouse});
+
+
 module.exports = function (socket) {
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {

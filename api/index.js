@@ -3,6 +3,7 @@ const http = require('http').createServer(app);
 //const ClickHouse = require('@apla/clickhouse');
 
 const routes = require('./routes');
+const saRoutes = require('./routes/indexSA');
 
 const PORT = 4000;
 const io = require('socket.io')(http,{
@@ -34,6 +35,7 @@ function dateFilter(item) {
 
 io.on('connection',  (socket) => {
     routes(socket);
+    saRoutes(socket);
 });
 
 

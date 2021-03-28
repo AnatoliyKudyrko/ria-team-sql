@@ -12,6 +12,8 @@ socket.emit('remindUser', {
     console.log(res);
 });
 
+socket.emit('get')
+
 //socket.emit("checkUser", {login:'ssss',password:'ss'}, (err, res) => {
 //    console.log(res)                
 //});

@@ -163,7 +163,7 @@ async function updateQuery({request_id, request_date, request_query, request_que
     };
 }
 
-async function selectQueries({ user_id, request_date, request_query, request_query_name }) {
+async function selectQueries({ user_id }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
@@ -179,4 +179,41 @@ async function selectQueries({ user_id, request_date, request_query, request_que
     };
 }
 
-module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery };
+async function getUsersQueries({ user_id, date_from = '1970-01-01', date_to = 'now()'}) {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const conditions = [`WHERE request_date BETWEEN ${date_from} AND ${date_to}`];
+        if (user_id) {
+            conditions.push(`request.user_id = '${user_id}'`);
+        }
+        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name FROM requests ${conditions.join(' AND ')}  ORDER BY request_date`);
+        response = {
+            success: true,
+            data: rows,
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
+async function getAllUsers() {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const [rows] = await connection.execute(`SELECT user_id, login, first_name, last_name FROM users ORDER BY login`);
+        response = {
+            success: true,
+            data: rows,
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
+
+module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries };

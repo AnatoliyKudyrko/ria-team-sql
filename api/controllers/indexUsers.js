@@ -21,10 +21,6 @@ async function updateUser(data, cb) {
     return cb(null, await myDb.updateUser({ ...data }));
 }
 
-async function deleteUser(data, cb) {
-    return cb(null, await myDb.deleteUser({ ...data }));
-}
-
 async function checkUser(data, cb) {
     const result = await myDb.checkUser({ ...data, password: code(data.password) })
     cb(null,result);

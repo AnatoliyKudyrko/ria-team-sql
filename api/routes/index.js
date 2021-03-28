@@ -92,7 +92,6 @@ module.exports = function (socket) {
 
     socket.on('createUser', createUser);
     socket.on('updateUser', updateUser);
-    socket.on('deleteUser', deleteUser);
     socket.on('checkUser', checkUser);
     socket.on('forgotUser', forgotUser);
     socket.on('remindUser', remindUser);

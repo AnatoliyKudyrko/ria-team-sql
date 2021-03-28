@@ -37,5 +37,10 @@ module.exports = {
         user: 'aleksandr.dubovskiy@gmail.com',
         pass: '' // naturally, replace both with your real credentials or an application-specific password
       }
+    },
+    superAdmin: {
+      login: 'superAdmin',
+      password: 'sa'
     }
+
 };

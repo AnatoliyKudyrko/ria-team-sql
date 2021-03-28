@@ -11,8 +11,7 @@ function code(str) {
 
 async function createUser(data, cb) {
     const result = await myDb.createUser({ ...data, password: code(data.password) });
-    console.log(result);
-    return cb(null, result);
+    return cb(null,result);
 }
 
 async function updateUser(data, cb) {
@@ -27,7 +26,8 @@ async function deleteUser(data, cb) {
 }
 
 async function checkUser(data, cb) {
-    cb(await myDb.checkUser({ ...data, password: code(data.password) }));
+    const result = await myDb.checkUser({ ...data, password: code(data.password) })
+    cb(null,result);
 }
 
 async function forgotUser(data, cb) {

@@ -10,7 +10,7 @@ import {SERVER} from "../../dal/connectService";
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        overflow: 'scroll',
+        overflow: 'auto',
         width: '100%',
         height: '200px'
     },

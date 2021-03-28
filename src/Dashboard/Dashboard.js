@@ -142,13 +142,12 @@ const  Dashboard =(props) =>{
                     </Typography>
                     {name.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}
                     <IconButton color="inherit">
-                        <IconButton color="inherit">
-                            <Badge badgeContent={countHistory} color="secondary">
-                                <DropDowns  icon={<NotificationsIcon/>} content={'Notifications'} />
-                            </Badge>
-                        </IconButton>
+                        <Badge badgeContent={countHistory} color="secondary">
+                            <DropDowns  icon={<NotificationsIcon/>} content={'Notifications'} />
+                        </Badge>
+                    </IconButton>
+                    <IconButton color="inherit">
                         <DropDowns  icon={  <AccountCircle/>} content={'Account'}/>
-
                     </IconButton>
                 </Toolbar>
             </AppBar>

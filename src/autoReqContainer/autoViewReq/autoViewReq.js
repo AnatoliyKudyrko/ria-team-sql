@@ -5,15 +5,17 @@ import {FetchDataActiveField, FetchDataSelect, LoadDataHistory} from "../../redu
 import io from "socket.io-client";
 import {useDispatch, useSelector} from "react-redux";
 import {Add} from "@material-ui/icons";
+import Box from "@material-ui/core/Box";
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
     root: {
          display:'flex',
-         justifyContent:'center',
+         justifyContent:'space-around',
          alignContent:'center',
-        textAlign:'center',
-        marginTop:'40px'
+         marginTop:'40px'
 
     },
     reqTitle:{
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
 }));
-const AutoViewReq = ({table,field}) => {
+const AutoViewReq = ({table,field,viewTabel}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const name = useSelector(state => state.Auth.data);
@@ -48,6 +50,7 @@ const AutoViewReq = ({table,field}) => {
 
     const handleSubmit =()=>{
         const socket = io(SERVER);
+        viewTabel(true);
         socket.emit("reqData", `${req} LIMIT 1000`, (err, res) => {
             dispatch(FetchDataSelect({
                     columns:res.columns,
@@ -57,12 +60,23 @@ const AutoViewReq = ({table,field}) => {
         });
 
     }
-
+    const handleClear = ()=>{
+        dispatch(FetchDataActiveField([]));
+    }
     return (
         <div className={classes.btn}>
-            <Paper className={classes.root}>
-                <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
-            </Paper>
+
+                {
+                    field.length !== 0  ?
+                        <Paper className={classes.root}>    <div>
+                            <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
+                        </div>
+                            <div>
+                                <DeleteIcon onClick={handleClear} color='secondary' fontSize='medium' style={{marginTop:'50%'}} />
+                            </div>
+                        </Paper>: null
+                }
+
             {
                 field.length !== 0  ? <Btn handleSubmit={handleSubmit} name={name} req={req}/> : null
             }
@@ -73,21 +87,19 @@ const AutoViewReq = ({table,field}) => {
 };
 
 const Btn= ({handleSubmit,name,req})=>{
-    const dispatch = useDispatch();
-    const handleClear = ()=>{
-        dispatch(FetchDataActiveField([]));
-    }
-    return(
-        <div style={{display:"flex",justifyContent:'space-around'}}>
 
-    <div>
-        <AddHistory name={name} req={req} />
-    </div>
+    return(
+        <div>
             <div>
-                <Button variant="contained" onClick={handleSubmit} color="primary" >Виконати</Button>
+                <Box m={3}>
+                    <Button variant="contained" onClick={handleSubmit} color="primary" size='large' >Виконати</Button>
+                    <div>
+                        <AddHistory name={name} req={req} />
+                    </div>
+                </Box>
+
             </div>
     <div>
-    <Button variant="contained"  color="secondary" onClick={handleClear}>Очистити</Button>
     </div>
         </div>
     )
@@ -119,9 +131,10 @@ const AddHistory = ({name,req})=>{
     };
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Зберегти
-            </Button>
+            <Box m={2}>
+                <SaveAltIcon onClick={handleClickOpen} fontSize='large'/>
+            </Box>
+
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Добавте в історію</DialogTitle>
                 <DialogContent>

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AutoReqMain = () => {
+const AutoReqMain = (props) => {
     const classes = useStyles();
     const [tableName,setTableName] = useState('slon.facts');
     const [fieldArray,setFieldArray] = useState([]);
@@ -64,7 +64,7 @@ const AutoReqMain = () => {
         <div>
             <Filter table = {tableName} field={fieldArray}  />
             <div className={classes.root}>
-                <Grid container spacing={3}>
+                <Grid container spacing={1}>
                     <Grid item xs={2}>
                      <Paper>
                         <span> Таблиці</span>
@@ -82,7 +82,7 @@ const AutoReqMain = () => {
                     }
                 </Grid>
             </div>
-            <AutoViewReq table = {tableActive} field={dataActiveField} />
+            <AutoViewReq table = {tableActive} field={dataActiveField} viewTabel={props.viewTable} />
 
         </div>
     );
@@ -93,11 +93,13 @@ const MoreParam =({dataActiveField,table})=>{
         <>
         <Grid item xs={6}>
             <Paper>
+                <span>Добавлення функцій</span>
                 <GroupReq dataActiveField={dataActiveField} table={table} />
             </Paper>
         </Grid>
     <Grid item xs={2}>
         <Paper>
+            <span>Групування та ліміт</span>
             <OrderReq dataActiveField={dataActiveField} />
         </Paper>
     </Grid>

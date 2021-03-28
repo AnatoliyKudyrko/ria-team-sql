@@ -13,6 +13,8 @@ import NearMeIcon from '@material-ui/icons/NearMe';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloseIcon from '@material-ui/icons/Close';
 import {HistoryExecute, HistoryExecuteId} from "../redux/action/action";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -45,7 +47,7 @@ function History() {
 
     const ButtonGroup = (i)=>{
         const executeReqHistory = (item)=>{
-            console.log(i)
+            console.log(data[item])
             dispatch(HistoryExecute())
             dispatch(HistoryExecuteId(item))
         }
@@ -79,25 +81,33 @@ function History() {
     return (
         <div>
             <List className={classes.root} >
+                <Box m={2} >
+                    <Typography variant="h5" component="h5" >
+                        Історія запитів
+                    </Typography>
+                </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'space-between'}}>
-                <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>
-                    <span style={{color:'#000'}}>Сортувати</span>
-                    <FormControl className={classes.formControl}>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={name}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={10}>Мої</MenuItem>
-                            <MenuItem value={20}>Всі</MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
+                   <Box m={2}>
+                       <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>
+                           <FormControl className={classes.formControl}>
+                               <Select
+                                   labelId="demo-simple-select-label"
+                                   id="demo-simple-select"
+                                   value={name}
+                                   onChange={handleChange}
+                               >
+                                   <MenuItem value={10}>Мої</MenuItem>
+                                   <MenuItem value={20}>Всі</MenuItem>
+                               </Select>
+                           </FormControl>
+                       </div>
+                   </Box>
+            <Box m={2}>
                 <div style={{textAlign:'right'}}>
                     <span style={{color:'#5e122d'}}>Очистити</span>
                     <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>
                 </div>
+            </Box>
                 </div>
                 <ListItem>
                     <ListItemText primary="Юзер"  />

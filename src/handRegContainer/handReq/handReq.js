@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
 }));
-const HandReq = () => {
+const HandReq = (props) => {
     const classes = new useStyles();
     const [value,setValue] = useState('');
     const dispatch = useDispatch();
@@ -37,6 +37,7 @@ const HandReq = () => {
 
     const handleSubmit = ()=> {
         const socket = io(SERVER);
+        props.viewTable(true);
         socket.emit("reqData", value, (err, res) => {
             dispatch(FetchDataSelect({
                 columns:res.columns,

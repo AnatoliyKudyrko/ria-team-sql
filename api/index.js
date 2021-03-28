@@ -3,7 +3,7 @@ const http = require('http').createServer(app);
 //const ClickHouse = require('@apla/clickhouse');
 const { ClickHouse } = require('clickhouse');
 const config = require('./config'),
-      err = require('./helpers/error');
+    err = require('./helpers/error');
 const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
 const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
 
@@ -29,7 +29,6 @@ io.on('connection',  (socket) => {
                 callbackFn(null , data);
         })
     });
-
 });
 */
 //csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})

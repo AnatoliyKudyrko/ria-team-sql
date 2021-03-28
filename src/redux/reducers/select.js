@@ -24,7 +24,7 @@ const initialState = {
     where:[],
     group:[],
     order:[],
-    limit:[]
+    limit:[],
 }
 export function Select (state=initialState,action){
     switch (action.type){

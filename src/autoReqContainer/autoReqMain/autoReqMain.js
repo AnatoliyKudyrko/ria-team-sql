@@ -40,6 +40,7 @@ const AutoReqMain = () => {
     const [fieldArray,setFieldArray] = useState([]);
     const [checkedTable,setCheckedTable] = useState(false);
     const dataActiveField = useSelector(state=>state.select.dataActiveField);
+    const tableActive = useSelector(state=>state.select.activeNameTable);
     const dispatch = useDispatch();
 
     useEffect(()=>{
@@ -81,7 +82,7 @@ const AutoReqMain = () => {
                     }
                 </Grid>
             </div>
-            <AutoViewReq table = {tableName} field={dataActiveField} />
+            <AutoViewReq table = {tableActive} field={dataActiveField} />
 
         </div>
     );

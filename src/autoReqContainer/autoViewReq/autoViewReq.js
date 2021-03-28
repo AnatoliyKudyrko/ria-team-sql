@@ -34,7 +34,7 @@ const AutoViewReq = ({table,field}) => {
     const group = useSelector(state=>state.select.group)
     const order = useSelector(state=>state.select.order)
     useEffect(()=>{
-        setReq(`Select ${field} ${[...funField]} from ${table} ${where} ${group} ${order}`)
+        setReq(`Select ${field} ${[...funField]} from ${table.map(item=>item.name)} ${where} ${group} ${order}`)
     },[table,field,where,funField,group,order])
 
     const handleSubmit =()=>{

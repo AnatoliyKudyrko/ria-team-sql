@@ -65,7 +65,7 @@ const SignUpUser = () =>{
     },[registerIn])
     const RegisterUser = ({email, firstName, lastName, password})=>{
         const socket = io(SERVER);
-        socket.emit("createUser", {login:email,password:firstName,first_name:lastName,last_name:password}, (err, res) => {
+        socket.emit("createUser", {login:email,first_name:firstName,last_name:lastName,password:password}, (err, res) => {
             setRegisterIn(res)
         });
 

@@ -35,7 +35,7 @@ module.exports = {
       host: 'smtp.gmail.com',
       auth: {
         user: 'aleksandr.dubovskiy@gmail.com',
-        pass: 'sanja1Det123' // naturally, replace both with your real credentials or an application-specific password
+        pass: '' // naturally, replace both with your real credentials or an application-specific password
       }
     }
 };

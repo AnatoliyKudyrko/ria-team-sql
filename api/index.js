@@ -12,6 +12,7 @@ const systemDb = new ClickHouse({...config.clickhouse, config: { database: 'syst
 const databases = ['slon', 'mviews'];
 
 const clickhouse = new ClickHouse({...config.clickhouse});
+const routes = require('./routes');
 
 const PORT = 4000;
 const io = require('socket.io')(http,{
@@ -43,7 +44,7 @@ function dateFilter(item) {
 }
 
 io.on('connection',  (socket) => {
-
+    routes(socket);
 });
 
 

@@ -12,7 +12,7 @@ function code(str) {
 async function createUser(data, cb) {
     const result = await myDb.createUser({ ...data, password: code(data.password) });
     console.log(result);
-    return cb({test: result}, result);
+    return cb(null, result);
 }
 
 async function updateUser(data, cb) {

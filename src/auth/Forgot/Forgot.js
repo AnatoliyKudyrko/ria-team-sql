@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SignIn = ()=>{
+const Forgot = ()=>{
     let history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -88,28 +88,17 @@ const SignIn = ()=>{
         },
     });
 
-    useEffect(()=>{
-        if(loggedIn) {
-            history.push("/dashboard");
-        }
-    },[loggedIn])
 
-
-    const ToSingUp =()=>{
-        history.push("/singup");
-    }
-    const ToForgot =()=>{
-        history.push("/forgot");
+    const ToSingIn =()=>{
+        history.push("/singin");
     }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
+
                 <Typography component="h1" variant="h5">
-                    Вхід
+                    Забули пароль
                 </Typography>
                 <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <TextField
@@ -122,39 +111,18 @@ const SignIn = ()=>{
                         error={formik.touched.email && Boolean(formik.errors.email)}
                         helperText={formik.touched.email && formik.errors.email}
                     />
-                    <TextField
-                        fullWidth
-                        id="password"
-                        name="password"
-                        label="Пароль"
-                        type="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        error={formik.touched.password && Boolean(formik.errors.password)}
-                        helperText={formik.touched.password && formik.errors.password}
-                    />
-                    {
-                        error ?  <Typography component="p" color='error' m={0.5}>
-                            Перевірте написання email або пароля
-                        </Typography> : null
-                    }
                     <Button
                         fullWidth
                         variant="contained"
                         className={classes.submit}
                         type="submit"
                     >
-                        Увійти
+                        Надіслати
                     </Button>
                     <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2" onClick={()=>ToForgot()}>
-                                Забули пароль
-                            </Link>
-                        </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2" onClick={()=>ToSingUp()}>
-                                {"Не має аккаунта? Зареєструватися"}
+                            <Link href="#" variant="body2" onClick={()=>ToSingIn()}>
+                                {"Перейти на вхід"}
                             </Link>
                         </Grid>
                     </Grid>
@@ -163,4 +131,4 @@ const SignIn = ()=>{
         </Container>
     );
 }
-export default SignIn;
+export default Forgot;

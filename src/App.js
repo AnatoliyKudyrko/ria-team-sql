@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import SignIn from "./auth/SingIn/SingIn";
 import SignUpUser from "./auth/SignUp/SignUpUser";
+import Forgot from "./auth/Forgot/Forgot";
 
 
  const App= () => {
@@ -18,6 +19,7 @@ import SignUpUser from "./auth/SignUp/SignUpUser";
                 <Route exact path='/' component={SignIn}/>
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path='/singUp' component={SignUpUser} />
+                <Route path='/forgot' component={Forgot} />
             </Switch>
                 </Router>
         </div>

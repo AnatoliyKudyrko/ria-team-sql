@@ -62,20 +62,23 @@ const SignIn = ()=>{
     const [error,setError] = useState(false);
     const CheckUser =(values)=>{
         const socket = io(SERVER);
-
-        socket.emit("checkUser", {login:values.email,password:values.password}, (err, res) => {
-            if( res[0].length !== 0 ){
-                setLoggedIn(true);
-                dispatch(FetchDataUser(res[0][0]));
-                setError(false);
-
-            }
-            if( res[0].length === 0 ){
-                setLoggedIn(false);
-                setError(true);
-            }
-
+        socket.emit('checkUser', {login:values.email,password:values.password}, (err, res) => {
+            console.log(res);
         });
+        // socket.emit("checkUser", , (err, res) => {
+        //     console.log(res)
+        //     // if( res[0].length !== 0 ){
+        //     //     setLoggedIn(true);
+        //     //     dispatch(FetchDataUser(res[0][0]));
+        //     //     setError(false);
+        //     //
+        //     // }
+        //     // if( res[0].length === 0 ){
+        //     //     setLoggedIn(false);
+        //     //     setError(true);
+        //     // }
+        //
+        // });
 
     }
     const formik = useFormik({

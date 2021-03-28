@@ -142,7 +142,6 @@ const SignIn = ()=>{
                     <Button
                         fullWidth
                         variant="contained"
-                        color="info"
                         className={classes.submit}
                         type="submit"
                     >

@@ -34,7 +34,9 @@ const SelectField = (props) => {
          let table = active.slice(index+1,active.length);
          return {name,table};
      }
+     useEffect(()=>{
 
+     },[field])
     useEffect(()=>{
        const socket = io(SERVER);
        socket.emit("getFields", getNameDB(active).name, getNameDB(active).table,(data) => {

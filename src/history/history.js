@@ -8,8 +8,11 @@ import {Button, InputLabel, MenuItem} from "@material-ui/core";
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
-import {useSelector} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
+import NearMeIcon from '@material-ui/icons/NearMe';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CloseIcon from '@material-ui/icons/Close';
+import {HistoryExecute, HistoryExecuteId} from "../redux/action/action";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -27,6 +30,7 @@ function History() {
     const classes = useStyles();
     const [name, setName] = useState(10);
     const data = useSelector(state => state.history.data);
+    const dispatch = useDispatch();
     const handleChange = (event) => {
         setName(event.target.value);
     };
@@ -39,18 +43,38 @@ function History() {
             <ListItemText primary="Немає подій"  />
         </ListItem> )
 
-    const itemYes = (data.map((item=>{
+    const ButtonGroup = (i)=>{
+        const executeReqHistory = (item)=>{
+            console.log(i)
+            dispatch(HistoryExecute())
+            dispatch(HistoryExecuteId(item))
+        }
         return (
-            <div>
-                <ListItem key={item}>
-                    <ListItemText primary={item.name}  />
-                    <ListItemText primary={item.reqData} style={{textAlign:'left'}}/>
-                    <ListItemText primary={item.date} style={{textAlign:'center'}}/>
+            <div style={{display:'flex',justifyContent:'space-between'}}>
+                <Button color='primary' variant='contained' onClick={()=>executeReqHistory(i)} >Виконати</Button>
+                <NearMeIcon color='primary'/>
+                <CloseIcon />
+            </div>
+        )
+
+    }
+    const itemYes = (data.map((item,i)=>{
+        return (
+            <div key={i}>
+                <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
+                    <ListItemText primary={item.name}  style={{width:'20%'}}/>
+                    <ListItemText primary={item.nameReq} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.date} align='center' style={{width:'20%'}}/>
+                    <ListItemText align='right' style={{width:'20%'}}>
+                                      <ButtonGroup i={i} />
+                    </ListItemText>
                 </ListItem>
                 <Divider />
             </div>
         )
-    })))
+    }))
+
+
 
     return (
         <div>
@@ -77,8 +101,9 @@ function History() {
                 </div>
                 <ListItem>
                     <ListItemText primary="Юзер"  />
-                    <ListItemText primary="Запит"  />
-                    <ListItemText primary="Час" style={{textAlign:'center'}}/>
+                    <ListItemText primary="Запит" align='center'  />
+                    <ListItemText primary="Час" align='center' />
+                    <ListItemText primary="Дії" align='center' />
                 </ListItem>
                 <Divider />
                 {

@@ -8,6 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 const useStyles = makeStyles((theme) => ({
     root: {
         position: 'relative',
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const DropDowns = (props)=> {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-
+    const countHistory = useSelector(state => state.history.count);
     const handleClick = () => {
         setOpen((prev) => !prev);
     };
@@ -42,7 +43,11 @@ const DropDowns = (props)=> {
                 {open ? (
                     <div className={classes.dropdown}>
                         <List component="nav"  aria-label="contacts">
-                            <Account  />
+                            {
+                                props.content === 'Notifications'  ?  <Notifications data={countHistory} /> :
+                                        props.content === 'Account'  ?  <Account  /> : null
+                            }
+
                         </List>
 
                     </div>
@@ -51,7 +56,20 @@ const DropDowns = (props)=> {
         </ClickAwayListener>
     );
 }
-
+const Notifications =({data})=> {
+    return (
+        data.map(item=>{
+            if (item === 0) {
+                return null;
+            }
+            return (
+                <ListItem button key={item}>
+                    <ListItemText primary="Добавлено в істрорію"  style={{color:'black'}}/>
+                </ListItem>
+            )
+        })
+    )
+}
 const Account =()=> {
     return (
         <List component="nav" aria-label="main mailbox folders" style={{color:'black'}}>

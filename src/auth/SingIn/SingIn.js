@@ -63,22 +63,18 @@ const SignIn = ()=>{
     const CheckUser =(values)=>{
         const socket = io(SERVER);
         socket.emit('checkUser', {login:values.email,password:values.password}, (err, res) => {
+            console.log(res)
+            if( res.success ){
+                setLoggedIn( res.success );
+                dispatch(FetchDataUser(res.data));
+                setError(false);
+            }
+                    if( !res.success){
+                        setLoggedIn(false);
+                        setError(true);
+                    }
             console.log(res);
         });
-        // socket.emit("checkUser", , (err, res) => {
-        //     console.log(res)
-        //     // if( res[0].length !== 0 ){
-        //     //     setLoggedIn(true);
-        //     //     dispatch(FetchDataUser(res[0][0]));
-        //     //     setError(false);
-        //     //
-        //     // }
-        //     // if( res[0].length === 0 ){
-        //     //     setLoggedIn(false);
-        //     //     setError(true);
-        //     // }
-        //
-        // });
 
     }
     const formik = useFormik({

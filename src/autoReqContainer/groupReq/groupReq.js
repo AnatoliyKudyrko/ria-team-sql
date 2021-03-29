@@ -5,11 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Checkbox, FormHelperText, InputLabel, MenuItem} from "@material-ui/core";
+import { InputLabel, MenuItem} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
 import {DeleteDataWhereField, LoadDataFunField, LoadDataWhereField} from "../../redux/action/action";
-import logger from "redux-thunk";
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {

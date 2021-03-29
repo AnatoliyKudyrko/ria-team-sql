@@ -6,16 +6,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from "@material-ui/core/Divider";
 import {Button, InputLabel, MenuItem} from "@material-ui/core";
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import FormControl from "@material-ui/core/FormControl";
-import Select from '@material-ui/core/Select';
 import {useDispatch, useSelector} from "react-redux";
-import NearMeIcon from '@material-ui/icons/NearMe';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloseIcon from '@material-ui/icons/Close';
-import {DeleteDataHistory, HistoryExecute, HistoryExecuteId, LoadDataHistory} from "../redux/action/action";
+import {
+    DeleteDataHistory,
+    FetchDataField,
+    HistoryExecute,
+    HistoryExecuteId,
+    LoadDataHistory
+} from "../redux/action/action";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import {useHistory} from "react-router-dom";
+import io from "socket.io-client";
+import {SERVER} from "../dal/connectService";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -31,11 +35,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 function History() {
     const classes = useStyles();
+    const socket = io(SERVER);
     let history = useHistory();
-    const data = useSelector(state => state.history.data);
+    const data = useSelector(state => state.Auth.data);
     const dispatch = useDispatch();
 
     useEffect(()=>{
+       socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(data) => {
+          console.log(data)
+        })
 
     },[data])
     const itemNone = (

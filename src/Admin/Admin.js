@@ -4,8 +4,6 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import {SERVER} from "../dal/connectService";
-import {useHistory} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloseIcon from "@material-ui/icons/Close";

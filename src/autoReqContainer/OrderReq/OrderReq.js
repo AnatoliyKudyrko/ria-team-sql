@@ -3,7 +3,7 @@ import FormControl from "@material-ui/core/FormControl";
 import {InputLabel, MenuItem} from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import {makeStyles} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {LoadDataGroup, LoadDataLimit, LoadDataOrder} from "../../redux/action/action";
 
 const useStyles = makeStyles((theme) => ({

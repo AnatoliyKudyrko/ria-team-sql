@@ -2,20 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {
-    DeleteDataHistory,
     FetchDataActiveField,
-    FetchDataSelect,
-    FetchDataUser, HistoryCount, HistoryExecute,
+    FetchDataSelect, HistoryCount, HistoryExecute,
     LoadDataHistory, Reset
 } from "../../redux/action/action";
 import io from "socket.io-client";
 import {useDispatch, useSelector} from "react-redux";
-import {Add} from "@material-ui/icons";
 import Box from "@material-ui/core/Box";
-import DeleteIcon from '@material-ui/icons/Delete';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import moment from "moment";
-import logger from "redux-thunk";
+
 
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
@@ -126,9 +121,6 @@ const AutoViewReq = ({table,field,viewTabel}) => {
                     field.length !== 0 && !history ? <MainView /> : null
 
                 }
-            {
-                console.log(history)
-            }
 
             {
                  history  ? <HistoryView /> : null

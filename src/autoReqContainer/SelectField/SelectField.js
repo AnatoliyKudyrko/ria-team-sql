@@ -40,7 +40,6 @@ const SelectField = (props) => {
     useEffect(()=>{
        const socket = io(SERVER);
        socket.emit("getFields", getNameDB(active).name, getNameDB(active).table,(data) => {
-           console.log(data)
            dispatch(FetchDataField(data))
        })
    },[data])

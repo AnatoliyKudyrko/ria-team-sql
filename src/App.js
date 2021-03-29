@@ -3,8 +3,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import SignIn from "./auth/SingIn/SingIn";
 import SignUpUser from "./auth/SignUp/SignUpUser";

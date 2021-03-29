@@ -1,5 +1,5 @@
 const config = require('../config').superAdmin;
-const { deleteUser, getAllUsers, getUsersQueries, autorizeSA } = require('../controllers/indexSAUser');
+const { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove } = require('../controllers/indexSAUser');
 
 module.exports = function (socket) {
 
@@ -32,8 +32,7 @@ module.exports = function (socket) {
         { user_id }
         output:
             {
-                success: true,
-            data: [{request_id, request_date, request_query, request_query_name}],
+                success: true
             }
     */
    socket.on('deleteUser', deleteUser);
@@ -43,9 +42,18 @@ module.exports = function (socket) {
         { user_id }
         output:
             {
-                success: true,
-            data: [{request_id, request_date, request_query, request_query_name}],
+                success: true
             }
     */
    socket.on('autorizeSA',  autorizeSA);
+
+       /*
+      input:
+        { user_id }
+        output:
+            {
+                success: true
+            }
+    */
+            socket.on('setApprove',  setApprove);
 }

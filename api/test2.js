@@ -6,13 +6,21 @@ const param = {
     fields: ['slon.facts.user_id']
 };
 
-socket.emit('remindUser', {
+/*socket.emit('remindUser', {
     code: '1616874380511code_14'
 }, (err, res) => {
     console.log(res);
 });
+*/
 
-socket.emit('get')
+socket.emit('createQuery', {
+    user_id: 1,
+    request_query: '111',
+    request_query_name: '3333',
+    request_date: '2021-03-11'
+}, (err, res) => {
+    console.log(res);
+});
 
 //socket.emit("checkUser", {login:'ssss',password:'ss'}, (err, res) => {
 //    console.log(res)                

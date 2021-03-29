@@ -1,13 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {FetchDataActiveField, FetchDataSelect, FetchDataUser, LoadDataHistory} from "../../redux/action/action";
+import {
+    DeleteDataHistory,
+    FetchDataActiveField,
+    FetchDataSelect,
+    FetchDataUser,
+    LoadDataHistory
+} from "../../redux/action/action";
 import io from "socket.io-client";
 import {useDispatch, useSelector} from "react-redux";
 import {Add} from "@material-ui/icons";
 import Box from "@material-ui/core/Box";
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import moment from "moment";
 
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +39,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     const dispatch = useDispatch();
     const name = useSelector(state => state.Auth.data);
     const [req, setReq] = useState('');
+    const [reqHistory, setReqHistory] = useState('');
     const where = useSelector(state=>state.select.where)
     const funField = useSelector(state=>state.select.fieldFun)
     const group = useSelector(state=>state.select.group)
@@ -46,13 +54,23 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     },[table,field,where,funField,group,order])
 
     useEffect(()=>{
-            console.log(historyData[historyDataActive])
+        if(historyData[historyDataActive.i]  && history){
+            setReqHistory(`${historyData[historyDataActive.i].reqData}`)
+        }
+        console.log(historyDataActive)
         console.log(history)
     },[history])
 
     const handleSubmit =()=>{
         viewTabel(true);
-        socket.emit("reqData", `${req} LIMIT 1000`, (err, res) => {
+        let reqTemp='';
+        if(historyData[historyDataActive.i]  && history){
+            reqTemp=reqHistory;
+        }
+        if( field.length !== 0 ){
+            reqTemp=req;
+        }
+        socket.emit("reqData", `${reqTemp} LIMIT 1000`, (err, res) => {
             dispatch(FetchDataSelect({
                     columns:res.columns,
                     rows:res.rows
@@ -63,25 +81,52 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     }
     const handleClear = ()=>{
         dispatch(FetchDataActiveField([]));
+
+    }
+    const handleClearHistory = ()=>{
+        setReqHistory('');
+    }
+    const HistoryView = ()=>{
+        return (
+            <div>
+                    <Paper className={classes.root}>
+                        <div style={{display:'flex', alignItems:'center',justifyContent:'space-around', width:'80%'}}>
+                        <p className={classes.reqTitle}>{`Запит з вашої історії:  ${reqHistory}`}</p>
+                        <DeleteIcon onClick={handleClearHistory} color='secondary' fontSize='medium' style={{marginTop:'5px'}} />
+                    </div>
+                    </Paper>
+
+                <Button variant="contained" onClick={handleSubmit} color="primary" size='large' >Виконати</Button>
+            </div>
+        )
+    }
+    const MainView = ()=>{
+        return (
+            <div>
+                <Paper className={classes.root}>    <div>
+                    <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
+
+                </div>
+                    <div>
+                        <DeleteIcon onClick={handleClear} color='secondary' fontSize='medium' style={{marginTop:'50%'}} />
+                    </div>
+                </Paper>
+                <Btn handleSubmit={handleSubmit} name={name} req={req} data={historyData[historyDataActive]}/>
+            </div>
+        )
     }
     return (
         <div className={classes.btn}>
 
                 {
-                    field.length !== 0  ?
-                        <Paper className={classes.root}>    <div>
-                            <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
-                        </div>
-                            <div>
-                                <DeleteIcon onClick={handleClear} color='secondary' fontSize='medium' style={{marginTop:'50%'}} />
-                            </div>
-                        </Paper>: null
+                    field.length !== 0  ? <MainView /> : null
+
                 }
 
             {
-                field.length !== 0  ? <Btn handleSubmit={handleSubmit} name={name} req={req} data={historyData[historyDataActive]}/> : null
-            }
+                historyData[historyDataActive.i]  && history && reqHistory !== ''  ? <HistoryView /> : null
 
+            }
 
         </div>
     );
@@ -117,22 +162,26 @@ const AddHistory = ({name,req,data})=>{
     };
     useEffect(()=>{
     },[data])
+
     const handleSubmitHistory = ()=>{
         socket.emit('createQuery',
             {
-                user_id: name.map(item=>item.user_id).toString(),
-                request_date:new Date().toDateString(),
+                user_id: Number(name.map(item=>item.user_id)),
+                request_date: new Date().toISOString().slice(0, 19).replace('T', ' '),
                 request_query:req,
                 request_query_name:value
             }, (err, res) => {
                 console.log(res)
+                dispatch(LoadDataHistory(
+                    {
+                        name:name.map(item=>item.first_name),
+                        nameReq:res.data.request_query_name,
+                        reqData:res.data.request_query,
+                        date:res.data.request_date
+                    }
+                        ))
             });
-        // dispatch(LoadDataHistory(
-        //     {
-        //         name:name.map(item=>item.first_name),
-        //         nameReq:value,
-        //         reqData:req,
-        //         date:new Date().toDateString()}))
+
         handleClose()
     }
     const handleClickOpen = () => {

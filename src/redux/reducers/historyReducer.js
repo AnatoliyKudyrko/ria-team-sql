@@ -1,4 +1,9 @@
-import {LOAD_DATA_HISTORY, LOAD_DATA_HISTORY_EXECUTE, LOAD_DATA_HISTORY_ID} from "../action/action";
+import {
+    DELETE_DATA_HISTORY,
+    LOAD_DATA_HISTORY,
+    LOAD_DATA_HISTORY_EXECUTE,
+    LOAD_DATA_HISTORY_ID
+} from "../action/action";
 
 const initialState = {
     execute:false,
@@ -12,6 +17,11 @@ export function HistoryReducer (state=initialState,action){
             return {
                 ...state,
                 data:[...state.data, action.data]
+            }
+        case DELETE_DATA_HISTORY:
+            return {
+                ...state,
+                data:[ action.data]
             }
         case LOAD_DATA_HISTORY_EXECUTE:
             return {

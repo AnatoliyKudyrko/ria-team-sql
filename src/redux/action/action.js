@@ -14,6 +14,7 @@ export const LOAD_DATA_ACTIVE_FIELD = 'LOAD_DATA_ACTIVE_FIELD';
 export const FILTER_DATA_SELECT = 'FILTER_DATA_SELECT';
 export const LOAD_ACTIVE_NAME_TABLE = 'LOAD_ACTIVE_NAME_TABLE';
 export const LOAD_DATA_HISTORY_EXECUTE = 'LOAD_DATA_HISTORY_EXECUTE';
+export const  DELETE_DATA_HISTORY = 'DELETE_DATA_HISTORY';
 
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
@@ -34,6 +35,12 @@ export function FetchDataUser(data){
 export function LoadDataHistory(data){
     return {
         type: LOAD_DATA_HISTORY,
+        data
+    }
+}
+export function DeleteDataHistory(data){
+    return {
+        type: DELETE_DATA_HISTORY,
         data
     }
 }

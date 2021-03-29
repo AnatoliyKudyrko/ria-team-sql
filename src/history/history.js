@@ -12,9 +12,10 @@ import {useDispatch, useSelector} from "react-redux";
 import NearMeIcon from '@material-ui/icons/NearMe';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloseIcon from '@material-ui/icons/Close';
-import {HistoryExecute, HistoryExecuteId} from "../redux/action/action";
+import {DeleteDataHistory, HistoryExecute, HistoryExecuteId, LoadDataHistory} from "../redux/action/action";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import {useHistory} from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function History() {
     const classes = useStyles();
+    let history = useHistory();
     const [name, setName] = useState(10);
     const data = useSelector(state => state.history.data);
     const dispatch = useDispatch();
@@ -50,11 +52,11 @@ function History() {
             console.log(data[item])
             dispatch(HistoryExecute())
             dispatch(HistoryExecuteId(item))
+            history.push("/dashboard/main");
         }
         return (
-            <div style={{display:'flex',justifyContent:'space-between'}}>
+            <div style={{display:'flex',justifyContent:'space-around'}}>
                 <Button color='primary' variant='contained' onClick={()=>executeReqHistory(i)} >Виконати</Button>
-                <NearMeIcon color='primary'/>
                 <CloseIcon />
             </div>
         )
@@ -67,9 +69,10 @@ function History() {
                     <ListItemText primary={item.name}  style={{width:'20%'}}/>
                     <ListItemText primary={item.nameReq} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.date} align='center' style={{width:'20%'}}/>
-                    <ListItemText align='right' style={{width:'20%'}}>
-                                      <ButtonGroup i={i} />
-                    </ListItemText>
+                    { item.name ?  <ListItemText align='right' style={{width:'20%'}}>
+                        <ButtonGroup i={i} />
+                    </ListItemText> : null}
+
                 </ListItem>
                 <Divider />
             </div>
@@ -86,26 +89,26 @@ function History() {
                         Історія запитів
                     </Typography>
                 </Box>
-                <div style={{display:'flex',alignItems:'center', justifyContent:'space-between'}}>
-                   <Box m={2}>
-                       <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>
-                           <FormControl className={classes.formControl}>
-                               <Select
-                                   labelId="demo-simple-select-label"
-                                   id="demo-simple-select"
-                                   value={name}
-                                   onChange={handleChange}
-                               >
-                                   <MenuItem value={10}>Мої</MenuItem>
-                                   <MenuItem value={20}>Всі</MenuItem>
-                               </Select>
-                           </FormControl>
-                       </div>
-                   </Box>
-            <Box m={2}>
-                <div style={{textAlign:'right'}}>
-                    <span style={{color:'#5e122d'}}>Очистити</span>
-                    <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>
+                <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
+                   {/*<Box m={2}>*/}
+                   {/*    <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>*/}
+                   {/*        <FormControl className={classes.formControl}>*/}
+                   {/*            <Select*/}
+                   {/*                labelId="demo-simple-select-label"*/}
+                   {/*                id="demo-simple-select"*/}
+                   {/*                value={name}*/}
+                   {/*                onChange={handleChange}*/}
+                   {/*            >*/}
+                   {/*                <MenuItem value={10}>Мої</MenuItem>*/}
+                   {/*                <MenuItem value={20}>Всі</MenuItem>*/}
+                   {/*            </Select>*/}
+                   {/*        </FormControl>*/}
+                   {/*    </div>*/}
+                   {/*</Box>*/}
+            <Box m={2} style={{textAlign:'right'}}>
+                <div>
+                    <span style={{color:'#5e122d'}} >Очистити</span>
+                    <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}} onClick={()=>dispatch(DeleteDataHistory({}))}/></Button>
                 </div>
             </Box>
                 </div>

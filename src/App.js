@@ -9,6 +9,7 @@ import {
 import SignIn from "./auth/SingIn/SingIn";
 import SignUpUser from "./auth/SignUp/SignUpUser";
 import Forgot from "./auth/Forgot/Forgot";
+import Admin from "./Admin/Admin";
 
 
  const App= () => {
@@ -20,6 +21,7 @@ import Forgot from "./auth/Forgot/Forgot";
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path='/singUp' component={SignUpUser} />
                 <Route path='/forgot' component={Forgot} />
+                <Route path='/admin' component={Admin} />
             </Switch>
                 </Router>
         </div>

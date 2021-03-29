@@ -63,8 +63,8 @@ const SignUpUser = () =>{
     },[registerIn])
     const RegisterUser = ({email, firstName, lastName, password})=>{
         const socket = io(SERVER);
-        socket.emit("createUser", {login:email,first_name:firstName,last_name:lastName,password:password}, (err, res) => {
-            console.log(res.data)
+        socket.emit("createUser", {login:email,first_name:firstName,last_name:lastName,password:password,isApproved:0}, (err, res) => {
+            console.log(res)
             setRegisterIn(res.success)
         });
 
@@ -188,7 +188,7 @@ const SuccessReqister = ()=>{
     return (
         <Box component="div" m={5} style={{textAlign:'center'}}>
             <div  style={{fontSize:'18px', marginBottom:'20px'}}>
-                Дякуєм за регістрацію
+                Дякуєм за регістрацію! Зачекайте адмін дасть вам доступ
             </div>
             <Link to='/'>
                 На сторінку входу

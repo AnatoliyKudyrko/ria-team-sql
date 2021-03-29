@@ -180,7 +180,7 @@ const MainPanel = ()=>{
             <List >
                 <Box m={2} >
                     <Typography variant="h5" component="h5" >
-                        Админ
+                        Панель адміністратора
                     </Typography>
                 </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>

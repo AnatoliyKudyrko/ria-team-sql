@@ -104,7 +104,7 @@ const Forgot = ()=>{
 
 
     const ToSingIn =()=>{
-        history.push("/singin");
+        history.push("/");
     }
 
     return (
@@ -122,7 +122,7 @@ const Forgot = ()=>{
                                      <div  style={{fontSize:'18px', marginBottom:'20px'}}>
                                          Ви успішно змінили пароль
                                      </div>
-                                     <Link  href="#" variant="body2" to='/'>
+                                     <Link variant="body2" onClick={()=>ToSingIn()} >
                                          На сторінку входу
                                      </Link>
                                  </Box>:
@@ -181,7 +181,7 @@ const Forgot = ()=>{
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link href="#" variant="body2" onClick={()=>ToSingIn()}>
+                                    <Link variant="body2" onClick={()=>ToSingIn()}>
                                         {"Перейти на вхід"}
                                     </Link>
                                 </Grid>

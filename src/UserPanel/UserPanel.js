@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -12,7 +12,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from "@material-ui/core/Button";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import io from "socket.io-client";
+import {SERVER} from "../dal/connectService";
+import {FetchDataUser} from "../redux/action/action";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,9 +36,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserPanel() {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-
     const data = useSelector(state => state.Auth.data);
+    const dispatch = useDispatch();
+    const [expanded, setExpanded] = React.useState(false);
+    const [id,setId] = useState(data.map(item=>item.user_id));
+    const [login,setLogin] = useState('');
+    const [first,setFirst] = useState('');
+    const [last,setLast] = useState('');
+    const [pass,setPass] = useState('');
+    const [newData,setNewData] = useState([]);
+    const socket = io(SERVER);
+
+    useEffect(()=>{
+        setNewData(data)
+    },[data])
 
     const [values, setValues] = React.useState({
         amount: '',
@@ -62,6 +76,31 @@ export default function UserPanel() {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const handleChangeFirstName = (event) => {
+        setFirst(event.target.value)
+    };
+    const ChangeFirst = ()=>{
+        const {user_id,login,password,last_name} = data[0];
+        socket.emit('updateUser',
+            {   user_id:user_id,
+                login:login,
+                password:password,
+                first_name:first,
+                last_name:last_name }, (err, res) => {
+                console.log(res)
+                dispatch(FetchDataUser(res));
+            });
+    }
+    const handleChangeLastName = () => {
+
+    };
+    const handleChangeLogin = () => {
+
+    };
+    const handleChangePass = () => {
+
+    };
+
     return (
         <div className={classes.root}>
             <h2>Особистий кабінет</h2>
@@ -72,11 +111,12 @@ export default function UserPanel() {
                     id="panel1bh-header"
                 >
                     <Typography className={classes.heading}>Імя</Typography>
-                    <Typography className={classes.secondaryHeading}>{data.map(item=>item.first_name)}</Typography>
+                    <Typography className={classes.secondaryHeading}>{newData.map(item=>item.first_name)}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <TextField id="standard-basic" defaultValue= {data.map(item=>item.first_name)} />
-                    <Button size="small" color="secondary">
+                    <TextField id="standard-basic"
+                               onChange={handleChangeFirstName}/>
+                    <Button size="small" color="secondary" onClick={()=>ChangeFirst()}>
                         Змінити
                     </Button>
                 </AccordionDetails>
@@ -89,11 +129,15 @@ export default function UserPanel() {
                 >
                     <Typography className={classes.heading}>Прізвище</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        {data.map(item=>item.last_name)}
+                        {newData.map(item=>item.last_name)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
-                    <TextField id="standard-basic" defaultValue= {data.map(item=>item.last_name)} />
+                    <TextField id="standard-basic"
+                               value={last}
+                               onChange={handleChangeLastName}
+
+                    />
                     <Button size="small" color="secondary">
                         Змінити
                     </Button>
@@ -107,7 +151,7 @@ export default function UserPanel() {
                 >
                     <Typography className={classes.heading}>Email</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        {data.map(item=>item.login)}
+                        {newData.map(item=>item.login)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -115,7 +159,8 @@ export default function UserPanel() {
                         id="email"
                         name="email"
                         autoComplete="email"
-                        defaultValue = {data.map(item=>item.login)}
+                        value={login}
+                        onChange={handleChangeLogin}
                     />
                     <Button size="small" color="secondary">
                         Змінити
@@ -134,7 +179,7 @@ export default function UserPanel() {
                     <Input
                         id="standard-adornment-password"
                         type={values.showPassword ? 'text' : 'password'}
-                        value={values.password}
+                        value={pass}
                         onChange={handleChangePassword('password')}
                         endAdornment={
                             <InputAdornment position="end">

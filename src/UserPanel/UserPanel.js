@@ -79,18 +79,6 @@ export default function UserPanel() {
     const handleChangeFirstName = (event) => {
         setFirst(event.target.value)
     };
-    const ChangeFirst = ()=>{
-        const {user_id,login,password,last_name} = data[0];
-        socket.emit('updateUser',
-            {   user_id:user_id,
-                login:login,
-                password:password,
-                first_name:first,
-                last_name:last_name }, (err, res) => {
-                console.log(res)
-                dispatch(FetchDataUser(res));
-            });
-    }
     const handleChangeLastName = () => {
 
     };
@@ -100,8 +88,21 @@ export default function UserPanel() {
     const handleChangePass = () => {
 
     };
+    const ChangeFirst = ()=> {
+        const {user_id, login, last_name} = data[0];
+        socket.emit('updateUser',
+            {
+                user_id: user_id,
+                login: login,
+                first_name: first,
+                last_name: last_name
+            }, (err, res) => {
+                console.log(res)
+                dispatch(FetchDataUser(res.data));
+            });
+    }
 
-    return (
+        return (
         <div className={classes.root}>
             <h2>Особистий кабінет</h2>
             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
@@ -111,7 +112,7 @@ export default function UserPanel() {
                     id="panel1bh-header"
                 >
                     <Typography className={classes.heading}>Імя</Typography>
-                    <Typography className={classes.secondaryHeading}>{newData.map(item=>item.first_name)}</Typography>
+                    <Typography className={classes.secondaryHeading}>{data.map(item=>item.first_name)}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <TextField id="standard-basic"
@@ -129,7 +130,7 @@ export default function UserPanel() {
                 >
                     <Typography className={classes.heading}>Прізвище</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        {newData.map(item=>item.last_name)}
+                        {data.map(item=>item.last_name)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
@@ -151,7 +152,7 @@ export default function UserPanel() {
                 >
                     <Typography className={classes.heading}>Email</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        {newData.map(item=>item.login)}
+                        {data.map(item=>item.login)}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>

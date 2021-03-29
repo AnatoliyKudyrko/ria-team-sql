@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {FetchDataActiveField, FetchDataSelect, LoadDataHistory} from "../../redux/action/action";
+import {FetchDataActiveField, FetchDataSelect, FetchDataUser, LoadDataHistory} from "../../redux/action/action";
 import io from "socket.io-client";
 import {useDispatch, useSelector} from "react-redux";
 import {Add} from "@material-ui/icons";
@@ -39,6 +39,8 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     const history = useSelector(state=>state.history.execute);
     const historyData = useSelector(state=>state.history.data);
     const historyDataActive = useSelector(state=>state.history.activeItems)
+    const socket = io(SERVER);
+
     useEffect(()=>{
         setReq(`Select ${field} ${[...funField]} from ${table.map(item=>item.name)} ${where} ${group} ${order}`)
     },[table,field,where,funField,group,order])
@@ -49,7 +51,6 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     },[history])
 
     const handleSubmit =()=>{
-        const socket = io(SERVER);
         viewTabel(true);
         socket.emit("reqData", `${req} LIMIT 1000`, (err, res) => {
             dispatch(FetchDataSelect({
@@ -78,7 +79,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
                 }
 
             {
-                field.length !== 0  ? <Btn handleSubmit={handleSubmit} name={name} req={req}/> : null
+                field.length !== 0  ? <Btn handleSubmit={handleSubmit} name={name} req={req} data={historyData[historyDataActive]}/> : null
             }
 
 
@@ -86,7 +87,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     );
 };
 
-const Btn= ({handleSubmit,name,req})=>{
+const Btn= ({handleSubmit,name,req,data})=>{
 
     return(
         <div>
@@ -94,7 +95,7 @@ const Btn= ({handleSubmit,name,req})=>{
                 <Box m={3}>
                     <Button variant="contained" onClick={handleSubmit} color="primary" size='large' >Виконати</Button>
                     <div>
-                        <AddHistory name={name} req={req} />
+                        <AddHistory name={name} req={req} data={data}/>
                     </div>
                 </Box>
 
@@ -106,14 +107,26 @@ const Btn= ({handleSubmit,name,req})=>{
 }
 
 
-const AddHistory = ({name,req})=>{
+const AddHistory = ({name,req,data})=>{
     const [open, setOpen] = useState(false);
     const [value, setValue] = React.useState('my');
     const dispatch = useDispatch();
+    const socket = io(SERVER);
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+    useEffect(()=>{
+        console.log(data)
+    },[data])
     const handleSubmitHistory = ()=>{
+        socket.emit('createQuery',
+            {
+                user_id: name.map(item=>item.user_id).toString(),
+                request_query:req,
+                request_query_name:value
+            }, (err, res) => {
+                console.log(res)
+            });
         dispatch(LoadDataHistory(
             {
                 name:name.map(item=>item.first_name),

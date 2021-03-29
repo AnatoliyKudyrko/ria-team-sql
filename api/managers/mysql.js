@@ -63,12 +63,17 @@ async function updateUser({ user_id, login, password, first_name, last_name }) {
 async function checkUser({ login, password }) {
     try {
         const connection = await db.connection();
-        const [rows] = await connection.execute(`SELECT user_id, first_name, last_name FROM users WHERE login = '${login}' AND password = '${password}'`);
+        const [rows] = await connection.execute(`SELECT user_id, first_name, last_name, isApproved FROM users WHERE login = '${login}' AND password = '${password}'`);
         let response = { success: false };
-        if (rows.length) {
+        if (rows.length && rows[0].isApproved) {
             response = {
                 data: { ...rows[0], login },
                 success: true
+            }
+        } else if(rows.length && !rows[0].isApproved) {
+            response = {
+                msg: `${rows[0].login} is not Approved`,
+                success: false
             }
         } else {
             const { user_id } = await checkLogin({ login });
@@ -201,11 +206,11 @@ async function getUsersQueries({ user_id, date_from = '1970-01-01', date_to = 'n
     };
 }
 
-async function getAllUsers() {
+async function getAllUsers({isApproved = 1}) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`SELECT user_id, login, first_name, last_name FROM users ORDER BY login`);
+        const [rows] = await connection.execute(`SELECT user_id, login, first_name, last_name FROM users WHERE isApproved = ${isApproved} ORDER BY login`);
         response = {
             success: true,
             data: rows,
@@ -217,5 +222,20 @@ async function getAllUsers() {
     };
 }
 
+async function setApprove({user_id}) {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        const [rows] = await connection.execute(`UPDATE users SET isApproved = 1 WHERE user_id = ${user_id}`);
+        response = {
+            success: true
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
 
-module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries };
+
+module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries, setApprove};

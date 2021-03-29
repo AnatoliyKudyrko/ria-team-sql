@@ -21,4 +21,8 @@ async function autorizeSA({login, password}, cb) {
     return cb(null, result);
 }
 
-module.exports = { deleteUser, getAllUsers, getUsersQueries, autorizeSA }
+async function setApprove(data, cb) {
+    return cb(null, await myDb.setApprove({ ...data }));
+}
+
+module.exports = { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove }

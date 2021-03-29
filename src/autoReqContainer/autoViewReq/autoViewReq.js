@@ -116,23 +116,23 @@ const AddHistory = ({name,req,data})=>{
         setValue(event.target.value);
     };
     useEffect(()=>{
-        console.log(data)
     },[data])
     const handleSubmitHistory = ()=>{
         socket.emit('createQuery',
             {
                 user_id: name.map(item=>item.user_id).toString(),
+                request_date:new Date().toDateString(),
                 request_query:req,
                 request_query_name:value
             }, (err, res) => {
                 console.log(res)
             });
-        dispatch(LoadDataHistory(
-            {
-                name:name.map(item=>item.first_name),
-                nameReq:value,
-                reqData:req,
-                date:new Date().toDateString()}))
+        // dispatch(LoadDataHistory(
+        //     {
+        //         name:name.map(item=>item.first_name),
+        //         nameReq:value,
+        //         reqData:req,
+        //         date:new Date().toDateString()}))
         handleClose()
     }
     const handleClickOpen = () => {

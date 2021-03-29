@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ListItem from "@material-ui/core/ListItem";
@@ -34,6 +34,9 @@ const DropDowns = (props)=> {
     const handleClickAway = () => {
         setOpen(false);
     };
+    useEffect(()=>{
+
+    },[countHistory])
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
             <div className={classes.root}>
@@ -58,17 +61,12 @@ const DropDowns = (props)=> {
 }
 const Notifications =({data})=> {
     return (
-        data.map(item=>{
-            if (item === 0) {
-                return null;
-            }
-            return (
-                <ListItem button key={item}>
-                    <ListItemText primary="Добавлено в істрорію"  style={{color:'black'}}/>
-                </ListItem>
-            )
-        })
+               data !== 0 ?
+                <ListItem>
+                    <ListItemText primary="Добавлено в історію"  style={{color:'black'}}/>
+                </ListItem> : null
     )
+
 }
 const Account =()=> {
     return (

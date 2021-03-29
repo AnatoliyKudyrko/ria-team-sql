@@ -44,19 +44,11 @@ const AutoReqMain = (props) => {
     const history = useSelector(state=>state.history.execute);
     const historyData = useSelector(state=>state.history.data);
     const historyDataActive = useSelector(state=>state.history.activeItems);
-    const [statusHistory,setStatusHistory] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(()=>{
         fieldArray.length !== 0 ? setCheckedTable(true): setCheckedTable(false)
     },[fieldArray])
-    useEffect(()=>{
-        if(historyData[historyDataActive.i]){
-            setStatusHistory(true);
-        } else {
-            setStatusHistory(false)
-        }
-    },[historyData,history,historyDataActive])
 
     useEffect(()=>{
         dispatch(FetchDataActiveField(fieldArray))
@@ -74,7 +66,7 @@ const AutoReqMain = (props) => {
     return (
         <div>
             {
-                statusHistory ? <Button onClick={()=>setStatusHistory(false)}>Закрити запит історії</Button>:
+                history ? null:
                     <div>
             <Filter table = {tableName} field={fieldArray}  />
                     <div className={classes.root}>

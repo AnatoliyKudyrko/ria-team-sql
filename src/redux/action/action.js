@@ -17,7 +17,7 @@ export const  DELETE_DATA_HISTORY = 'DELETE_DATA_HISTORY';
 export const  RESET = 'RESET';
 export  const  DELETE_DATA_FUN_WHERE = 'DELETE_DATA_FUN_WHERE';
 export const LOAD_DATA_LIMIT= 'LOAD_DATA_LIMIT';
-
+export const LOAD_DATA_HISTORY_COUNT = 'LOAD_DATA_HISTORY_COUNT';
 
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
@@ -52,11 +52,18 @@ export function DeleteDataHistory(data){
     }
 }
 
-export function HistoryExecute(){
+export function HistoryExecute(data){
     return {
-        type: LOAD_DATA_HISTORY_EXECUTE
+        type: LOAD_DATA_HISTORY_EXECUTE,
+        data
     }
 }
+export function HistoryCount(){
+    return {
+        type: LOAD_DATA_HISTORY_COUNT
+    }
+}
+
 export function HistoryExecuteId(id){
     return {
         type: LOAD_DATA_HISTORY_ID,

@@ -32,12 +32,8 @@ const useStyles = makeStyles((theme) => ({
 function History() {
     const classes = useStyles();
     let history = useHistory();
-    const [name, setName] = useState(10);
     const data = useSelector(state => state.history.data);
     const dispatch = useDispatch();
-    const handleChange = (event) => {
-        setName(event.target.value);
-    };
 
     useEffect(()=>{
 
@@ -50,7 +46,7 @@ function History() {
     const ButtonGroup = (i)=>{
         const executeReqHistory = (item)=>{
             console.log(data[item])
-            dispatch(HistoryExecute())
+            dispatch(HistoryExecute(true))
             dispatch(HistoryExecuteId(item))
             history.push("/dashboard/main");
         }

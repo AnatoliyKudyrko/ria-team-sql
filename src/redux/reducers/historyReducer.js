@@ -1,6 +1,6 @@
 import {
     DELETE_DATA_HISTORY,
-    LOAD_DATA_HISTORY,
+    LOAD_DATA_HISTORY, LOAD_DATA_HISTORY_COUNT,
     LOAD_DATA_HISTORY_EXECUTE,
     LOAD_DATA_HISTORY_ID
 } from "../action/action";
@@ -26,8 +26,12 @@ export function HistoryReducer (state=initialState,action){
         case LOAD_DATA_HISTORY_EXECUTE:
             return {
                 ...state,
-                count:state.count+1,
-                execute: true
+                execute: action.data
+            }
+        case LOAD_DATA_HISTORY_COUNT:
+            return {
+                ...state,
+                count: state.count+1
             }
         case LOAD_DATA_HISTORY_ID:
             return {

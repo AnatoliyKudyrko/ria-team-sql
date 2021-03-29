@@ -5,7 +5,7 @@ import {
     DeleteDataHistory,
     FetchDataActiveField,
     FetchDataSelect,
-    FetchDataUser,
+    FetchDataUser, HistoryCount, HistoryExecute,
     LoadDataHistory, Reset
 } from "../../redux/action/action";
 import io from "socket.io-client";
@@ -15,6 +15,7 @@ import Box from "@material-ui/core/Box";
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import moment from "moment";
+import logger from "redux-thunk";
 
 const SERVER = "http://127.0.0.1:4000";
 const useStyles = makeStyles((theme) => ({
@@ -47,8 +48,10 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     const limit = useSelector(state=>state.select.limit)
     const history = useSelector(state=>state.history.execute);
     const historyData = useSelector(state=>state.history.data);
-    const historyDataActive = useSelector(state=>state.history.activeItems)
+    const historyDataActive = useSelector(state=>state.history.activeItems);
+
     const socket = io(SERVER);
+
 
     useEffect(()=>{
         setReq(`Select ${field} ${[...funField]} from ${table.map(item=>item.name)} ${where} ${group} ${order} ${limit}`)
@@ -91,10 +94,11 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     const HistoryView = ()=>{
         return (
             <div>
+                <Button onClick={()=>dispatch(HistoryExecute(false))}>Закрити запити історії</Button>
                     <Paper className={classes.root}>
                         <div style={{display:'flex', alignItems:'center',justifyContent:'space-around', width:'80%'}}>
                         <p className={classes.reqTitle}>{`Запит з вашої історії:  ${reqHistory}`}</p>
-                        <DeleteIcon onClick={handleClearHistory} color='secondary' fontSize='medium' style={{marginTop:'5px'}} />
+                        <Button onClick={handleClearHistory}  style={{marginTop:'5px'}} >очистити</Button>
                     </div>
                     </Paper>
 
@@ -109,9 +113,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
                     <p className={classes.reqTitle}>{`Запит:  ${req}`}</p>
 
                 </div>
-                    <div>
-                        <DeleteIcon onClick={handleClear} color='secondary' fontSize='medium' style={{marginTop:'50%'}} />
-                    </div>
+                        <Button onClick={handleClear} >очитисти</Button>
                 </Paper>
                 <Btn handleSubmit={handleSubmit} name={name} req={req} data={historyData[historyDataActive]}/>
             </div>
@@ -121,12 +123,15 @@ const AutoViewReq = ({table,field,viewTabel}) => {
         <div className={classes.btn}>
 
                 {
-                    field.length !== 0  ? <MainView /> : null
+                    field.length !== 0 && !history ? <MainView /> : null
 
                 }
+            {
+                console.log(history)
+            }
 
             {
-                historyData[historyDataActive.i]  && history && reqHistory !== ''  ? <HistoryView /> : null
+                 history  ? <HistoryView /> : null
 
             }
 
@@ -159,6 +164,7 @@ const AddHistory = ({name,req,data})=>{
     const [value, setValue] = React.useState('my');
     const dispatch = useDispatch();
     const socket = io(SERVER);
+
     const handleChange = (event) => {
         setValue(event.target.value);
     };
@@ -183,7 +189,7 @@ const AddHistory = ({name,req,data})=>{
                     }
                         ))
             });
-
+        dispatch(HistoryCount());
         handleClose()
     }
     const handleClickOpen = () => {

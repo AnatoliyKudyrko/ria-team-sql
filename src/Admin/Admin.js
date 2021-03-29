@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import TextField from "@material-ui/core/TextField";
-import {
-    DeleteDataHistory,
-    FetchDataActiveField,
-    FetchDataSelect,
-    HistoryExecute,
-    HistoryExecuteId
-} from "../redux/action/action";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";

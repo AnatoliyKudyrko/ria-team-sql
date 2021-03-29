@@ -7,7 +7,7 @@ import {
     LOAD_DATA_FUN_WHERE,
     LOAD_DATA_GROUP,
     LOAD_DATA_ORDER,
-    LoadDataFunField,
+    LoadDataFunField, RESET,
     UPDATE_DATA_SELECT
 } from "../action/action";
 
@@ -73,6 +73,18 @@ export function Select (state=initialState,action){
             return {
                 ...state,
                 fieldFun:[...state.fieldFun, action.data]
+            }
+        case RESET:
+            return {
+                ...state,
+                dataField:[],
+                dataActiveField:[],
+                activeNameTable:[{name:'slon.facts'}],
+                fieldFun : [],
+                where:[],
+                group:[],
+                order:[],
+                limit:[],
             }
         case LOAD_DATA_FUN_WHERE:
             return {

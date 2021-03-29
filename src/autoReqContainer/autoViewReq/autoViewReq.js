@@ -6,7 +6,7 @@ import {
     FetchDataActiveField,
     FetchDataSelect,
     FetchDataUser,
-    LoadDataHistory
+    LoadDataHistory, Reset
 } from "../../redux/action/action";
 import io from "socket.io-client";
 import {useDispatch, useSelector} from "react-redux";
@@ -71,6 +71,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
             reqTemp=req;
         }
         socket.emit("reqData", `${reqTemp} LIMIT 1000`, (err, res) => {
+            reqTemp = '';
             dispatch(FetchDataSelect({
                     columns:res.columns,
                     rows:res.rows
@@ -81,6 +82,8 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     }
     const handleClear = ()=>{
         dispatch(FetchDataActiveField([]));
+        dispatch(Reset());
+        setReq('');
 
     }
     const handleClearHistory = ()=>{

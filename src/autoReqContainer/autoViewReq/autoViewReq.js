@@ -81,7 +81,6 @@ const AutoViewReq = ({table,field,viewTabel}) => {
         dispatch(FetchDataActiveField([]));
         dispatch(Reset());
         setReq('');
-
     }
     const handleClearHistory = ()=>{
         setReqHistory('');

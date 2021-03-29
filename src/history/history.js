@@ -41,7 +41,7 @@ function History() {
     const dispatch = useDispatch();
 
     useEffect(()=>{
-       socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(data) => {
+       socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {
           console.log(data)
         })
 

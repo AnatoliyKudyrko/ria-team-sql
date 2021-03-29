@@ -76,17 +76,26 @@ const Admin = () => {
 const MainPanel = ()=>{
 
     const [data,setData] = useState([]);
+    const [updateUser,setUpdateUser] = useState(false);
 
     useEffect(()=>{
         socket.emit("getAllUsers", {}, (err, res) => {
             setData(res.data);
-            console.log(data)
         });
-    },[])
-    const ButtonGroup = (i)=>{
+    },[updateUser])
+
+    const deleteUserID =(userID)=>{
+        socket.emit("deleteUser", {user_id:userID.id}, (err, res) => {
+            if(res.success) {
+                setUpdateUser(prev=>!prev)
+            }
+       });
+    }
+
+    const ButtonGroup = (id)=>{
         return (
-            <div style={{display:'flex',justifyContent:'space-around'}}>
-                <CloseIcon />
+            <div style={{display:'flex',justifyContent:'space-around',cursor:'pointer'}}>
+                <CloseIcon onClick={()=>deleteUserID(id)}/>
             </div>
         )
     }
@@ -100,7 +109,7 @@ const MainPanel = ()=>{
                     <ListItemText primary={item.last_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.login} align='center' style={{width:'20%'}}/>
                    <ListItemText align='right' style={{width:'20%'}}>
-                        <ButtonGroup i={i} />
+                        <ButtonGroup id={item.user_id} />
                     </ListItemText>
                 </ListItem>
                 <Divider />

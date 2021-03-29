@@ -187,7 +187,6 @@ module.exports = function (socket) {
         output:
             {
                 success: true,
-            data: [{request_id, request_date, request_query, request_query_name}],
             }
     */
     socket.on('selectQueries', selectQueries);

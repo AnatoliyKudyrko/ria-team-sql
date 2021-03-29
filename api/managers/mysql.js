@@ -44,7 +44,8 @@ async function updateUser({ user_id, login, password, first_name, last_name }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`UPDATE users SET login = '${login}', password = '${password}', first_name = '${first_name}', last_name = '${last_name}' WHERE user_id = '${user_id}'`);
+        const passwordStr = password ? `, password = '${password}'` : ``;
+        const [rows] = await connection.execute(`UPDATE users SET login = '${login}' ${passwordStr}, first_name = '${first_name}', last_name = '${last_name}' WHERE user_id = '${user_id}'`);
         if (rows.changedRows) {
             response = {
                 success: true,
@@ -122,18 +123,18 @@ async function deleteUser({ user_id }) {
         const connection = await db.connection();
         await connection.execute(`DELETE FROM users WHERE user_id = '${user_id}'`);
         await connection.execute(`DELETE FROM requests WHERE user_id = '${user_id}'`);
-        return { id };
+        return { success: true };
     } catch (error) {
         console.error(error);
-        return error;
+        return { error, success: false };
     };
 }
 
-async function createQuery({ user_id, request_date, request_query, request_query_name }) {
+async function createQuery({ user_id, request_query, request_query_name }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`INSERT INTO requests (user_id, request_date, request_query, request_query_name) VALUES ('${user_id}', '${request_date}', '${request_query}', '${request_query_name}')`);
+        const [rows] = await connection.execute(`INSERT INTO requests (user_id, request_date, request_query, request_query_name) VALUES ('${user_id}', now(), '${request_query}', '${request_query_name}')`);
         console.log(rows.insertId);
         response = {
             success: true,
@@ -147,13 +148,14 @@ async function createQuery({ user_id, request_date, request_query, request_query
     };
 }
 
-async function updateQuery({request_id, request_date, request_query, request_query_name }) {
+async function updateQuery({request_id, request_query, request_query_name }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`UPDATE requests SET request_date = '${request_date}, request_query = '${request_query}', request_query_name = '${request_query_name}', request_date = '${request_date}' WHERE request_id = ${request_id}`);
+        const [rows] = await connection.execute(`UPDATE requests SET request_date = now(), request_query = '${request_query}', request_query_name = '${request_query_name}', request_date = now() WHERE request_id = ${request_id}`);
         response = {
             success: true,
+            data: {request_id, request_query, request_query_name},
             msg: `${request_query_name} is updated`
         }
         return response;
@@ -167,10 +169,10 @@ async function selectQueries({ user_id }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`SELECT request_date, request_query, request_query_name FROM requests WHERE request.user_id = '${user_id}' ORDER BY request_date`);
+        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name FROM requests WHERE request.user_id = '${user_id}' ORDER BY request_date`);
         response = {
             success: true,
-            data: rows,
+            data: rows || [],
         }
         return response;
     } catch (error) {
@@ -183,11 +185,11 @@ async function getUsersQueries({ user_id, date_from = '1970-01-01', date_to = 'n
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const conditions = [`WHERE request_date BETWEEN ${date_from} AND ${date_to}`];
+        let condition = '';
         if (user_id) {
-            conditions.push(`request.user_id = '${user_id}'`);
+            condition = ` AND request.user_id = '${user_id}'`;
         }
-        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name FROM requests ${conditions.join(' AND ')}  ORDER BY request_date`);
+        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name, login, first_name, last_name FROM requests, users WHERE request_date BETWEEN ${date_from} AND ${date_to} AND request.user_id = users.user_id  ORDER BY request_date`);
         response = {
             success: true,
             data: rows,

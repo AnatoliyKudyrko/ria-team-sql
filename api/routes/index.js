@@ -20,12 +20,12 @@ module.exports = function (socket) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
                // const res = data ? data.map(namer).filter(dateFilter).map(item=>{return {name:item}}) : null;
                 const res = data ? data.map(namer).map(item=>{return {name:item}}) : null;
-                callbackFn(res);
+                callbackFn(null, res);
             })
         } else {
             const msg = 'database not found';
             err(msg);
-            callbackFn({
+            callbackFn(null, {
                 error: msg
             })
         }
@@ -45,7 +45,7 @@ module.exports = function (socket) {
             })
         });
         Promise.all([prom1, prom2]).then(values => {
-            callbackFn({
+            callbackFn(null, {
                 mviews: values[0],
                 slon: values[1]
             });
@@ -90,14 +90,105 @@ module.exports = function (socket) {
             callbackFn(null,{columns,rows});
     });
 
+    /*
+        input:
+        { login, password, first_name, last_name }
+        output:
+            {
+                success: true,
+                data:  { login, first_name, last_name, user_id },
+                msg: `${login} is created`
+            } or
+            {
+                success: false,
+                msg: `${login} is already present`
+            }
+        */ 
     socket.on('createUser', createUser);
+    /*
+        input:
+        { user_id, login, password(optional), first_name, last_name }
+        output:
+            {
+                success: true,
+                data: { login, first_name, last_name, user_id },
+                msg: `${login} is updated`
+            }
+        */    
     socket.on('updateUser', updateUser);
+
+        /*
+        input:
+        { login, password }
+        output:
+            {
+                data: { login, first_name, last_name, user_id },
+                success: true
+            }
+            or 
+            {
+                user_id: user_id || null,
+                success: false,
+                msg
+            }
+        */ 
     socket.on('checkUser', checkUser);
+
+    /*
+        input:
+        { login }
+        output:
+            {
+                success: true,
+                msg: 'Email sent: ' + info.response
+            }
+        */ 
     socket.on('forgotUser', forgotUser);
+
+/*
+        input:
+        { code }
+        output:
+             {
+                success: true,
+                data: {user_id, login, first_name, last_name} 
+             }
+        */ 
     socket.on('remindUser', remindUser);
 
+    
+/*
+        input:
+        { user_id, request_query, request_query_name }
+        output:
+             {
+                success: true,
+                data: { request_id, user_id, request_query_name, request_query, request_date } 
+                msg: `${request_query_name} is created` 
+            }
+        */ 
     socket.on('createQuery', createQuery);
+
+/*
+        input:
+        { request_id, request_query, request_query_name }
+        output:
+             {
+                success: true,
+                data: { request_id, request_query_name, request_query, request_date } 
+                msg: `${request_query_name} is updated` 
+            }
+        */ 
     socket.on('updateQuery', updateQuery);
+
+    /*
+      input:
+        { user_id }
+        output:
+            {
+                success: true,
+            }
+    */
     socket.on('selectQueries', selectQueries);
     
 }

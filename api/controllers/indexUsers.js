@@ -79,4 +79,4 @@ async function remindUser({ code }, cb) {
     }
 }
 
-module.exports = { createUser, updateUser, checkUser, deleteUser, forgotUser, remindUser }
+module.exports = { createUser, updateUser, checkUser, forgotUser, remindUser }

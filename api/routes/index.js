@@ -1,9 +1,8 @@
-const {createUser, updateUser, deleteUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
+const {createUser, updateUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
 const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
 const err = require('../helpers/error');
 const { ClickHouse } = require('clickhouse');
-const config = require('./config'),
-    err = require('./helpers/error');
+const config = require('../config');
 const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
 const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
 

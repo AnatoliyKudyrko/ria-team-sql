@@ -7,6 +7,7 @@ import {SERVER} from "../dal/connectService";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloseIcon from "@material-ui/icons/Close";
+import DoneIcon from "@material-ui/icons/Done";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
@@ -67,11 +68,17 @@ const Admin = () => {
 const MainPanel = ()=>{
 
     const [data,setData] = useState([]);
+    const [waited,setWaited] = useState([]);
+
     const [updateUser,setUpdateUser] = useState(false);
 
     useEffect(()=>{
         socket.emit("getAllUsers", {}, (err, res) => {
             setData(res.data);
+        });
+
+        socket.emit("getAllUsers", {isApproved: 0}, (err, res) => {
+            setWaited(res.data);
         });
     },[updateUser])
 
@@ -82,7 +89,13 @@ const MainPanel = ()=>{
             }
        });
     }
-
+    const setApprove =(userID)=>{
+        socket.emit("setApprove", {user_id:userID.id}, (err, res) => {
+            if(res.success) {
+                setUpdateUser(prev=>!prev)
+            }
+       });
+    }
     const ButtonGroup = (id)=>{
         return (
             <div style={{display:'flex',justifyContent:'space-around',cursor:'pointer'}}>
@@ -91,6 +104,13 @@ const MainPanel = ()=>{
         )
     }
 
+    const ButtonApply = (id)=>{
+        return (
+            <div style={{display:'flex',justifyContent:'space-around',cursor:'pointer'}}>
+                <DoneIcon onClick={()=>setApprove(id)}/>
+            </div>
+        )
+    }
     const itemYes = (data.map((item,i)=>{
         return (
             <div key={i}>
@@ -108,10 +128,55 @@ const MainPanel = ()=>{
         )
     }))
 
+    const waitedList = (waited.map((item,i)=>{
+        return (
+            <div key={i}>
+                <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
+                    <ListItemText primary={item.user_id}  style={{width:'20%'}}/>
+                    <ListItemText primary={item.first_name} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.last_name} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.login} align='center' style={{width:'20%'}}/>
+                   <ListItemText align='right' style={{width:'20%'}}>
+                        <ButtonGroup id={item.user_id} />
+                        <ButtonApply  id={item.user_id} />
+                    </ListItemText>
+                </ListItem>
+                <Divider />
+            </div>
+        )
+    }))
+
 
 
     return (
         <div>
+            <List >
+                <Box m={1} >
+                    <Typography variant="h5" component="h5" >
+                        Wait for approve
+                    </Typography>
+                </Box>
+                <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
+                    <Box m={1} style={{textAlign:'right'}}>
+                        <div>
+                            <span style={{color:'#5e122d'}} >Очистити</span>
+                            <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>
+                        </div>
+                    </Box>
+                </div>
+                <ListItem color='primary'>
+                    <ListItemText primary="Id"  />
+                    <ListItemText primary="Імя" align='center'  />
+                    <ListItemText primary="Прізвище" align='center' />
+                    <ListItemText primary="Логін" align='center' />
+                    <ListItemText primary="Дії" align='center' />
+                </ListItem>
+                <Divider />
+                {
+                    waited.length === 0  ? null : waitedList
+                }
+            </List>
+
             <List >
                 <Box m={2} >
                     <Typography variant="h5" component="h5" >

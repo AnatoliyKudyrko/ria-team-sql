@@ -1,6 +1,5 @@
 import io from "socket.io-client";
 export const LOAD_DATA_SELECT = 'LOAD_DATA_SELECT';
-
 export const LOAD_DATA_USER = 'LOAD_DATA_USER';
 export const LOAD_DATA_HISTORY = 'LOAD_DATA_HISTORY';
 export const LOAD_DATA_HISTORY_ID = 'LOAD_DATA_HISTORY_ID';
@@ -16,6 +15,9 @@ export const LOAD_ACTIVE_NAME_TABLE = 'LOAD_ACTIVE_NAME_TABLE';
 export const LOAD_DATA_HISTORY_EXECUTE = 'LOAD_DATA_HISTORY_EXECUTE';
 export const  DELETE_DATA_HISTORY = 'DELETE_DATA_HISTORY';
 export const  RESET = 'RESET';
+export  const  DELETE_DATA_FUN_WHERE = 'DELETE_DATA_FUN_WHERE';
+export const LOAD_DATA_LIMIT= 'LOAD_DATA_LIMIT';
+
 
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
@@ -74,6 +76,12 @@ export function LoadDataWhereField(data){
         data
     }
 }
+export function DeleteDataWhereField(data){
+    return {
+        type: DELETE_DATA_FUN_WHERE,
+        data
+    }
+}
 export function LoadDataGroup(data){
     return {
         type: LOAD_DATA_GROUP,
@@ -83,6 +91,12 @@ export function LoadDataGroup(data){
 export function LoadDataOrder(data){
     return {
         type: LOAD_DATA_ORDER,
+        data
+    }
+}
+export function LoadDataLimit(data){
+    return {
+        type: LOAD_DATA_LIMIT,
         data
     }
 }

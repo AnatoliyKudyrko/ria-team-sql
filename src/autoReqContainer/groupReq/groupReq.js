@@ -8,7 +8,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {Checkbox, FormHelperText, InputLabel, MenuItem} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
-import {LoadDataFunField, LoadDataWhereField} from "../../redux/action/action";
+import {DeleteDataWhereField, LoadDataFunField, LoadDataWhereField} from "../../redux/action/action";
+import logger from "redux-thunk";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -22,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 const GroupReq = ({dataActiveField,table}) => {
     const [activeField, setActiveField] = useState([]);
+    useEffect(()=>{
+        console.log(activeField)
+    },[activeField])
     return (
         <div>
             <Autocomplete
@@ -62,14 +66,14 @@ const GroupReqItem = ({name,table})=>{
         if (fun !== ''){
             if(fun === 'WHERE' && value !== ''){
                 dispatch(LoadDataWhereField(`${fun} ${name} ${operator} ${value}`))
-                console.log(fun,name,operator,value)
             }
             if(fun !== 'WHERE'){
-                dispatch(LoadDataFunField(`${fun}(${name})`))
-                console.log(`${fun}(${name})`)
+                    dispatch(LoadDataFunField(`,${fun}(${name})`))
+                if(value === ''){
+                    dispatch(DeleteDataWhereField(`${fun}(${name})`))
+                }
             }
         }
-
 
     },[fun,value,operator,name])
 

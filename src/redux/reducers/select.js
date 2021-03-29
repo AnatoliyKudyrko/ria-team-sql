@@ -1,11 +1,12 @@
 import {
+    DELETE_DATA_FUN_WHERE,
     FILTER_DATA_SELECT,
     LOAD_ACTIVE_NAME_TABLE,
     LOAD_DATA_ACTIVE_FIELD,
     LOAD_DATA_FIELDS,
     LOAD_DATA_FUN_FIELD,
     LOAD_DATA_FUN_WHERE,
-    LOAD_DATA_GROUP,
+    LOAD_DATA_GROUP, LOAD_DATA_LIMIT,
     LOAD_DATA_ORDER,
     LoadDataFunField, RESET,
     UPDATE_DATA_SELECT
@@ -91,6 +92,11 @@ export function Select (state=initialState,action){
                 ...state,
                     where:[action.data]
             }
+        case DELETE_DATA_FUN_WHERE:
+            return {
+                ...state,
+                where:[state.where.filter(e => e !== action.data)]
+            }
 
         case LOAD_DATA_GROUP:
             return {
@@ -101,6 +107,11 @@ export function Select (state=initialState,action){
             return {
                 ...state,
                 order:[action.data]
+            }
+        case LOAD_DATA_LIMIT:
+            return {
+                ...state,
+                limit:[action.data]
             }
         default: return state
     }

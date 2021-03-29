@@ -44,21 +44,20 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     const funField = useSelector(state=>state.select.fieldFun)
     const group = useSelector(state=>state.select.group)
     const order = useSelector(state=>state.select.order)
+    const limit = useSelector(state=>state.select.limit)
     const history = useSelector(state=>state.history.execute);
     const historyData = useSelector(state=>state.history.data);
     const historyDataActive = useSelector(state=>state.history.activeItems)
     const socket = io(SERVER);
 
     useEffect(()=>{
-        setReq(`Select ${field} ${[...funField]} from ${table.map(item=>item.name)} ${where} ${group} ${order}`)
-    },[table,field,where,funField,group,order])
+        setReq(`Select ${field} ${[...funField]} from ${table.map(item=>item.name)} ${where} ${group} ${order} ${limit}`)
+    },[table,field,where,funField,group,order,limit])
 
     useEffect(()=>{
         if(historyData[historyDataActive.i]  && history){
             setReqHistory(`${historyData[historyDataActive.i].reqData}`)
         }
-        console.log(historyDataActive)
-        console.log(history)
     },[history])
 
     const handleSubmit =()=>{

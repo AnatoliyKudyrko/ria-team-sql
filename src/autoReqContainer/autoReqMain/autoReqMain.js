@@ -41,11 +41,22 @@ const AutoReqMain = (props) => {
     const [checkedTable,setCheckedTable] = useState(false);
     const dataActiveField = useSelector(state=>state.select.dataActiveField);
     const tableActive = useSelector(state=>state.select.activeNameTable);
+    const history = useSelector(state=>state.history.execute);
+    const historyData = useSelector(state=>state.history.data);
+    const historyDataActive = useSelector(state=>state.history.activeItems);
+    const [statusHistory,setStatusHistory] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(()=>{
         fieldArray.length !== 0 ? setCheckedTable(true): setCheckedTable(false)
     },[fieldArray])
+    useEffect(()=>{
+        if(historyData[historyDataActive.i]){
+            setStatusHistory(true);
+        } else {
+            setStatusHistory(false)
+        }
+    },[historyData,history,historyDataActive])
 
     useEffect(()=>{
         dispatch(FetchDataActiveField(fieldArray))
@@ -62,26 +73,32 @@ const AutoReqMain = (props) => {
     }
     return (
         <div>
+            {
+                statusHistory ? <Button onClick={()=>setStatusHistory(false)}>Закрити запит історії</Button>:
+                    <div>
             <Filter table = {tableName} field={fieldArray}  />
-            <div className={classes.root}>
-                <Grid container spacing={1}>
-                    <Grid item xs={2}>
-                     <Paper>
-                        <span> Таблиці</span>
-                    <SelectTable getTableName={getTableName} checkedTable={checkedTable} />
-                     </Paper>
-                    </Grid>
-                    <Grid item xs={2}>
-                     <Paper>
-                        <span> Поля</span>
-                    <SelectField getFieldName={getFieldName} delFieldName={delFieldName} />
-                     </Paper>
-                    </Grid>
-                    {
-                        dataActiveField.length !== 0 ? <MoreParam dataActiveField={dataActiveField} table = {tableName} /> : null
-                    }
-                </Grid>
-            </div>
+                    <div className={classes.root}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={2}>
+                                <Paper>
+                                    <span> Таблиці</span>
+                                    <SelectTable getTableName={getTableName} checkedTable={checkedTable}/>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Paper>
+                                    <span> Поля</span>
+                                    <SelectField getFieldName={getFieldName} delFieldName={delFieldName}/>
+                                </Paper>
+                            </Grid>
+                            {
+                                dataActiveField.length !== 0 ?
+                                    <MoreParam dataActiveField={dataActiveField} table={tableName}/> : null
+                            }
+                        </Grid>
+                    </div>
+                    </div>
+            }
             <AutoViewReq table = {tableActive} field={dataActiveField} viewTabel={props.viewTable} />
 
         </div>

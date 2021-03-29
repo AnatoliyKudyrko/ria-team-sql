@@ -130,11 +130,11 @@ async function deleteUser({ user_id }) {
     };
 }
 
-async function createQuery({ user_id, request_query, request_query_name }) {
+async function createQuery({ user_id, request_date, request_query, request_query_name }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`INSERT INTO requests (user_id, request_date, request_query, request_query_name) VALUES ('${user_id}', now(), '${request_query}', '${request_query_name}')`);
+        const [rows] = await connection.execute(`INSERT INTO requests (user_id, request_date, request_query, request_query_name) VALUES ('${user_id}', '${request_date}', '${request_query}', '${request_query_name}')`);
         console.log(rows.insertId);
         response = {
             success: true,
@@ -148,11 +148,11 @@ async function createQuery({ user_id, request_query, request_query_name }) {
     };
 }
 
-async function updateQuery({request_id, request_query, request_query_name }) {
+async function updateQuery({request_id, request_date, request_query, request_query_name }) {
     try {
-        const connection = await db.connection();
+        const connection = await db.connection(); 
         let response = { success: false };
-        const [rows] = await connection.execute(`UPDATE requests SET request_date = now(), request_query = '${request_query}', request_query_name = '${request_query_name}', request_date = now() WHERE request_id = ${request_id}`);
+        const [rows] = await connection.execute(`UPDATE requests SET request_date = '${request_date}', request_query = '${request_query}', request_query_name = '${request_query_name}', request_date = now() WHERE request_id = ${request_id}`);
         response = {
             success: true,
             data: {request_id, request_query, request_query_name},

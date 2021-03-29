@@ -64,16 +64,16 @@ const SignIn = ()=>{
         const socket = io(SERVER);
         socket.emit('checkUser', {login:values.email,password:values.password}, (err, res) => {
             console.log(res)
-            if( res.success ){
-                setLoggedIn( res.success );
-                dispatch(FetchDataUser(res.data));
-                setError(false);
-            }
-                    if( !res.success){
-                        setLoggedIn(false);
-                        setError(true);
-                    }
-            console.log(res);
+            // if( res.success && res.a){
+            //     setLoggedIn( res.success );
+            //     dispatch(FetchDataUser(res.data));
+            //     setError(false);
+            // }
+            //         if( !res.success){
+            //             setLoggedIn(false);
+            //             setError(true);
+            //         }
+
         });
 
     }

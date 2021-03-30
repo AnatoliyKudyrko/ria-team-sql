@@ -54,15 +54,16 @@ const AutoViewReq = ({table,field,viewTabel}) => {
     },[table,field,where,funField,group,order,limit])
 
     useEffect(()=>{
-        if(historyData[historyDataActive.i]  && history){
-            setReqHistory(`${historyData[historyDataActive.i].request_query}`)
+        if(historyData[historyDataActive]  && history){
+            console.log(historyData[historyDataActive]);
+            setReqHistory(`${historyData[historyDataActive].request_query}`)
         }
-    },[history])
+    },[history,historyData,historyDataActive])
 
     const handleSubmit =()=>{
         viewTabel(true);
         let reqTemp='';
-        if(historyData[historyDataActive.i]  && history){
+        if(historyData[historyDataActive]  && history){
             reqTemp=reqHistory;
         }
         if( field.length !== 0 ){

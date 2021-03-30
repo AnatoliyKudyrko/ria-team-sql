@@ -117,7 +117,7 @@ function History() {
             {/*</Box>*/}
                 </div>
                 <ListItem>
-                    <ListItemText primary="Логін" align='center'  />
+                    <ListItemText primary="Юзер" align='center'  />
                     <ListItemText primary="Запит" align='center'  />
                     <ListItemText primary="Час" align='center' />
                     <ListItemText primary="Дії" align='center' />

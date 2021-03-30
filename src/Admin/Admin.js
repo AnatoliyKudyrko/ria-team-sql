@@ -98,13 +98,7 @@ const MainPanel = ()=>{
 
     },[updateUser,valueFilter])
 
-    const deleteUserID =(userID)=>{
-        socket.emit("deleteUser", {user_id:userID.id}, (err, res) => {
-            if(res.success) {
-                setUpdateUser(prev=>!prev)
-            }
-        });
-    }
+
 
 
 
@@ -120,6 +114,15 @@ const MainPanel = ()=>{
                     setUpdateUser(prev=>!prev)
                 }
             })
+        }
+
+        const deleteUserID =(userID)=>{
+            console.log(userID)
+            socket.emit("deleteUser", {user_id:userID}, (err, res) => {
+                if(res.success) {
+                    setUpdateUser(prev=>!prev)
+                }
+            });
         }
 
         let color = state !== 0 ? 'secondary': 'primary';

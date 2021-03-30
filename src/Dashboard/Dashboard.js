@@ -24,7 +24,7 @@ import History from "../history/history";
 import HistoryIcon from '@material-ui/icons/History';
 import {useSelector} from "react-redux";
 import NotificationsIcon from '@material-ui/icons/Notifications';
-
+import logo from '../accept/delta.png';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -138,7 +138,11 @@ const  Dashboard =(props) =>{
                         <MenuIcon/>
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Конструктор Delta
+                        <div style={{display:'flex',alignItems:'center'}}>
+                            <span> Конструктор Delta </span>
+                            <img src={logo} alt={"logo"} style={{width:'50px'}}/>
+                        </div>
+
                     </Typography>
                     {name.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}
                     <IconButton color="inherit">

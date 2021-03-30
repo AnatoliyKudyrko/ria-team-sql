@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {
+    AddDataHistory,
     FetchDataActiveField,
     FetchDataSelect, HistoryCount, HistoryExecute,
     LoadDataHistory, Reset
@@ -54,7 +55,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
 
     useEffect(()=>{
         if(historyData[historyDataActive.i]  && history){
-            setReqHistory(`${historyData[historyDataActive.i].reqData}`)
+            setReqHistory(`${historyData[historyDataActive.i].request_query}`)
         }
     },[history])
 
@@ -171,14 +172,7 @@ const AddHistory = ({name,req,data})=>{
                 request_query_name:value
             }, (err, res) => {
                 console.log(res)
-                dispatch(LoadDataHistory(
-                    {
-                        name:name.map(item=>item.first_name),
-                        nameReq:res.data.request_query_name,
-                        reqData:res.data.request_query,
-                        date:res.data.request_date
-                    }
-                        ))
+                dispatch(AddDataHistory(res))
             });
         dispatch(HistoryCount());
         handleClose()

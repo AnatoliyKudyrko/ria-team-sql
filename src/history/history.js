@@ -20,6 +20,7 @@ import Box from "@material-ui/core/Box";
 import {useHistory} from "react-router-dom";
 import io from "socket.io-client";
 import {SERVER} from "../dal/connectService";
+import Toolbar from "@material-ui/core/Toolbar";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -43,10 +44,10 @@ function History() {
 
     useEffect(()=>{
        socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {
-          dispatch(LoadDataHistory(data.data))
+         dispatch(LoadDataHistory(data.data))
         })
 
-    },[data])
+    },[])
     const itemNone = (
         <ListItem>
             <ListItemText primary="Немає подій"  />
@@ -71,12 +72,12 @@ function History() {
         return (
             <div key={i}>
                 <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
-                    <ListItemText primary={item.request_query_name}  style={{width:'20%'}}/>
-                    <ListItemText primary={item.request_query} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.login} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.request_query_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.request_date} align='center' style={{width:'20%'}}/>
-                    { item.request_query_name ?  <ListItemText align='right' style={{width:'20%'}}>
+                    <ListItemText align='right' style={{width:'20%'}}>
                         <ButtonGroup i={i} />
-                    </ListItemText> : null}
+                    </ListItemText>
 
                 </ListItem>
                 <Divider />
@@ -91,7 +92,7 @@ function History() {
             <List className={classes.root} >
                 <Box m={2} >
                     <Typography variant="h5" component="h5" >
-                        Історія запитів
+                        Історія запитів  <span style={{color:'#ff7961'}}>{data.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}</span>
                     </Typography>
                 </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
@@ -118,7 +119,6 @@ function History() {
             </Box>
                 </div>
                 <ListItem>
-                    <ListItemText primary="Юзер"  />
                     <ListItemText primary="Запит" align='center'  />
                     <ListItemText primary="Час" align='center' />
                     <ListItemText primary="Дії" align='center' />

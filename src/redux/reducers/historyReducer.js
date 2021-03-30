@@ -1,4 +1,5 @@
 import {
+    ADD_DATA_HISTORY,
     DELETE_DATA_HISTORY,
     LOAD_DATA_HISTORY, LOAD_DATA_HISTORY_COUNT,
     LOAD_DATA_HISTORY_EXECUTE,
@@ -14,6 +15,11 @@ const initialState = {
 export function HistoryReducer (state=initialState,action){
     switch (action.type){
         case LOAD_DATA_HISTORY:
+            return {
+                ...state,
+                data:action.data
+            }
+        case ADD_DATA_HISTORY:
             return {
                 ...state,
                 data:[...state.data, action.data]

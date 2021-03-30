@@ -11,6 +11,9 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import ClearAllIcon from "@material-ui/icons/ClearAll";
+import {InputLabel, MenuItem, Switch} from "@material-ui/core";
+import FormControl from "@material-ui/core/FormControl";
+import Select from '@material-ui/core/Select';
 
 const socket = io(SERVER);
 
@@ -33,33 +36,34 @@ const Admin = () => {
     }
     return (
         <div>
-        {
-            !success ? <div>
-                <Box style={{width:'20%',margin:'auto'}}>
-                    <TextField
-                        fullWidth
-                        id="email"
-                        name="email"
-                        label="Login"
-                        value={login}
-                        onChange={handleLogin}
-                    />
-                    <TextField
-                        fullWidth
-                        id="password"
-                        name="password"
-                        label="Пароль"
-                        value={password}
-                        onChange={handlePassword}
-                    />
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        onClick={()=>checkAdmin()}
-                    >Увійти</Button>
-                </Box>
-            </div> : <MainPanel />
-        }
+            {
+                !success ? <div style={{marginTop:'200px'}}>
+                    <Box style={{width:'20%',margin:'auto'}}>
+                        <TextField
+                            fullWidth
+                            id="email"
+                            name="email"
+                            label="Login"
+                            value={login}
+                            onChange={handleLogin}
+                        />
+                        <TextField
+                            fullWidth
+                            id="password"
+                            name="password"
+                            label="Пароль"
+                            value={password}
+                            onChange={handlePassword}
+                        />
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            style={{marginTop:'10px'}}
+                            onClick={()=>checkAdmin()}
+                        >Увійти</Button>
+                    </Box>
+                </div> : <MainPanel />
+            }
         </div>
     );
 };
@@ -68,24 +72,61 @@ const MainPanel = ()=>{
 
     const [data,setData] = useState([]);
     const [updateUser,setUpdateUser] = useState(false);
+    const [valueFilter, setValueFilter] = React.useState('всі');
 
+    const handleChangeFilter = (event) => {
+        setValueFilter(event.target.value);
+    };
     useEffect(()=>{
-        socket.emit("getAllUsers", {}, (err, res) => {
-            setData(res.data);
-        });
-    },[updateUser])
+        if(valueFilter === 'всі'){
+            socket.emit("getAllUsers", {}, (err, res) => {
+                console.log(res)
+                setData(res.data);
+            });
+        }
+        if(valueFilter === 'активовані'){
+            socket.emit("getAllUsers", {}, (err, res) => {
+                setData(res.data.filter(item=> item.isApproved === 1));
+            });
+        }
+        if(valueFilter === 'блоковані'){
+            socket.emit("getAllUsers", {}, (err, res) => {
+                setData(res.data.filter(item=> item.isApproved === 0));
+            });
+        }
+
+
+    },[updateUser,valueFilter])
 
     const deleteUserID =(userID)=>{
         socket.emit("deleteUser", {user_id:userID.id}, (err, res) => {
             if(res.success) {
                 setUpdateUser(prev=>!prev)
             }
-       });
+        });
     }
 
-    const ButtonGroup = (id)=>{
+
+
+    const ButtonGroup = ({id,isApproved})=>{
+        const [state, setState] = useState(isApproved);
+        useEffect(()=>{
+
+        },[data,isApproved])
+        const setApprove = ()=>{
+            socket.emit('setApprove',{user_id:id,value:isApproved !== 0 ? 0 : 1},(err, res) => {
+                console.log(res)
+                if(res.success) {
+                    setUpdateUser(prev=>!prev)
+                }
+            })
+        }
+
+        let color = state !== 0 ? 'secondary': 'primary';
+
         return (
-            <div style={{display:'flex',justifyContent:'space-around',cursor:'pointer'}}>
+            <div style={{display:'flex',justifyContent:'space-around',alignItems:'center',cursor:'pointer'}}>
+                <Button variant="contained" color={color} onClick={setApprove}>{state !== 0 ? 'блок': 'активувати'}</Button>
                 <CloseIcon onClick={()=>deleteUserID(id)}/>
             </div>
         )
@@ -99,8 +140,8 @@ const MainPanel = ()=>{
                     <ListItemText primary={item.first_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.last_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.login} align='center' style={{width:'20%'}}/>
-                   <ListItemText align='right' style={{width:'20%'}}>
-                        <ButtonGroup id={item.user_id} />
+                    <ListItemText align='right' style={{width:'20%'}}>
+                        <ButtonGroup id={item.user_id} isApproved={item.isApproved } />
                     </ListItemText>
                 </ListItem>
                 <Divider />
@@ -118,22 +159,21 @@ const MainPanel = ()=>{
                         Панель адміністратора
                     </Typography>
                 </Box>
-                <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
-                    {/*<Box m={2}>*/}
-                    {/*    <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>*/}
-                    {/*        <FormControl className={classes.formControl}>*/}
-                    {/*            <Select*/}
-                    {/*                labelId="demo-simple-select-label"*/}
-                    {/*                id="demo-simple-select"*/}
-                    {/*                value={name}*/}
-                    {/*                onChange={handleChange}*/}
-                    {/*            >*/}
-                    {/*                <MenuItem value={10}>Мої</MenuItem>*/}
-                    {/*                <MenuItem value={20}>Всі</MenuItem>*/}
-                    {/*            </Select>*/}
-                    {/*        </FormControl>*/}
-                    {/*    </div>*/}
-                    {/*</Box>*/}
+                <div style={{display:'flex',justifyContent:'space-between'}}>
+                    <Box m={2}>
+                        <FormControl >
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={valueFilter}
+                                onChange={handleChangeFilter}
+                            >
+                                <MenuItem value='всі'>Всі</MenuItem>
+                                <MenuItem value='активовані'>активовані</MenuItem>
+                                <MenuItem value='блоковані'>блоковані</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
                     <Box m={2} style={{textAlign:'right'}}>
                         <div>
                             <span style={{color:'#5e122d'}} >Очистити</span>

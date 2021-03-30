@@ -174,12 +174,12 @@ const MainPanel = ()=>{
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box m={2} style={{textAlign:'right'}}>
-                        <div>
-                            <span style={{color:'#5e122d'}} >Очистити</span>
-                            <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>
-                        </div>
-                    </Box>
+                    {/*<Box m={2} style={{textAlign:'right'}}>*/}
+                    {/*    <div>*/}
+                    {/*        <span style={{color:'#5e122d'}} >Очистити</span>*/}
+                    {/*        <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>*/}
+                    {/*    </div>*/}
+                    {/*</Box>*/}
                 </div>
                 <ListItem color='primary'>
                     <ListItemText primary="Id"  />

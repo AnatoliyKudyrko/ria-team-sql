@@ -2,6 +2,7 @@ const {createUser, updateUser, checkUser, forgotUser, remindUser} = require ('..
 const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
 const { ClickHouse } = require('clickhouse');
 const config = require('../config');
+const {removeQuery} = require("../controllers/indexQuery");
 const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
 const mviewsDb = new ClickHouse({...config.clickhouse, config: { database: 'mviews'}});
 
@@ -193,5 +194,6 @@ module.exports = function (socket) {
             }
     */
     socket.on('selectQueries', selectQueries);
+    socket.on('removeQuery', removeQuery);
     
 }

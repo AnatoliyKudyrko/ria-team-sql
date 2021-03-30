@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import CloseIcon from '@material-ui/icons/Close';
 import {
     DeleteDataHistory,
-    FetchDataField,
+    FetchDataField, FilterDataHistory,
     HistoryExecute,
     HistoryExecuteId, LOAD_DATA_HISTORY,
     LoadDataHistory
@@ -44,6 +44,7 @@ function History() {
 
     useEffect(()=>{
        socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {
+           console.log(data.data)
          dispatch(LoadDataHistory(data.data))
         })
 
@@ -55,22 +56,27 @@ function History() {
 
 
 
-    const deleteHistoryID =(id)=>{
-        socket.emit("deleteUser", {user_id:id}, (err, res) => {
 
-        });
-    }
-
-    const ButtonGroup = (i)=>{
+    const ButtonGroup = ({i,index})=>{
         const executeReqHistory = (item)=>{
             dispatch(HistoryExecute(true))
             dispatch(HistoryExecuteId(item))
             history.push("/dashboard/main");
         }
+
+        const deleteHistoryID =(id)=>{
+
+            socket.emit("removeQuery", {request_id:id}, (err, res) => {
+             if (res.success){
+            dispatch(FilterDataHistory({idQuery:id}));
+             }
+
+            });
+        }
         return (
             <div style={{display:'flex',justifyContent:'space-around'}}>
                 <Button color='primary' variant='contained' onClick={()=>executeReqHistory(i)} >Виконати</Button>
-                <CloseIcon />
+                <Button  onClick={()=>deleteHistoryID(index)} >Видалити</Button>
             </div>
         )
 
@@ -83,7 +89,7 @@ function History() {
                     <ListItemText primary={item.request_query_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.request_date} align='center' style={{width:'20%'}}/>
                     <ListItemText align='right' style={{width:'20%'}}>
-                        <ButtonGroup i={i} />
+                        <ButtonGroup i={i} index={item.request_id}/>
                     </ListItemText>
 
                 </ListItem>

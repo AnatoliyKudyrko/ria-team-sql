@@ -19,6 +19,7 @@ export  const  DELETE_DATA_FUN_WHERE = 'DELETE_DATA_FUN_WHERE';
 export const LOAD_DATA_LIMIT= 'LOAD_DATA_LIMIT';
 export const LOAD_DATA_HISTORY_COUNT = 'LOAD_DATA_HISTORY_COUNT';
 export const ADD_DATA_HISTORY = 'ADD_DATA_HISTORY';
+export const FILTER_DATA_HISTORY = 'FILTER_DATA_HISTORY';
 
 const SERVER = "http://127.0.0.1:4000";
 const socket = io(SERVER);
@@ -135,6 +136,12 @@ export function UpdateDataSelect(id){
 export function FilterDataSelect(data){
     return {
         type:FILTER_DATA_SELECT,
+        data
+    }
+}
+export function FilterDataHistory(data){
+    return {
+        type:FILTER_DATA_HISTORY,
         data
     }
 }

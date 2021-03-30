@@ -237,5 +237,20 @@ async function setApprove({user_id}) {
     };
 }
 
+async function removeAllUsers() {
+    try {
+        const connection = await db.connection();
+        let response = { success: false };
+        await connection.execute(`DELETE FROM requests`);
+        await connection.execute(`DELETE FROM users`);
+        response = {
+            success: true
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
 
-module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries, setApprove};
+module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries, setApprove, removeAllUsers};

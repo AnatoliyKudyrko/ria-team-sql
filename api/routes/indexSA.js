@@ -1,5 +1,5 @@
 const config = require('../config').superAdmin;
-const { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove } = require('../controllers/indexSAUser');
+const { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove, removeAllUsers } = require('../controllers/indexSAUser');
 
 module.exports = function (socket) {
 
@@ -46,6 +46,15 @@ module.exports = function (socket) {
             }
     */
    socket.on('autorizeSA',  autorizeSA);
+
+       /*
+      input:
+        output:
+            {
+                success: true
+            }
+    */
+            socket.on('removeAllUsers',  removeAllUsers);
 
        /*
       input:

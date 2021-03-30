@@ -16,6 +16,7 @@
     "clickhouse": "^2.2.1",
     "express": "^4.17.1",
     "formik": "^2.2.6",
+    "moment": "^2.29.1",
     "mui-datatables": "^3.7.6",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",

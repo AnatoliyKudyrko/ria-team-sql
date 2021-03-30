@@ -72,7 +72,7 @@ async function checkUser({ login, password }) {
             }
         } else if(rows.length && !rows[0].isApproved) {
             response = {
-                msg: `${rows[0].login} is not Approved`,
+                msg: `${login} is not Approved`,
                 success: false
             }
         } else {

@@ -53,9 +53,18 @@ function History() {
             <ListItemText primary="Немає подій"  />
         </ListItem> )
 
+
+
+    const deleteHistoryID =(id)=>{
+        socket.emit("deleteUser", {user_id:userID.id}, (err, res) => {
+            if(res.success) {
+                setUpdateUser(prev=>!prev)
+            }
+        });
+    }
+
     const ButtonGroup = (i)=>{
         const executeReqHistory = (item)=>{
-            console.log(data[item])
             dispatch(HistoryExecute(true))
             dispatch(HistoryExecuteId(item))
             history.push("/dashboard/main");
@@ -72,7 +81,7 @@ function History() {
         return (
             <div key={i}>
                 <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
-                    <ListItemText primary={item.login} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={data.map(item=>item.first_name)} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.request_query_name} align='center' style={{width:'20%'}}/>
                     <ListItemText primary={item.request_date} align='center' style={{width:'20%'}}/>
                     <ListItemText align='right' style={{width:'20%'}}>
@@ -92,25 +101,10 @@ function History() {
             <List className={classes.root} >
                 <Box m={2} >
                     <Typography variant="h5" component="h5" >
-                        Історія запитів  <span style={{color:'#ff7961'}}>{data.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}</span>
+                        Історія запитів  <span style={{textTransform:'uppercase'}}>{data.map(item=><span key={item.user_id} style={{fontSize:'16px'}}>{item.first_name}</span>)}</span>
                     </Typography>
                 </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
-                   {/*<Box m={2}>*/}
-                   {/*    <div style={{textAlign:'left',display:'flex',alignItems:'center'}}>*/}
-                   {/*        <FormControl className={classes.formControl}>*/}
-                   {/*            <Select*/}
-                   {/*                labelId="demo-simple-select-label"*/}
-                   {/*                id="demo-simple-select"*/}
-                   {/*                value={name}*/}
-                   {/*                onChange={handleChange}*/}
-                   {/*            >*/}
-                   {/*                <MenuItem value={10}>Мої</MenuItem>*/}
-                   {/*                <MenuItem value={20}>Всі</MenuItem>*/}
-                   {/*            </Select>*/}
-                   {/*        </FormControl>*/}
-                   {/*    </div>*/}
-                   {/*</Box>*/}
             <Box m={2} style={{textAlign:'right'}}>
                 <div>
                     <span style={{color:'#5e122d'}} >Очистити</span>
@@ -119,6 +113,7 @@ function History() {
             </Box>
                 </div>
                 <ListItem>
+                    <ListItemText primary="Логін" align='center'  />
                     <ListItemText primary="Запит" align='center'  />
                     <ListItemText primary="Час" align='center' />
                     <ListItemText primary="Дії" align='center' />

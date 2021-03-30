@@ -129,6 +129,7 @@ const Forgot = ()=>{
                                 />
                                 <Button
                                 fullWidth
+                                style={{marginTop:'10px'}}
                                 variant="contained"
                                 onClick={()=>changePassword()}
                                 >Змінити</Button>

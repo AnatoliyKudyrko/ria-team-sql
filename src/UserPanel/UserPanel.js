@@ -40,7 +40,7 @@ export default function UserPanel() {
     const dispatch = useDispatch();
     const [expanded, setExpanded] = React.useState(false);
     const [id,setId] = useState(data.map(item=>item.user_id));
-    const [login,setLogin] = useState('');
+    const [loginUser,setLoginUser] = useState('');
     const [first,setFirst] = useState('');
     const [last,setLast] = useState('');
     const [pass,setPass] = useState('');
@@ -51,7 +51,7 @@ export default function UserPanel() {
         setNewData(data)
     },[data])
 
-    const [values, setValues] = React.useState({
+    const [values, setValues] = useState({
         amount: '',
         password: '',
         weight: '',
@@ -61,6 +61,8 @@ export default function UserPanel() {
 
     const handleChangePassword = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
+        setPass(values.password)
+
     };
 
     const handleClickShowPassword = () => {
@@ -79,15 +81,13 @@ export default function UserPanel() {
     const handleChangeFirstName = (event) => {
         setFirst(event.target.value)
     };
-    const handleChangeLastName = () => {
-
+    const handleChangeLastName = (event) => {
+        setLast(event.target.value)
     };
-    const handleChangeLogin = () => {
-
+    const handleChangeLogin = (event) => {
+        setLoginUser(event.target.value)
     };
-    const handleChangePass = () => {
 
-    };
     const ChangeFirst = ()=> {
         const {user_id, login, last_name} = data[0];
         socket.emit('updateUser',
@@ -97,11 +97,50 @@ export default function UserPanel() {
                 first_name: first,
                 last_name: last_name
             }, (err, res) => {
-                console.log(res)
                 dispatch(FetchDataUser(res.data));
             });
     }
+    const ChangeLast = ()=> {
+        const {user_id, login,first_name} = data[0];
+        socket.emit('updateUser',
+            {
+                user_id: user_id,
+                login: login,
+                first_name: first_name,
+                last_name: last
+            }, (err, res) => {
 
+                dispatch(FetchDataUser(res.data));
+            });
+    }
+    const ChangeLogin = ()=> {
+        const {user_id,last_name,first_name} = data[0];
+        socket.emit('updateUser',
+            {
+                user_id: user_id,
+                login: loginUser,
+                first_name: first_name,
+                last_name: last_name,
+
+            }, (err, res) => {
+
+                dispatch(FetchDataUser(res.data));
+            });
+    }
+    const ChangePassword = ()=> {
+        const {user_id,last_name,first_name,login} = data[0];
+        socket.emit('updateUser',
+            {
+                user_id: user_id,
+                login: login,
+                first_name: first_name,
+                last_name: last_name,
+                password:pass
+            }, (err, res) => {
+
+                dispatch(FetchDataUser(res.data));
+            });
+    }
         return (
         <div className={classes.root}>
             <h2>Особистий кабінет</h2>
@@ -139,7 +178,7 @@ export default function UserPanel() {
                                onChange={handleChangeLastName}
 
                     />
-                    <Button size="small" color="secondary">
+                    <Button size="small" color="secondary" onClick={()=>ChangeLast()}>
                         Змінити
                     </Button>
                 </AccordionDetails>
@@ -160,10 +199,10 @@ export default function UserPanel() {
                         id="email"
                         name="email"
                         autoComplete="email"
-                        value={login}
+                        value={loginUser}
                         onChange={handleChangeLogin}
                     />
-                    <Button size="small" color="secondary">
+                    <Button size="small" color="secondary" onClick={()=>ChangeLogin()}>
                         Змінити
                     </Button>
                 </AccordionDetails>
@@ -194,7 +233,7 @@ export default function UserPanel() {
                             </InputAdornment>
                         }
                     />
-                    <Button size="small" color="secondary">
+                    <Button size="small" color="secondary" onClick={()=>ChangePassword()}>
                         Змінити
                     </Button>
                 </AccordionDetails>

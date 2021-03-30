@@ -109,12 +109,12 @@ function History() {
                     </Typography>
                 </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
-            <Box m={2} style={{textAlign:'right'}}>
-                <div>
-                    <span style={{color:'#5e122d'}} >Очистити</span>
-                    <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}} onClick={()=>dispatch(DeleteDataHistory({}))}/></Button>
-                </div>
-            </Box>
+            {/*<Box m={2} style={{textAlign:'right'}}>*/}
+            {/*    <div>*/}
+            {/*        <span style={{color:'#5e122d'}} >Очистити</span>*/}
+            {/*        <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}} onClick={()=>dispatch(DeleteDataHistory({}))}/></Button>*/}
+            {/*    </div>*/}
+            {/*</Box>*/}
                 </div>
                 <ListItem>
                     <ListItemText primary="Логін" align='center'  />

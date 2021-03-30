@@ -25,4 +25,9 @@ async function setApprove(data, cb) {
     return cb(null, await myDb.setApprove({ ...data }));
 }
 
-module.exports = { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove }
+async function removeAllUsers(data, cb) {
+    return cb(null, await myDb.removeAllUsers({ ...data }));
+}
+
+
+module.exports = { deleteUser, getAllUsers, getUsersQueries, autorizeSA, setApprove, removeAllUsers }

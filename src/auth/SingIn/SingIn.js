@@ -60,19 +60,21 @@ const SignIn = ()=>{
     const classes = useStyles();
     const [loggedIn,setLoggedIn] = useState(false);
     const [error,setError] = useState(false);
+    const [msg,setMessage] = useState('');
     const CheckUser =(values)=>{
         const socket = io(SERVER);
         socket.emit('checkUser', {login:values.email,password:values.password}, (err, res) => {
-            console.log(res)
-            // if( res.success && res.a){
-            //     setLoggedIn( res.success );
-            //     dispatch(FetchDataUser(res.data));
-            //     setError(false);
-            // }
-            //         if( !res.success){
-            //             setLoggedIn(false);
-            //             setError(true);
-            //         }
+            if( res.success){
+                setMessage('');
+                setLoggedIn( res.success );
+                dispatch(FetchDataUser(res.data));
+                setError(false);
+            }
+                    if( !res.success){
+                        setLoggedIn(false);
+                        setError(true);
+                        setMessage(res.msg)
+                    }
 
         });
 
@@ -138,6 +140,7 @@ const SignIn = ()=>{
                             Перевірте написання email або пароля
                         </Typography> : null
                     }
+                     <span>{msg}</span>
                     <Button
                         fullWidth
                         variant="contained"

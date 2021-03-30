@@ -12,7 +12,7 @@ import {
     DeleteDataHistory,
     FetchDataField,
     HistoryExecute,
-    HistoryExecuteId,
+    HistoryExecuteId, LOAD_DATA_HISTORY,
     LoadDataHistory
 } from "../redux/action/action";
 import Typography from "@material-ui/core/Typography";
@@ -38,11 +38,12 @@ function History() {
     const socket = io(SERVER);
     let history = useHistory();
     const data = useSelector(state => state.Auth.data);
+    const historyData = useSelector(state=>state.history.data);
     const dispatch = useDispatch();
 
     useEffect(()=>{
        socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {
-          console.log(data)
+          dispatch(LoadDataHistory(data.data))
         })
 
     },[data])
@@ -66,14 +67,14 @@ function History() {
         )
 
     }
-    const itemYes = (data.map((item,i)=>{
+    const itemYes = (historyData.map((item,i)=>{
         return (
             <div key={i}>
                 <ListItem key={i} style={{display:"flex", justifyContent:'space-between'}}>
-                    <ListItemText primary={item.name}  style={{width:'20%'}}/>
-                    <ListItemText primary={item.nameReq} align='center' style={{width:'20%'}}/>
-                    <ListItemText primary={item.date} align='center' style={{width:'20%'}}/>
-                    { item.name ?  <ListItemText align='right' style={{width:'20%'}}>
+                    <ListItemText primary={item.request_query_name}  style={{width:'20%'}}/>
+                    <ListItemText primary={item.request_query} align='center' style={{width:'20%'}}/>
+                    <ListItemText primary={item.request_date} align='center' style={{width:'20%'}}/>
+                    { item.request_query_name ?  <ListItemText align='right' style={{width:'20%'}}>
                         <ButtonGroup i={i} />
                     </ListItemText> : null}
 

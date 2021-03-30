@@ -170,6 +170,22 @@ async function updateQuery({request_id, request_date, request_query, request_que
     };
 }
 
+async function removeQuery({request_id}) {
+    try {
+        const connection = await db.connection(); 
+        let response = { success: false };
+        const [rows] = await connection.execute(`DELETE FROM requests WHERE request_id = ${request_id}`);
+        response = {
+            success: true,
+            msg: `${request_id} is removed`
+        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        return error;
+    };
+}
+
 async function selectQueries({ user_id }) {
     try {
         const connection = await db.connection();
@@ -254,4 +270,4 @@ async function removeAllUsers() {
     };
 }
 
-module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, getAllUsers, getUsersQueries, setApprove, removeAllUsers};
+module.exports = { createUser, checkUser, updateUser, deleteUser, checkLogin, getUserData, selectQueries, createQuery, updateQuery, removeQuery, getAllUsers, getUsersQueries, setApprove, removeAllUsers};

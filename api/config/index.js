@@ -28,14 +28,14 @@ module.exports = {
         port: '3306',
         user: 'root',
         database: 'delta',
-        password: '1234'
+        password: 'root'
       },
     nodemailer: {
       service: 'gmail',
       host: 'smtp.gmail.com',
       auth: {
-        user: 'aleksandr.dubovskiy@gmail.com',
-        pass: '' // naturally, replace both with your real credentials or an application-specific password
+        user: 'gigabate3@gmail.com',
+        pass: 'madara1997M' // naturally, replace both with your real credentials or an application-specific password
       }
     },
     superAdmin: {

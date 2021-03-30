@@ -13,18 +13,18 @@ let db = (function () {
 })();
 
 
-async function createUser({ login, password, first_name, last_name }) {
+async function createUser({ login, password, first_name, last_name,isApproved }) {
 
     try {
         const connection = await db.connection();
         const { user_id, success } = await checkLogin({ login });
         let response = { success: false };
         if (!success) {
-            const [rows] = await connection.execute(`INSERT INTO users (login, password, first_name, last_name) VALUES ('${login}', '${password}', '${first_name}', '${last_name}')`);
+            const [rows] = await connection.execute(`INSERT INTO users (login, password, first_name, last_name, isApproved) VALUES ('${login}', '${password}', '${first_name}', '${last_name}',${isApproved})`);
             console.log(rows.insertId);
             response = {
                 success: true,
-                data: { login, first_name, last_name, user_id: rows.insertId },
+                data: { login, first_name, last_name,isApproved, user_id: rows.insertId },
                 msg: `${login} is created`
             }
         } else {
@@ -143,7 +143,7 @@ async function createQuery({ user_id, request_date, request_query, request_query
         console.log(rows.insertId);
         response = {
             success: true,
-            data: { request_id: rows.insertId, user_id, request_query_name, request_query, request_date },
+            data: { request_id: rows.insertId, user_id, request_date, request_query_name, request_query },
             msg: `${request_query_name} is created`
         }
         return response;
@@ -174,11 +174,12 @@ async function selectQueries({ user_id }) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name FROM requests WHERE request.user_id = ${user_id} ORDER BY request_date`);
+        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name FROM requests WHERE user_id = '${user_id}' ORDER BY request_date`);
         response = {
             success: true,
             data: rows || [],
         }
+        console.log(response)
         return response;
     } catch (error) {
         console.error(error);
@@ -194,7 +195,7 @@ async function getUsersQueries({ user_id, date_from = '1970-01-01', date_to = 'n
         if (user_id) {
             condition = ` AND request.user_id = ${user_id}`;
         }
-        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name, login, first_name, last_name FROM requests, users WHERE request_date BETWEEN ${date_from} AND ${date_to} AND request.user_id = users.user_id  ORDER BY request_date`);
+        const [rows] = await connection.execute(`SELECT request_id, request_date, request_query, request_query_name, login, first_name, last_name FROM requests, users WHERE request_date BETWEEN ${date_from} AND ${date_to} AND '${condition}' ORDER BY request_date`);
         response = {
             success: true,
             data: rows,
@@ -206,11 +207,11 @@ async function getUsersQueries({ user_id, date_from = '1970-01-01', date_to = 'n
     };
 }
 
-async function getAllUsers({isApproved = 1}) {
+async function getAllUsers() {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`SELECT user_id, login, first_name, last_name FROM users WHERE isApproved = ${isApproved} ORDER BY login`);
+        const [rows] = await connection.execute('SELECT user_id, login, first_name, last_name, isApproved FROM users');
         response = {
             success: true,
             data: rows,
@@ -222,11 +223,11 @@ async function getAllUsers({isApproved = 1}) {
     };
 }
 
-async function setApprove({user_id}) {
+async function setApprove({user_id,value}) {
     try {
         const connection = await db.connection();
         let response = { success: false };
-        const [rows] = await connection.execute(`UPDATE users SET isApproved = 1 WHERE user_id = ${user_id}`);
+        const [rows] = await connection.execute(`UPDATE users SET isApproved = ${value} WHERE user_id = ${user_id}`);
         response = {
             success: true
         }

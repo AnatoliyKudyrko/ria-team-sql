@@ -56,10 +56,8 @@ function History() {
 
 
     const deleteHistoryID =(id)=>{
-        socket.emit("deleteUser", {user_id:userID.id}, (err, res) => {
-            if(res.success) {
-                setUpdateUser(prev=>!prev)
-            }
+        socket.emit("deleteUser", {user_id:id}, (err, res) => {
+
         });
     }
 

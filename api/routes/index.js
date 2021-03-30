@@ -1,6 +1,5 @@
 const {createUser, updateUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
 const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
-const err = require('../helpers/error');
 const { ClickHouse } = require('clickhouse');
 const config = require('../config');
 const slonDb = new ClickHouse({...config.clickhouse, config: { database: 'slon'}});
@@ -14,12 +13,17 @@ const clickhouse = new ClickHouse({...config.clickhouse});
 
 
 module.exports = function (socket) {
+
+    function namer(item, index) {
+        return item.name;
+    }
+
     socket.on('getFields', (db, table, callbackFn) => {
         if (databases.includes(db)) {
             systemDb.query(`SELECT name FROM columns WHERE database = '${db}' AND table = '${table}' ORDER BY name`, (err, data) => {
                // const res = data ? data.map(namer).filter(dateFilter).map(item=>{return {name:item}}) : null;
                 const res = data ? data.map(namer).map(item=>{return {name:item}}) : null;
-                callbackFn(null, res);
+                callbackFn({test:'test'},res);
             })
         } else {
             const msg = 'database not found';

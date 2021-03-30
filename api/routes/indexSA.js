@@ -64,5 +64,5 @@ module.exports = function (socket) {
                 success: true
             }
     */
-            socket.on('setApprove',  setApprove);
+    socket.on('setApprove',  setApprove);
 }

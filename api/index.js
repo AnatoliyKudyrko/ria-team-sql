@@ -25,9 +25,7 @@ io.on('connection',  (socket) => {
 //csystemDb.query(`SELECT name FROM columns`, (err, data) => {    console.log(data);})
 
 //приймає запит у вигляді сроки та віддає дані по цьому запиту
-function namer(item, index) {
-    return item.name;
-}
+
 
 function dateFilter(item) {
     return !(['EventDate','HourDate', 'MinuteDate', 'SecondDate', 'date_time'].includes(item))

@@ -11,10 +11,11 @@ function code(str) {
 
 async function createUser(data, cb) {
     const result = await myDb.createUser({ ...data, password: code(data.password) });
-    return cb(null,result);
+    return cb({test:'test'},result);
 }
 
 async function updateUser(data, cb) {
+    console.log(data)
     if (data.password) {
         data.password = code(data.password);
     }
@@ -23,10 +24,11 @@ async function updateUser(data, cb) {
 
 async function checkUser(data, cb) {
     const result = await myDb.checkUser({ ...data, password: code(data.password) })
-    cb(null,result);
+    cb({test:'test'},result);
 }
 
 async function forgotUser(data, cb) {
+    console.log(data)
     const { user_id } = await myDb.checkLogin(data);
     if (user_id) {
         const code = new Date().getTime() + 'code_' + user_id;
@@ -67,12 +69,12 @@ async function remindUser({ code }, cb) {
     if (storedForgotCode.check(code)) {
         storedForgotCode.clear();
         const user_id = code.replace(/.*code_/, '');
-        cb(null, {
+        cb({test:'test'}, {
             success: true,
             data: await myDb.getUserData({ user_id })
         });
     } else {
-        cb(null, {
+        cb({test:'test'}, {
             msg: 'User Error',
             success: false
         })

@@ -1,5 +1,5 @@
 const {createUser, updateUser, checkUser, forgotUser, remindUser} = require ('../controllers/indexUsers');
-const {createQuery, updateQuery, selectQueries} = require('../controllers/indexQuery');
+const {createQuery, updateQuery, removeQuery, selectQueries} = require('../controllers/indexQuery');
 const err = require('../helpers/error');
 const { ClickHouse } = require('clickhouse');
 const config = require('../config');
@@ -179,6 +179,17 @@ module.exports = function (socket) {
             }
         */ 
     socket.on('updateQuery', updateQuery);
+
+/*
+        input:
+        { request_id }
+        output:
+             {
+                success: true,
+                msg: `${request_id} is removed` 
+            }
+        */ 
+            socket.on('removeQuery', removeQuery);
 
     /*
       input:

@@ -9,8 +9,11 @@ async function updateQuery(data, cb) {
     return cb(null, await myDb.updateQuery({ ...data }));
 }
 
-
+async function removeQuery(data, cb) {
+    return cb(null, await myDb.removeQuery({ ...data }));
+}
 async function selectQueries(data, cb) {
     return cb(null, await myDb.selectQueries({ ...data }));
 }
-module.exports = { createQuery, updateQuery, selectQueries }
+
+module.exports = { createQuery, updateQuery, selectQueries, removeQuery }

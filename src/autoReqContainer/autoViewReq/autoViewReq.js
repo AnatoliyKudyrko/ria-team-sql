@@ -69,7 +69,7 @@ const AutoViewReq = ({table,field,viewTabel}) => {
         if( field.length !== 0 ){
             reqTemp=req;
         }
-        socket.emit("reqData", `${reqTemp} LIMIT 1000`, (err, res) => {
+        socket.emit("reqData", `${reqTemp} ${limit.length !==0 ? '' : 'LIMIT 1000'}`, (err, res) => {
             reqTemp = '';
             dispatch(FetchDataSelect({
                     columns:res.columns,

@@ -37,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
 function History() {
     const classes = useStyles();
     const socket = io(SERVER);
+    const dispatch = useDispatch();
     let history = useHistory();
     const data = useSelector(state => state.Auth.data);
     const historyData = useSelector(state=>state.history.data);
-    const dispatch = useDispatch();
 
     useEffect(()=>{
        socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {
@@ -53,8 +53,6 @@ function History() {
         <ListItem>
             <ListItemText primary="Немає подій"  />
         </ListItem> )
-
-
 
 
     const ButtonGroup = ({i,index})=>{
@@ -81,6 +79,7 @@ function History() {
         )
 
     }
+
     const itemYes = (historyData.map((item,i)=>{
         return (
             <div key={i}>
@@ -109,12 +108,6 @@ function History() {
                     </Typography>
                 </Box>
                 <div style={{display:'flex',alignItems:'center', justifyContent:'flex-end'}}>
-            {/*<Box m={2} style={{textAlign:'right'}}>*/}
-            {/*    <div>*/}
-            {/*        <span style={{color:'#5e122d'}} >Очистити</span>*/}
-            {/*        <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}} onClick={()=>dispatch(DeleteDataHistory({}))}/></Button>*/}
-            {/*    </div>*/}
-            {/*</Box>*/}
                 </div>
                 <ListItem>
                     <ListItemText primary="Юзер" align='center'  />

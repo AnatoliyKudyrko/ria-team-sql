@@ -20,7 +20,6 @@ import Box from "@material-ui/core/Box";
 import {useHistory} from "react-router-dom";
 import io from "socket.io-client";
 import {SERVER} from "../dal/connectService";
-import Toolbar from "@material-ui/core/Toolbar";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -36,11 +35,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 function History() {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const socket = io(SERVER);
     let history = useHistory();
     const data = useSelector(state => state.Auth.data);
     const historyData = useSelector(state=>state.history.data);
-    const dispatch = useDispatch();
+
 
     useEffect(()=>{
        socket.emit("selectQueries",{user_id:Number(data.map(item=>item.user_id))} ,(err,data) => {

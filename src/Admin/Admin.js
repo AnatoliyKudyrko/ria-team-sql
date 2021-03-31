@@ -10,8 +10,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import ClearAllIcon from "@material-ui/icons/ClearAll";
-import {InputLabel, MenuItem, Switch} from "@material-ui/core";
+import { MenuItem} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
 
@@ -177,12 +176,6 @@ const MainPanel = ()=>{
                             </Select>
                         </FormControl>
                     </Box>
-                    {/*<Box m={2} style={{textAlign:'right'}}>*/}
-                    {/*    <div>*/}
-                    {/*        <span style={{color:'#5e122d'}} >Очистити</span>*/}
-                    {/*        <Button style={{color:'#e2e6e9'}} ><ClearAllIcon style={{color:'#5e122d'}}/></Button>*/}
-                    {/*    </div>*/}
-                    {/*</Box>*/}
                 </div>
                 <ListItem color='primary'>
                     <ListItemText primary="Id"  />
